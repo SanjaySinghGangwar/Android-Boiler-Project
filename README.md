@@ -2,6 +2,7 @@
 
 This boilerplate project includes the following features and integrations:
 
+- **WorkManager**: Handles background tasks, such as syncing data, uploading files, or scheduling jobs.
 - **Fastlane (CI/CD)**: Automates build, testing, and deployment processes.
 - **Room Database**: Local database solution for persistent storage.
 - **Automatic App Signing**: Seamlessly manages app signing for multiple build variants.
