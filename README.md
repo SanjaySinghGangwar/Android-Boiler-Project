@@ -11,8 +11,11 @@ This boilerplate project includes the following features and integrations:
 - **Firebase Cloud Messaging (FCM)**: Enables push notifications and messaging services.
 - **Hilt (Dagger)**: Provides dependency injection for easier object management.
 - **Coroutines**: Supports asynchronous programming and concurrency handling.
+- **DataStore**: A modern, coroutine-based solution for storing key-value pairs or typed objects.
 - **Retrofit**: A powerful HTTP client for managing API calls and network requests.
+- **ViewModel**: Manages UI-related data in a lifecycle-conscious way to survive configuration changes.
 - **Lottie**: Integrates animated graphics and vector-based visual effects.
+- **SharedPreferences**: Provides simple, synchronous key-value storage for small amounts of data.
 - **Play In-App Update**: Integrates Google's in-app update mechanism for smooth updates.
 - **Facebook Ads Integration**: Supports Facebook ads for app monetization.
 - **Google Ads Integration**: Adds Google ads for additional monetization options.
