@@ -10,12 +10,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import dev.sanjaygangwar.tempproject.ui.activity.Main
 import dev.sanjaygangwar.tempproject.utils.HapticFeedbackManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 abstract class BaseFragment<VB : ViewBinding>(private val inflate: InflateFragmentLayout<VB>) :
     Fragment(), View.OnClickListener {
-
-    private var bind: VB? = null
+    var bind: VB? = null
     private val hapticFeedbackManager by lazy { context?.let { HapticFeedbackManager(it) } }
     lateinit var clickableViews: List<View?>
 
@@ -32,8 +34,10 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: InflateFragme
         initAllComponents()
         initOnClickListener()
         initAllObserver()
-        getDataFromTheServer()
         setOnClickListener()
+        CoroutineScope(Dispatchers.IO).launch {
+            getDataFromTheServer()
+        }
     }
 
     private fun setOnClickListener() {
@@ -44,7 +48,7 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: InflateFragme
         }
     }
 
-    abstract fun getDataFromTheServer()
+    abstract suspend fun getDataFromTheServer()
 
     abstract fun initAllComponents()
     abstract fun initAllObserver()

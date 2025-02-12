@@ -16,7 +16,7 @@ import dev.sanjaygangwar.tempproject.repository.online.APIService
 import dev.sanjaygangwar.tempproject.repository.online.RemoteDataSource
 import dev.sanjaygangwar.tempproject.repository.online.Repository
 import dev.sanjaygangwar.tempproject.repository.sharedpreferences.AppSharePreference
-import dev.sanjaygangwar.tempproject.utils.network.Const.BaseUrl
+import dev.sanjaygangwar.tempproject.utils.network.Const.baseUrl
 import dev.sanjaygangwar.tempproject.utils.network.Const.timeOutTime
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,7 +32,7 @@ object AppModule {
     @Provides
     fun provideRetrofit(@ApplicationContext appContext: Context, gson: Gson): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BaseUrl)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(
                 OkHttpClient.Builder()
