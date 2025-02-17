@@ -36,13 +36,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d12be28-2a5c-4ff1-9f7d-e57e65ceabf5" name="Changes" comment="made changes for folder structure">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/Home.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/Home.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/setting/Setting.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/setting/Setting.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/navigation/main_nav.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/navigation/main_nav.xml" afterDir="false" />
-    </list>
+    <list default="true" id="1d12be28-2a5c-4ff1-9f7d-e57e65ceabf5" name="Changes" comment="added Serializable Parcelize to export the data classes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -316,7 +310,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739777970124</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added Serializable Parcelize to export the data classes">
+      <option name="closed" value="true" />
+      <created>1739779885668</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1739779885668</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -336,7 +338,8 @@
     <MESSAGE value="nothing major" />
     <MESSAGE value="updated room db and adding one api with response with local db etc" />
     <MESSAGE value="made changes for folder structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="made changes for folder structure" />
+    <MESSAGE value="added Serializable Parcelize to export the data classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="added Serializable Parcelize to export the data classes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

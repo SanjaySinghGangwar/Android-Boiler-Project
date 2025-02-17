@@ -14,8 +14,8 @@ class Setting : BaseFragment<SettingBinding>(SettingBinding::inflate) {
     override suspend fun getDataFromTheServer() {}
 
     override fun initAllComponents() {
-        bind?.name?.text = args.userID?.name
-        bind?.species?.text = args.userID?.species
+        bind?.name?.text = args.userData?.name
+        bind?.species?.text = args.userData?.species
     }
 
     override fun initAllObserver() {}
