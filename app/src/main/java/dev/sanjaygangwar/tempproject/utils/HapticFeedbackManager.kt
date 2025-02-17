@@ -14,7 +14,6 @@ class HapticFeedbackManager(private val context: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     vibrator.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE))
-//                    vibrator.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.EFFECT_CLICK))
                 }else{
                     vibrator.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE))
                 }

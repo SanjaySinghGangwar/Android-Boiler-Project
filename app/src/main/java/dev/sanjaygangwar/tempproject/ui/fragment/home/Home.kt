@@ -4,13 +4,13 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanjaygangwar.tempproject.databinding.HomeBinding
-import dev.sanjaygangwar.tempproject.models.dataclass.Characters
-import dev.sanjaygangwar.tempproject.ui.fragment.home.recycler.HomeRecyclerAdapter
-import dev.sanjaygangwar.tempproject.utils.baseclasses.BaseFragment
-import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.Extensions.hide
-import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.Extensions.show
-import dev.sanjaygangwar.tempproject.utils.mUtils.mToast
-import dev.sanjaygangwar.tempproject.utils.retrofit.Resource
+import dev.sanjaygangwar.tempproject.models.entity.Characters
+import dev.sanjaygangwar.tempproject.ui.fragment.home.adapter.HomeRecyclerAdapter
+import dev.sanjaygangwar.tempproject.ui.base.BaseFragment
+import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.ImageExtensions.hide
+import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.ImageExtensions.show
+import dev.sanjaygangwar.tempproject.utils.ToastUtil.mToast
+import dev.sanjaygangwar.tempproject.utils.network.retrofit.Resource
 
 @AndroidEntryPoint
 class Home : BaseFragment<HomeBinding>(HomeBinding::inflate), HomeRecyclerAdapter.onClickListner {

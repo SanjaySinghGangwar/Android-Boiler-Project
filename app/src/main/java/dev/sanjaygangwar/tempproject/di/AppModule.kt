@@ -10,14 +10,14 @@ import dagger.hilt.InstallIn
 
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.sanjaygangwar.tempproject.repository.offline.AppDatabase
+import dev.sanjaygangwar.tempproject.repository.offline.database.AppDatabase
 import dev.sanjaygangwar.tempproject.repository.offline.dao.mainDao
-import dev.sanjaygangwar.tempproject.repository.online.APIService
-import dev.sanjaygangwar.tempproject.repository.online.RemoteDataSource
-import dev.sanjaygangwar.tempproject.repository.online.Repository
+import dev.sanjaygangwar.tempproject.repository.online.api.APIService
+import dev.sanjaygangwar.tempproject.repository.online.datasource.RemoteDataSource
+import dev.sanjaygangwar.tempproject.repository.Repository
 import dev.sanjaygangwar.tempproject.repository.sharedpreferences.AppSharePreference
-import dev.sanjaygangwar.tempproject.utils.network.Const.baseUrl
-import dev.sanjaygangwar.tempproject.utils.network.Const.timeOutTime
+import dev.sanjaygangwar.tempproject.utils.const.NetworkConstants.baseUrl
+import dev.sanjaygangwar.tempproject.utils.const.NetworkConstants.timeOutTime
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
