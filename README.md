@@ -29,7 +29,7 @@ This boilerplate project includes the following features and integrations:
 - **Etc.**: Additional shared components and utilities for code reuse.
 
 
-# --------------------  Android Topic  --------------------
+# ---------------------  Android Topic  ---------------------
 
 ## Fundamentals
 **App Components**: Activities, Services, Broadcast Receivers, Content Providers
@@ -140,5 +140,5 @@ This boilerplate project includes the following features and integrations:
 **CI/CD**: GitHub Actions, Fastlane, Firebase App Distribution
 
 
-# --------------------  Interview Questions   -------------------- 
+# ------------------  Interview Questions   ------------------ 
 Will add soon
