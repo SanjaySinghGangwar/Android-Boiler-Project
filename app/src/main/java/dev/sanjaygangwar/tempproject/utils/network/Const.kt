@@ -1,6 +1,6 @@
 package dev.sanjaygangwar.tempproject.utils.network
 
 object Const {
-    val  BaseUrl="https://jsonplaceholder.typicode.com/"
-    val  timeOutTime:Long=60
+    const val baseUrl = "https://api.sanjaygangwar.dev/boilerConnection/"
+    const val timeOutTime: Long = 90
 }

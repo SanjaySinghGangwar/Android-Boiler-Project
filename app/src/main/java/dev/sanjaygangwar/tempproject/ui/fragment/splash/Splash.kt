@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 @AndroidEntryPoint
 class Splash : BaseFragment<SplashBinding>(SplashBinding::inflate) {
 
-    override fun getDataFromTheServer() {}
+    override suspend fun getDataFromTheServer() {}
     override fun initAllComponents() {
         CoroutineScope(Dispatchers.IO).launch {
             moveToHomeScreen()

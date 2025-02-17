@@ -4,10 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import dev.sanjaygangwar.tempproject.models.dataclass.Characters
 import dev.sanjaygangwar.tempproject.models.localdbclass.userData
 import dev.sanjaygangwar.tempproject.repository.offline.dao.mainDao
+import dev.sanjaygangwar.tempproject.repository.offline.dao.utils.Converters
 
-@Database(entities = [userData::class], version = 1, exportSchema = false)
+@Database(entities = [userData::class,Characters::class], version = 1, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun mainDao(): mainDao
@@ -17,11 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
         private var instance: AppDatabase? = null
 
         fun getDatabase(context: Context): AppDatabase =
-            instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also {
-                    instance = it
-                }
-            }
+            instance ?: synchronized(this) { instance ?: buildDatabase(context).also { instance = it } }
 
         private fun buildDatabase(appContext: Context) =
             Room.databaseBuilder(appContext, AppDatabase::class.java, appContext.applicationInfo.name)

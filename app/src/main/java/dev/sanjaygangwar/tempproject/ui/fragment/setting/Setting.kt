@@ -9,11 +9,14 @@ import dev.sanjaygangwar.tempproject.utils.mUtils.mLog
 class Setting : BaseFragment<SettingBinding>(SettingBinding::inflate) {
 
     val args: SettingArgs by navArgs()
-    override fun getDataFromTheServer() {
+
+    override suspend fun getDataFromTheServer() {
         mLog("DEEPLINK VLAUE IS :: " + args.userID)
     }
 
-    override fun initAllComponents() {}
+    override fun initAllComponents() {
+        bind?.name?.text = args.userID
+    }
 
     override fun initAllObserver() {}
 
