@@ -47,11 +47,7 @@ object DummyWorkers {
     private fun startWorkerForNotification() {
         work?.let { worker -> workManager?.enqueue(worker) }
         work?.let { worker ->
-            workManager?.enqueueUniquePeriodicWork(
-                workerName,
-                ExistingPeriodicWorkPolicy.REPLACE,
-                worker
-            )
+            workManager?.enqueueUniquePeriodicWork(workerName, ExistingPeriodicWorkPolicy.REPLACE, worker)
         }
     }
 }
