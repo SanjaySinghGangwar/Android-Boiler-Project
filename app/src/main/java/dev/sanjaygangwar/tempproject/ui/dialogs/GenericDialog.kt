@@ -3,8 +3,8 @@ package dev.sanjaygangwar.tempproject.ui.dialogs
 import android.view.View
 import dev.sanjaygangwar.tempproject.R
 import dev.sanjaygangwar.tempproject.databinding.GenericDialogBinding
-import dev.sanjaygangwar.tempproject.models.dataclass.GenericDialogModelClass
-import dev.sanjaygangwar.tempproject.utils.baseclasses.BaseDialogFragment
+import dev.sanjaygangwar.tempproject.models.data.GenericDialogModelClass
+import dev.sanjaygangwar.tempproject.ui.base.BaseDialogFragment
 
 class GenericDialog(
     private val flag: String,

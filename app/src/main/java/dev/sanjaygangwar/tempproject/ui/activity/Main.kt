@@ -26,22 +26,17 @@ import com.google.android.play.core.review.ReviewManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanjaygangwar.tempproject.R
 import dev.sanjaygangwar.tempproject.databinding.MainBinding
-import dev.sanjaygangwar.tempproject.models.dataclass.GenericDialogModelClass
-import dev.sanjaygangwar.tempproject.models.protoclass.appsetting.Language
+import dev.sanjaygangwar.tempproject.models.data.GenericDialogModelClass
+import dev.sanjaygangwar.tempproject.models.proto.appsetting.Language
 import dev.sanjaygangwar.tempproject.ui.dialogs.GenericDialog
 import dev.sanjaygangwar.tempproject.ui.dialogs.NoInternetConnection
-import dev.sanjaygangwar.tempproject.utils.baseclasses.BaseActivity
+import dev.sanjaygangwar.tempproject.ui.base.BaseActivity
 import dev.sanjaygangwar.tempproject.utils.datastore.AppSetting
-import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.Extensions.hide
-import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.Extensions.show
-import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.VariableConst.Notification
-import dev.sanjaygangwar.tempproject.utils.mUtils.mLog
+import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.ImageExtensions.hide
+import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.ImageExtensions.show
+import dev.sanjaygangwar.tempproject.utils.const.AppConstants.Notification
+import dev.sanjaygangwar.tempproject.utils.ToastUtil.mLog
 import dev.sanjaygangwar.tempproject.utils.network.NetworkObserver
-import dev.sanjaygangwar.tempproject.workers.DummyWorker.DummyWorkers.startDummyWorker
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 @AndroidEntryPoint
