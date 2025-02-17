@@ -38,7 +38,7 @@
             android:id="@+id/deepLink"
             app:uri="https://tempproject.sanjaygangwar.dev/setting/{userID}" />
         <argument android:name="userID"
-            app:argType="string"
+            app:argType="dev.sanjaygangwar.tempproject.models.entity.Characters"
             app:nullable="true" />
     </fragment>
 </navigation>
