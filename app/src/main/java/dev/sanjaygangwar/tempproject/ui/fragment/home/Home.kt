@@ -57,8 +57,7 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate), HomeRecyclerAdapte
     override fun onViewClicker(p0: View?) {}
 
     override fun onItemCLicked(id: Characters) {
-        context?.mToast(id.name)
-        val action = HomeDirections.actionHome2ToSetting(id.name)
+        val action = HomeDirections.actionHome2ToSetting(id)
         action.navigate()
     }
 

@@ -36,56 +36,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d12be28-2a5c-4ff1-9f7d-e57e65ceabf5" name="Changes" comment="made changes for folder structure">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/entity/Characters.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/const/AppConstants.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/const/NetworkConstants.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/di/AppModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/di/AppModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/fcm/CustomFirebaseBaseMessaging.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/fcm/CustomFirebaseBaseMessaging.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/dataclass/Characters.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/dataclass/GenericDialogModelClass.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/data/GenericDialogModelClass.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/dataclass/GetAllCharacterDataClass.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/data/GetAllCharacterDataClass.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/localdbclass/UserData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/entity/UserData.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/protoclass/appsetting/AppSettings.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/proto/appsetting/AppSettings.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/protoclass/appsetting/AppSettingsSerializer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/models/proto/appsetting/AppSettingsSerializer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/offline/AppDatabase.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/offline/database/AppDatabase.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/offline/dao/mainDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/offline/dao/mainDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/offline/dao/utils/Converters.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/converters/Converters.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/online/APIService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/online/api/APIService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/online/RemoteDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/online/datasource/RemoteDataSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/online/Repository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/repository/Repository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/activity/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/activity/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/dialogs/GenericDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/dialogs/GenericDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/dialogs/NoInternetConnection.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/dialogs/NoInternetConnection.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/Home.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/Home.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/HomeViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/HomeViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/recycler/HomeRecyclerAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/adapter/HomeRecyclerAdapter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/recycler/HomeRecyclerViewHolder.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/adapter/HomeRecyclerViewHolder.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/setting/Setting.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/setting/Setting.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/splash/Splash.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/splash/Splash.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/FilesUri.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/FilesUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/Formatter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/TextFormatterUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/HapticFeedbackManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/HapticFeedbackManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/Intent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/IntentUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/baseclasses/BaseActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/base/BaseActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/baseclasses/BaseBottomSheetFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/base/BaseBottomSheetFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/baseclasses/BaseDialogFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/base/BaseDialogFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/baseclasses/BaseFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/base/BaseFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/datastore/datastore.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/datastore/datastore.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/extenstionfuntions/Extensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/extenstionfuntions/ImageExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/extenstionfuntions/VariableConst.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/extenstionfuntions/mCoroutineExtensions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/extenstionfuntions/CoroutineExtensions.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/mFonts.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/FontsUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/mUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/ToastUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/network/Const.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/retrofit/BaseDataSource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/network/retrofit/BaseDataSource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/retrofit/Resource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/network/retrofit/Resource.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/retrofit/operations/AutoClearedValue.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/network/retrofit/operations/AutoClearedValue.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/retrofit/operations/DataAccessStrategy.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/network/retrofit/operations/DataAccessStrategy.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/workers/DummyWorker/DummyWorkerTask.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/workers/notifications/DummyWorkerTask.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/workers/DummyWorker/DummyWorkers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/workers/notifications/DummyWorkers.kt" afterDir="false" />
-    </list>
+    <list default="true" id="1d12be28-2a5c-4ff1-9f7d-e57e65ceabf5" name="Changes" comment="added Serializable Parcelize to export the data classes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -144,6 +95,7 @@
         <option value="layoutResourceFile" />
         <option value="Kotlin Script" />
         <option value="Kotlin Class" />
+        <option value="Kotlin Data Class" />
       </list>
     </option>
   </component>
@@ -205,7 +157,7 @@
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "#4 on dummy-app",
+    "git-widget-placeholder": "#5 on dummy-app",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Volumes/2 TB/Personal/Code/Boiler/android/app/src/main/res/drawable",
     "settings.editor.selected.configurable": "editing.templates",
@@ -350,7 +302,23 @@
       <option name="project" value="LOCAL" />
       <updated>1739775310413</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="made changes for folder structure">
+      <option name="closed" value="true" />
+      <created>1739777970124</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1739777970124</updated>
+    </task>
+    <task id="LOCAL-00007" summary="added Serializable Parcelize to export the data classes">
+      <option name="closed" value="true" />
+      <created>1739779885668</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1739779885668</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -370,7 +338,8 @@
     <MESSAGE value="nothing major" />
     <MESSAGE value="updated room db and adding one api with response with local db etc" />
     <MESSAGE value="made changes for folder structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="made changes for folder structure" />
+    <MESSAGE value="added Serializable Parcelize to export the data classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="added Serializable Parcelize to export the data classes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
