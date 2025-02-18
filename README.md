@@ -145,5 +145,5 @@ This boilerplate project includes the following features and integrations:
 # ------------------ Kotlin Questions ------------------
 
 - **What is the difference between val and var in Kotlin?**
-- **val is used to declare a read-only variable, while var is used to declare a mutable variable.**
-- `print("Hello, World!")`
+**val is used to declare a read-only variable, while var is used to declare a mutable variable.**
+`print("Hello, World!")`
