@@ -36,8 +36,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d12be28-2a5c-4ff1-9f7d-e57e65ceabf5" name="Changes" comment="added Serializable Parcelize to export the data classes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="1d12be28-2a5c-4ff1-9f7d-e57e65ceabf5" name="Changes" comment="added bullets">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +47,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=RZCX4117GSW)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=10BCBG110E001R7)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -118,22 +118,22 @@
     &quot;assignee&quot;: &quot;SanjaySinghGangwar&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/SanjaySinghGangwar/Android-Boiler-Project.git",
-    "accountId": "2a309583-7eb6-4e89-8f6b-cc36859849a9"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/SanjaySinghGangwar/Android-Boiler-Project.git&quot;,
+    &quot;accountId&quot;: &quot;2a309583-7eb6-4e89-8f6b-cc36859849a9&quot;
   },
-  "recentNewPullRequestHead": {
-    "server": {
-      "useHttp": false,
-      "host": "github.com",
-      "port": null,
-      "suffix": null
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
     },
-    "owner": "SanjaySinghGangwar",
-    "repository": "Android-Boiler-Project"
+    &quot;owner&quot;: &quot;SanjaySinghGangwar&quot;,
+    &quot;repository&quot;: &quot;Android-Boiler-Project&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -159,7 +159,7 @@
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "#6 on dummy-app",
+    "git-widget-placeholder": "#11 on dummy-app",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Volumes/2 TB/Personal/Code/Boiler/android/app/src/main/res/drawable",
     "settings.editor.selected.configurable": "editing.templates",
@@ -328,7 +328,47 @@
       <option name="project" value="LOCAL" />
       <updated>1739779976830</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="added topic for android">
+      <option name="closed" value="true" />
+      <created>1739788229876</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1739788229876</updated>
+    </task>
+    <task id="LOCAL-00010" summary="added topic for android">
+      <option name="closed" value="true" />
+      <created>1739788343091</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1739788343091</updated>
+    </task>
+    <task id="LOCAL-00011" summary="added topic for android">
+      <option name="closed" value="true" />
+      <created>1739788424404</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1739788424404</updated>
+    </task>
+    <task id="LOCAL-00012" summary="added topic for android">
+      <option name="closed" value="true" />
+      <created>1739788478563</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1739788478563</updated>
+    </task>
+    <task id="LOCAL-00013" summary="added bullets">
+      <option name="closed" value="true" />
+      <created>1739788724718</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1739788724718</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -349,7 +389,9 @@
     <MESSAGE value="updated room db and adding one api with response with local db etc" />
     <MESSAGE value="made changes for folder structure" />
     <MESSAGE value="added Serializable Parcelize to export the data classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="added Serializable Parcelize to export the data classes" />
+    <MESSAGE value="added topic for android" />
+    <MESSAGE value="added bullets" />
+    <option name="LAST_COMMIT_MESSAGE" value="added bullets" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
