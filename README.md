@@ -144,8 +144,10 @@ This boilerplate project includes the following features and integrations:
 
 # ------------------ Kotlin Questions ------------------
 
-- **What is the difference between val and var in Kotlin?**
-**val is used to declare a read-only variable, while var is used to declare a mutable variable.**
+- **What is the difference between `val` and `var` in Kotlin?**
+    - `val` is used to declare a **read-only** variable (immutable).
+    - `var` is used to declare a **mutable** variable, allowing reassignment.
+
 
 ```kotlin
 val myString = "Hello World"
@@ -159,4 +161,5 @@ anotherString = "Hello Kotlin" // This is valid
 - `lateinit` is used to initialize a **non-nullable property** outside of the constructor.  
 - `lazy` is used to create a property **whose value will be computed only when it is first accessed**.  
 
+This formatting makes sure the Kotlin code is correct and the explanation is outside the code block. 🚀
 
