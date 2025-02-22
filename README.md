@@ -916,5 +916,74 @@ fun main() {
 }
 ```
 
-## ------------------ Android Questions ------------------
-Adding
+## ------------------ Android Points ------------------
+
+**What’s Activity in Android?**
+Activity `represents a single screen with a user interface`. It serves as the entry point for interacting with the app and can host UI elements like buttons, text fields, and images. Each Android app typically consists of multiple activities that work together to provide a seamless user experience.
+
+**What are the components of the Android Application?**
+There are some necessary `building blocks` that an `Android application consists` of. These loosely coupled components are bound by the application manifest file which contains the description of each component and how they interact. The four main components of Android applications are:
+
+- `Activities`
+- `Services`
+- `Content Providers`
+- `Broadcast Receiver`
+- `Intents`
+
+
+**What is Toast in Android?**
+A Toast is a `short alert message shown on the Android screen for a short interval of time`. Android Toast is a short popup notification that is used to display information when we perform any operation in our app. It disappears automatically.
+
+**What’s Service in Android?**
+Services in Android are a special component that facilitates an application to `run in the background in order to perform long-running operation tasks`. 
+
+**What is a `Content Provider` in Android?**
+A Content Provider is a crucial component in Android that acts as a `central repository for storing and managing application data`. It allows apps to securely `share, access, and modify data` from other apps while maintaining proper permissions and security.
+
+```kotlin
+val contentUri = Uri.parse("content://com.example.provider/users")
+val cursor = contentResolver.query(contentUri, null, null, null, null)
+```
+
+**What is a `Broadcast Receiver` in Android?**
+A Broadcast Receiver is a component in Android that listens for `system-wide or app-specific events` (broadcasts) and responds when they occur. Events include `device boot`, `incoming SMS`, `battery changes`, or `airplane mode activation`.
+
+- **Types of Broadcast Receivers:**
+- **Static Broadcast Receiver** – Declared in the AndroidManifest.xml, works even if the app is closed.
+- **Dynamic Broadcast Receiver** – Registered at runtime, works only when the app is running or minimized.
+
+**What is `Gradle` in Android?**
+Gradle is an open-source build automation tool used in Android for `building, testing, and deployment`. It `automates tasks like compiling code, managing dependencies, and generating APKs`.
+
+**What is a Fragment in Android?**
+A Fragment is a `reusable UI component` that represents a portion of an Activity. It helps create `flexible, modular, and adaptive UI designs` that adjust to different screen sizes. Fragments make it easier to build `multi-pane layouts` and `improve app scalability`.
+
+What’s  RecyclerView in Android & How it works?
+
+RecyclerView is a ViewGroup added to the Android Studio as a successor of the GridView and ListView. It is an improvement on both of them. It has been created to make possible construction of any lists with XML layouts as an item that can be customized vastly while improving the efficiency of ListViews and GridViews. This improvement is achieved by recycling the views which are out of the visibility of the user. For example, if a user scrolled down to a position where items 4 and 5 are visible; items 1, 2, and 3 would be cleared from the memory to reduce memory consumption. 
+
+
+What’s the Difference Between Intent and Intent filters?
+
+An Intent is an object passed to Context.startActivity(), Context.startService() or Activity.startActivityForResult() etc. to launch an activity or get an existing activity to do something new. On the other hand, an Intent filter describes the capability of the component(like activities, services, and broadcast receivers). 
+
+
+What is the AndroidManifest.xml?
+
+Every project in Android includes a manifest file, which is AndroidManifest.xml, stored in the root directory of its project hierarchy. The manifest file is an important part of our app because it defines the structure and metadata of our application, its components, and its requirements. This file includes nodes for each of the Activities, Services, Content Providers, and Broadcast Receivers that make the application and using Intent Filters and Permissions determines how they coordinate with each other and other applications. The manifest file also specifies the application metadata, which includes its icon, version number, themes, etc., and additional top-level nodes can specify any required permissions, unit tests, and define hardware, screen, or platform requirements.
+
+
+ Activity Lifecycle in brief.
+
+These are the different stages of the Activity Lifecycle:
+![alt text](A0ED08A0-8A80-4B38-8CB0-C85D004B7557.jpeg)
+
+onCreate(): It is called when the activity is first created. This is where all the static work is done like creating views, binding data to lists, etc.
+onStart(): It is invoked when the activity is visible to the user. It is followed by onResume() if the activity is invoked from the background.
+onRestart(): It is invoked after the activity has been stopped and prior to its starting stage and thus is always followed by onStart() when any activity is revived from background to on the screen.
+onResume(): It is invoked when the activity starts interacting with the user. At this point, the activity is at the top of the activity stack, with a user interacting with it.
+onPause(): It is invoked when an activity is going into the background but has not yet been killed. It is a counterpart to onResume()
+onStop(): It is invoked when the activity is not visible to the user. It is followed by onRestart() when the activity is revoked from the background, followed by onDestroy() when the activity is closed or finished, and nothing when the activity remains on the background only.
+onDestroy(): The final call received before the activity is destroyed. This can happen either because the activity is finished (when finish() is invoked) or because the system is temporarily destroying this instance of the activity to save space.
+
+
