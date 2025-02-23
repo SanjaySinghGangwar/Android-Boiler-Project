@@ -958,32 +958,396 @@ Gradle is an open-source build automation tool used in Android for `building, te
 **What is a Fragment in Android?**
 A Fragment is a `reusable UI component` that represents a portion of an Activity. It helps create `flexible, modular, and adaptive UI designs` that adjust to different screen sizes. Fragments make it easier to build `multi-pane layouts` and `improve app scalability`.
 
-What’s  RecyclerView in Android & How it works?
+**What’s  `RecyclerView in Android` & How it works?**
 
-RecyclerView is a ViewGroup added to the Android Studio as a successor of the GridView and ListView. It is an improvement on both of them. It has been created to make possible construction of any lists with XML layouts as an item that can be customized vastly while improving the efficiency of ListViews and GridViews. This improvement is achieved by recycling the views which are out of the visibility of the user. For example, if a user scrolled down to a position where items 4 and 5 are visible; items 1, 2, and 3 would be cleared from the memory to reduce memory consumption. 
-
-
-What’s the Difference Between Intent and Intent filters?
-
-An Intent is an object passed to Context.startActivity(), Context.startService() or Activity.startActivityForResult() etc. to launch an activity or get an existing activity to do something new. On the other hand, an Intent filter describes the capability of the component(like activities, services, and broadcast receivers). 
+RecyclerView is a ViewGroup added to the Android Studio as a `successor of the GridView and ListView`. It is an `improvement` on both of them. It has been created to make possible construction of any lists with XML layouts as an item that can be `customized vastly` while `improving the efficiency of ListViews and GridViews`. This improvement is achieved by recycling the views which are out of the visibility of the user. For example, if a user scrolled down to a position where items 4 and 5 are visible; items 1, 2, and 3 would be cleared from the memory to reduce memory consumption. 
 
 
-What is the AndroidManifest.xml?
+**What’s the Difference Between `Intent and Intent filters`?**
 
-Every project in Android includes a manifest file, which is AndroidManifest.xml, stored in the root directory of its project hierarchy. The manifest file is an important part of our app because it defines the structure and metadata of our application, its components, and its requirements. This file includes nodes for each of the Activities, Services, Content Providers, and Broadcast Receivers that make the application and using Intent Filters and Permissions determines how they coordinate with each other and other applications. The manifest file also specifies the application metadata, which includes its icon, version number, themes, etc., and additional top-level nodes can specify any required permissions, unit tests, and define hardware, screen, or platform requirements.
+An Intent is an `object passed to Context.startActivity()`, Context.startService() or Activity.startActivityForResult() etc. to launch an activity or get an existing activity to do something new. On the other hand, an `Intent filter` describes the `capability of the component`(like activities, services, and broadcast receivers). 
 
 
- Activity Lifecycle in brief.
+**What is the AndroidManifest.xml?**
+
+Every project in Android includes a manifest file, which is `AndroidManifest.xml`, `stored` in the `root directory` of its project hierarchy. The manifest file is an important part of our app because it defines the structure and metadata of our application, its `components`, and its `requirements`. This file includes nodes for each of the `Activities, Services, Content Providers, and Broadcast Receivers` that make the application and using `Intent Filters and Permissions determines` how they coordinate with each other and other applications. The manifest file also specifies the application metadata, which includes its `icon`, `themes`, etc.
+
+
+ **Activity Lifecycle in brief.**
 
 These are the different stages of the Activity Lifecycle:
 ![alt text](A0ED08A0-8A80-4B38-8CB0-C85D004B7557.jpeg)
 
-onCreate(): It is called when the activity is first created. This is where all the static work is done like creating views, binding data to lists, etc.
-onStart(): It is invoked when the activity is visible to the user. It is followed by onResume() if the activity is invoked from the background.
-onRestart(): It is invoked after the activity has been stopped and prior to its starting stage and thus is always followed by onStart() when any activity is revived from background to on the screen.
-onResume(): It is invoked when the activity starts interacting with the user. At this point, the activity is at the top of the activity stack, with a user interacting with it.
-onPause(): It is invoked when an activity is going into the background but has not yet been killed. It is a counterpart to onResume()
-onStop(): It is invoked when the activity is not visible to the user. It is followed by onRestart() when the activity is revoked from the background, followed by onDestroy() when the activity is closed or finished, and nothing when the activity remains on the background only.
-onDestroy(): The final call received before the activity is destroyed. This can happen either because the activity is finished (when finish() is invoked) or because the system is temporarily destroying this instance of the activity to save space.
+`onCreate():` It is `called when the activity is first created`. This is where all the static work is done like creating views, binding data to lists, etc.
+`onStart():` It is invoked `when the activity is visible to the user`. It is followed by onResume() if the activity is invoked from the background.
+`onRestart():` It is invoked after the `activity has been stopped and prior to its starting stage` and thus is always followed by onStart() when any activity is revived from background to on the screen.
+`onResume():` It is invoked when `the activity starts interacting with the user`. At this point, the activity is at the top of the activity stack, with a user interacting with it.
+`onPause():` It is invoked `when an activity is going into the background but has not yet been killed`. It is a counterpart to onResume()
+`onStop():` It is invoked when the `activity is not visible to the user`. It is followed by onRestart() when the activity is revoked from the background, followed by onDestroy() when the activity is closed or finished, and nothing when the activity remains on the background only.
+`onDestroy()`: The final call `received before the activity is destroyed`. This can happen either because the activity is finished (when finish() is invoked) or because the system is temporarily destroying this instance of the activity to save space.
 
 
+**Why do we need to call `setContentView() in onCreate()` of Activity class?**
+
+The reason for doingso is that the activity life cycle onCreate() method is `called only once`. And this is the big reason we need to call the `setContentView() in onCreate()`. And it will be `inefficient to call` this function in `onResume(), onStart()`, and somewhere else because those methods are called more than once. 
+
+**Explain the `Fragment Lifecycle` in Brief**
+![alt text](Android_Fragment_Lifecycle.jpg)
+
+
+## Difference between Fragment and Activity
+
+| Feature              | Activity | Fragment |
+|----------------------|---------|---------|
+| **Definition**       | An application component that provides a user interface for interaction. | A UI component that is part of an Activity, contributing to its UI. |
+| **Independence**     | Not dependent on a Fragment. | Dependent on an Activity; cannot exist independently. |
+| **Manifest Requirement** | Must be declared in `AndroidManifest.xml`. | No need to declare in the manifest file. |
+| **Multi-Screen UI**  | Cannot create a multi-screen UI alone. | Enables multi-screen UI by combining multiple fragments in one activity. |
+| **Existence**        | Can exist without a Fragment. | Cannot exist without an Activity. |
+| **Project Structure** | Difficult to manage if the project has only activities. | Easier to manage and scale using fragments. |
+| **Lifecycle Handling** | Lifecycle is managed by the OS. | Lifecycle is managed by the hosting Activity. |
+| **Performance**      | Heavier component. | Lightweight compared to Activity. |
+| **Reusability**       | Not reusable. | Highly reusable. |
+
+
+
+
+**What’s `Context` in Android?**
+
+The context in Android can be understood as something which gives us the `context of the current state of our application`. We can break the context and its use into three major points: 
+
+- It allows us to access resources.
+- It allows us to interact with other Android components by sending messages.
+- It gives you information about your app environment.
+
+**There are mainly two types of context available in Android.**
+
+- Application Context
+- Activity Context
+
+## Difference Between View and ViewGroup in Android
+
+| Feature | View | ViewGroup |
+|---------|------|----------|
+| **Definition** | A simple rectangular UI element that responds to user actions. | An invisible container that holds Views and other ViewGroups. |
+| **Hierarchy** | Superclass of all UI components like `TextView`, `EditText`, `ListView`, etc. | A collection of Views (`TextView`, `EditText`, `ListView`, etc.), acting as a container. |
+| **Purpose** | Represents UI elements like buttons, text boxes, and widgets. | Organizes Views and ViewGroups to structure the UI layout. |
+| **Examples** | `EditText`, `Button`, `CheckBox`, etc. | `LinearLayout`, `RelativeLayout`, `ConstraintLayout` (which contain Views inside). |
+| **Class Reference** | Refers to `android.view.View`. | Refers to `android.view.ViewGroup`. |
+| **Base Class** | `android.view.View` is the base class of all UI components. | `ViewGroup` is the base class for all Layouts. |
+
+
+**Describe the architecture of your last app.**
+To structure the project’s code and to give it a modular design(separated code parts), architecture patterns are applied to separate the concerns. The most popular Android architectures used by developers are the following:
+
+`MVC (Model — View — Controller)`
+`MVP (Model — View — Presenter)`
+`MVVM (Model — View — ViewModel)`
+
+
+## MVC vs MVP vs MVVM Architecture and Which One to Choose?
+
+| Feature | MVC (Model-View-Controller) | MVP (Model-View-Presenter) | MVVM (Model-View-ViewModel) |
+|---------|----------------------------|----------------------------|----------------------------|
+| **Evolution** | One of the oldest software architectures. | Advanced version of MVC. | Industry-recognized architecture pattern. |
+| **Coupling** | UI (View) and Model are tightly coupled. | Presenter acts as an intermediary to reduce dependency between View and Model. | Uses data binding for event-driven communication, ensuring a clear separation of business logic and UI. |
+| **Relationships** | One-to-many: One Controller can handle multiple Views. | One-to-one: One Presenter manages one View. | One-to-many: Multiple Views can be mapped to a single ViewModel. |
+
+### **Which One Should We Choose?**
+- **MVC**: Best for **small-scale projects** due to its simplicity.  
+- **MVP**: Suitable for **both simple and complex applications**.  
+- **MVVM**: Ideal for **large-scale projects** but may be overkill for smaller ones.  
+
+
+**Describe `MVVM`**
+
+`Model — View — ViewModel (MVVM)` is the industry-recognized software architecture pattern that `overcomes all drawbacks of MVP and MVC` design patterns. MVVM suggests separating the data presentation logic(Views or UI) from the core business logic part of the application. 
+
+The separate code layers of MVVM are:
+- `Model:` This layer is responsible for the abstraction of the data sources. Model and ViewModel work together to get and save the data.
+- `View:` The purpose of this layer is to inform the ViewModel about the user’s action. This layer observes the ViewModel and does not contain any kind of application logic.
+- `ViewModel:` It exposes those data streams which are relevant to the View. Moreover, it serves as a link between the Model and the View.
+
+
+**How to Reduce APK size in Android?**
+
+- Remove unused sources
+- Use of Vector Drawables
+- Reuse your code
+- Compress PNG and JPEG files
+- Use of Lint
+- Use images in WebP file format
+- Use of proguard
+- Use of ShrinkResources
+- Limit the usage of external libraries
+- Use the Android Size Analyzer tool
+- Generate App Bundles instead of APK
+- Use of Resconfigs
+
+**What’s the `Android jetpack` and its `Key Benefits`?**
+
+Jetpack is nothing but a `set of software components, libraries, tools`, and guidance to help in developing great Android apps. Google launched Android Jetpack in 2018. Key Benefits of Android Jetpack
+
+- Forms a recommended way for app architecture through its components
+- Eliminate boilerplate code
+- Simplify complex task
+- Provide backward compatibility as libraries like support are unbundled from Android API and are re-packaged to androidx.* package
+- Inbuilt productivity feature of the Kotlin Integration
+
+
+**What’s `Jetpack Compose` and its Benefits?**
+
+Jetpack Compose is a `modern UI toolkit` recently launched by Google which is used for building native Android UI. It simplifies and accelerates the UI development with less code, Kotlin APIs, and powerful tools. 
+
+- Declarative
+- Compatible
+- Increase development speed
+- Concise and Idiomatic Kotlin
+- Easy to maintain
+- Written in Kotlin
+
+**What are the `Architecture Components` of Android?**
+Architecture Components could be classified as follows: 
+- Room
+- WorkManager
+- Lifecycle
+- ViewModel
+- LiveData
+- Navigation
+- Paging
+- Data Binding
+
+**How to Improve RecyclerView Scrolling Performance in Android?**
+
+- Set a specific width and height to ImageView in RecyclerView items
+- Avoid using NestedView
+- Use the setHasFixedsize method
+- Use the image loading library for loading images
+- Do less work in the OnBindViewHolder method
+- Use the NotifyItem method for your RecyclerView
+
+**What’s `Retrofit` in Android?**
+
+Retrofit is a `type-safe REST client built by square for Android` and Java which intends to make it simpler to expand RESTful web services. Retrofit uses `OkHttp as the system’s administration layer` and is based on it. Retrofit `naturally serializes the JSON reaction utilizing a POJO` (PlainOldJavaObject) which must be characterized as cutting edge for the JSON Structure. To serialize JSON we require a `converter to change it into Gson first`. Retrofit is much simpler than other libraries; we don’t have to parse our JSON. It directly returns objects but there is one 
+
+`disadvantage`: it doesn’t provide support to load images from the server, but we can use Picasso for the same. 
+
+
+**What are the `reasons your Android app` is legging?**
+- You are doing too much on the main thread
+- Your asset files are huge
+- You are using an outdated SDK version
+- You are using bad libraries
+- The speed of the network
+- Chatty conversations
+- `Your code is inefficient`
+
+
+**What is `ANR` and How can it be `Prevented in Android`?**
+
+ANR stands for `Application Not Responding`. An ANR will occur `if you’re running a process on the UI thread which takes an extended time`, usually around `5 seconds`. During this point, the `GUI (Graphical User Interface) will lock up which can end in anything the user presses won’t be actioned`. After the 5 seconds approx. has occurred, if the `thread still hasn’t recovered then an ANR dialogue box` is shown informing the user that the appliance isn’t responding and can give the user the choice to either wait, in the hope that the app will eventually recover, or to force close the app.
+
+`Stop doing heavy tasks on the main thread`. Instead, use worker threads such as IntentService, AsyncTask Handler, or another Thread simply. Detecting where ANRs happen is straightforward if it’s a permanent block (deadlock acquiring some locks for instance), but harder if it’s just a short-lived delay. First, re-evaluate your code and appearance for vulnerable spots and long-running operations.
+
+**What is `Android NDK` and why is it useful?**
+The NDK (Native Development Kit) is a tool that `allows you to program in C/C++ for Android devices`. It provides platform libraries one can use to manage native activities and access physical device components, such as sensors and touch input.
+Squeeze extra performance out of a device to achieve low latency or `run computationally intensive applications`, such as `games or physics simulations`. Reuse your own or other developers’ C or C++ libraries.
+
+**Explain the `JUnit` test in brief.**
+
+JUnit is a `“Unit Testing” framework` for Java Applications which is already included by default in Android studio. It is an `automation framework for Unit as well as UI Testing`. It contains annotations such as `@Test, @Before, @After,` etc. Here we will be using only @Test annotation to keep the article easy to understand.
+
+
+**What’s `LiveData` in `Android Architecture Component` and its Advantages?**
+LiveData component is an observable data holder class i.e, the contained value can be observed. `LiveData is a lifecycle-aware component` and thus `it performs its functions according to the lifecycle state of other application components`. Further, if the `observer’s lifecycle state is active i.e., either STARTED or RESUMED`, only then LiveData updates the app component. LiveData always checks the `observer’s state before making any update` to ensure that the observer must be active to receive it. If the observer’s lifecycle state is destroyed, `LiveData is capable of removing it, and thus it avoids memory leaks.` It makes the task of data synchronization easier.
+
+**Advantages of `LiveData component`:**
+
+- UI is updated as per the appropriate change in the data
+- It removes the stopped or destroyed activities which reduce the chance of app crash
+- No memory leaks as LiveData is a lifecycle-aware component.
+
+![alt text](LiveData_Component-(1).jpg)
+
+
+**What’s `Data Binding` in Android?**
+Data Binding library is a support library that provides the feature of `binding UI components in an activity/fragment to the data sources of the application`. The library carries out this binding task in a declarative format and not in a programmatic way. Below is an example to understand the working of this library accurately:
+To find a TextView widget and bind it to the userName property of the ViewModel variable, the findViewById() method is called:
+
+```kotlin
+TextView textView = findViewById(R.id.sample_text);
+textView.setText(viewModel.getUserName());
+
+```
+```kotlin
+After using the Data Binding library, the above code changes by using the assignment expression as follows:
+<TextView
+android:text=”@{viewmodel.userName}” />
+```
+**Advantages of Data Binding Component:**
+
+- Make code simpler and easy to maintain by removing UI frameworks called in the activity.
+- Allows classes and methods to observe changes in data
+- Allows to make objects and fill which works as collection observables.
+
+
+**Room in Android Architecture Component.**
+
+The requirement of a database in Android is fulfilled by SQLite from the very beginning. However, it comes with some severe drawbacks like not checking the queries at compile-time, it does not save plain-old-Java Objects(commonly referred to as POJOs). Developers also need to write a lot of boilerplate code to make the SQLite database work in the Android OS environment. The Room component comes into the picture as an SQLite Object Mapping Library which overcomes all the mentioned challenges. `Room converts queries directly into objects, checks errors in queries at the compile-time, and is also capable of persisting the Java POJOs.` 
+
+Moreover, `it produces LiveData results/observables from the given query result.` Because of this versatile nature of the Room component, Google officially supports and recommends developers to use it. The Room consists of the following sub-components:
+
+`Entity:` It is the `annotated class for which the Room creates a table within the database`. The field of the class represents columns in the table.
+`DAO(Data Access Object):` It is responsible for `defining the methods` to access the database and to perform operations.
+`Database:` It is an `abstract class that extends RoomDatabase class` and it serves as the main `access point to the underlying app’s` relational data.
+
+
+**ViewModel in Android**
+ViewModel is `one of the most critical classes of the Android Jetpack Architecture Component` that support data for UI components. Its purpose is to `hold and manage the UI-related data`. Moreover, its `main function is to maintain the integrity and allows data to be serviced during configuration changes like screen rotations`. Any kind of configuration change in `Android devices tends to recreate the whole activity of the application.` It means the data will be lost if it has not been saved and restored properly from the activity which was destroyed. To avoid these issues, it is recommended to store all `UI data in the ViewModel` instead of an activity. 
+
+
+**What is the difference between `Serializable` and `Parcelable` interfaces in Android?**
+`Both Serializable and Parcelable interfaces` are used to `transfer data between components in Android`. However, `Parcelable is more efficient than Serializable when it comes to performance`. Serializable uses `reflection`, which can slow down the `serialization and deserialization process`. On the other hand, Parcelable requires explicit implementation, but it performs better by using direct memory access.
+
+**How does `Dependency Injection (DI)` work in Android?**
+Dependency Injection is a `design pattern that promotes loose coupling between classes`. In Android, DI frameworks like Dagger or Koin are commonly used to manage dependencies. DI involves `creating interfaces or abstract classes for dependencies`, which are then `injected into the dependent classes during runtime`. This approach improves code `maintainability`, `testability`, and allows for `easy swapping of dependencie`s.
+
+**What is the `purpose of ProGuard` in Android development?**
+ProGuard is a tool used for `code shrinking, optimization, and obfuscation in Android development`. It analyzes the compiled code and `removes unused classes, fields, and methods,` `reducing the application's size`. Additionally, ProGuard can `obfuscate the code by renaming classes, fields, and methods, making it harder for reverse engineers` to understand the code and modify it.
+
+**How can you `handle orientation changes` in an Android application?**
+Orientation changes, such as rotating the device, can cause an Activity to restart. To handle orientation changes properly, you can override the `onSaveInstanceState()` method to save important data. The saved data can be retrieved in the `onCreate`() or `onRestoreInstanceState()` method to restore the previous state of the Activity. Additionally, using Fragments and ViewModel can provide a more robust solution for managing orientation changes.
+
+**What is the difference between a `Service` and an `IntentService` in Android?**
+Both Service and IntentService are used to` perform background operations in Android`. The main difference lies in how they handle requests. A Service runs on the `main thread and requires manual handling of background tasks` and thread management. On the other hand, `IntentService automatically creates a worker thread for each start request and handles requests sequentially`, making it more suitable for simple, independent background tasks.
+
+
+**What is Android `WorkManager`?**
+Android WorkManager is an `API introduced by Google to simplify and manage background tasks` in Android applications. It serves as a `unified solution that abstracts away the differences between various versions of Android and their limitations regarding background processing`. WorkManager enables developers to schedule and execute tasks reliably, even across device reboots.
+
+**What are the key `features` of WorkManager?**
+WorkManager offers several essential features, including:
+Support for one-time and periodic tasks.
+
+```kotlin
+// One-time task
+OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(MyWorker.class).build();
+
+// Periodic task
+PeriodicWorkRequest myPeriodicWorkRequest = new PeriodicWorkRequest.Builder(MyWorker.class, 1, TimeUnit.HOURS).build();
+Ability to define constraints for task execution, such as network availability or device charging status.
+
+// Adding network connectivity constraint
+Constraints constraints = new Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.UNMETERED)
+    .build();
+
+OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+    .setConstraints(constraints)
+    .build();
+```
+
+`Guaranteed task execution, even across device reboots`.
+Seamless integration with other Jetpack components, such as LiveData and ViewModel.
+
+
+**How does `WorkManager differ from other background task scheduling` mechanisms in Android?**
+Unlike other background task scheduling mechanisms in Android, WorkManager provides a `unified API that handles the intricacies of task execution on various Android versions`. It intelligently chooses the best available implementation based on the device's API level and capabilities, `ensuring optimal performance and reliability`.
+
+**What are the different types of `constraints` that can be applied to a `WorkRequest`?**
+WorkRequests in WorkManager can have various constraints, including:
+`Network connectivity requirements`, such as requiring an unmetered network. `Device charging status`, ensuring tasks execute only when the device is plugged in. `Device idle or not`, allowing tasks to be executed only when the device is idle.
+Execution window, which specifies a time frame for task execution.
+
+**What is the difference between `OneTimeWorkRequest` and `PeriodicWorkRequest`?**
+`OneTimeWorkRequest` is used for `one-time background tasks`, while `PeriodicWorkRequest` is employed for tasks that need to be `executed periodically `at a `specified interval`. OneTimeWorkRequests are ideal for tasks like sending analytics data, while PeriodicWorkRequests are suitable for recurring tasks like syncing data with a server.
+
+
+**How can you `pass data` to a Worker class?**
+You can pass data to a Worker class by using the `setInputData()` method when creating the WorkRequest. This method allows you to `attach a Data object containing key-value pairs`. Inside the Worker's `doWork()` method, you can retrieve the data using the getInputData() method.
+
+```kotlin
+Data inputData = new Data.Builder()
+    .putString("key", "value")
+    .build();
+
+OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+    .setInputData(inputData)
+    .build();
+
+```
+
+**How can you `observe the progress` or `output of a Worker class`?**
+WorkManager `provides a LiveData object called WorkInfo` that `allows you to observe the progress` and `status of a Worker`. By using the `getWorkInfoByIdLiveData()` method, you can `obtain the WorkInfo object` and observe it to get updates on the task's progress, output, and completion status.
+
+```Kotlin
+WorkManager.getInstance(context).getWorkInfoByIdLiveData(workRequestId)
+    .observe(owner, workInfo -> {
+        if (workInfo != null && workInfo.getState().isFinished()) {
+            // Task finished
+            // Access output data: workInfo.getOutputData()
+        } else {
+            // Task in progress
+            // Access progress: workInfo.getProgress()
+        }
+    });
+```
+
+**How can you `chain multiple work requests together`?**
+To chain multiple work requests together, you can use the `then()` method on a WorkRequest object. This method allows you to `specify another WorkRequest that should run after the current one completes`. By chaining work requests, you can define a sequence of tasks and ensure they are executed in the desired order.
+```kotlin
+OneTimeWorkRequest firstWorkRequest = new OneTimeWorkRequest.Builder(FirstWorker.class).build();
+OneTimeWorkRequest secondWorkRequest = new OneTimeWorkRequest.Builder(SecondWorker.class).build();
+
+WorkManager.getInstance(context)
+    .beginWith(firstWorkRequest)
+    .then(secondWorkRequest)
+    .enqueue();
+```
+**How can you handle and retry failed tasks in WorkManager?**
+WorkManager automatically `handles failed tasks by respecting the retry policy defined for the WorkRequest.` You can specify the retry policy using the s`etBackoffCriteria()` method, which allows you to `define the initial and maximum delay for retries.` WorkManager intelligently applies exponential backoff to retries, giving failed tasks a chance to succeed without overwhelming system resources.
+```kotlin
+// Set exponential backoff with a 1-minute initial delay and a maximum of 3 retries
+OneTimeWorkRequest myWorkRequest = new OneTimeWorkRequest.Builder(MyWorker.class)
+    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, OneTimeWorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
+    .build();
+```
+
+
+**SOLID Principles in Programming**
+The SOLID principles are five essential guidelines that enhance software design, `making code more maintainable and scalable`. They include `Single Responsibility`, `Open/Closed`, `Liskov Substitution`, `Interface Segregation`, and `Dependency Inversion`. These five principles are:
+
+- Single Responsibility Principle (SRP)
+- Open/Closed Principle
+- Liskov’s Substitution Principle (LSP)
+- Interface Segregation Principle (ISP)
+- Dependency Inversion Principle (DIP)
+
+
+**SOLID Principles in Programming**
+
+The SOLID principle helps in `reducing tight coupling`. Tight coupling means a group of classes are `highly dependent on one another which you should avoid in your code.`
+
+Opposite of tight coupling is `loose coupling and your code is considered as a good code` when it has loosely-coupled classes.
+Loosely coupled classes minimize changes in your code, `helps in making code more reusable, maintainable, flexible and stable`. Now let’s discuss one by one these principles…
+
+- **Single Responsibility Principle (SRP)**
+This principle states that “`A class should have only one reason to change`” which means `every class should have a single responsibility or single job` or single purpose. In other words, a class should have only one job or purpose within the software system.
+
+- **Open/Closed Principle**
+This principle states that “`Software entities (classes, modules, functions, etc.) should be open for extension`, but closed for modification” which means you should be able to extend a class behavior, without modifying it.
+
+- **Liskov’s Substitution Principle (LSP)**
+The principle was introduced by Barbara Liskov in 1987 and according to this principle “`Derived or child classes must be substitutable for their base or parent classes`“. This principle ensures that any class that is the child of a parent class should be usable in place of its parent without any unexpected behavior.
+
+- **Interface Segregation Principle (ISP)**
+This principle is the first principle that applies to Interfaces instead of classes in SOLID and it is similar to the single responsibility principle. It states that “`do not force any client to implement an interface which is irrelevant to them`“. Here your main goal is to `focus on avoiding fat interfac`e and give preference to many small client-specific interfaces. You should prefer many client interfaces rather than one general interface and each interface should have a specific responsibility.
+
+
+- **Dependency Inversion Principle**
+The Dependency Inversion Principle (DIP) is a principle in object-oriented design that states that “`High-level modules should not depend on low-level modules`. Both `should depend on abstractions`“. Additionally, `abstractions should not depend on details`. Details should depend on abstractions. In simpler terms, `the DIP suggests that classes should rely on abstractions (e.g., interfaces or abstract classes) rather than concrete implementations`.
+This allows for more flexible and decoupled code, making it easier to change implementations without affecting other parts of the codebase.
+
+SOLID principles make `code easier to maintain`. When each class has a clear responsibility, it’s simpler to find where to make changes without affecting unrelated parts of the code.
+These principles support growth in software. For example, the `Open/Closed Principle allows developers` to add new features without changing existing code, `making it easier to adapt to new requirements`.
+SOLID encourages flexibility. By depending on abstractions rather than specific implementations (as in the Dependency Inversion Principle), developers can change components without disrupting the entire system.
