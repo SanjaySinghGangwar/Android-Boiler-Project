@@ -1,5 +1,6 @@
 package dev.sanjaygangwar.tempproject.repository.online.datasource
 
+import dev.sanjaygangwar.tempproject.models.data.EmployeeModel
 import dev.sanjaygangwar.tempproject.models.data.GetAllCharacterDataClass
 import dev.sanjaygangwar.tempproject.repository.online.api.APIService
 import dev.sanjaygangwar.tempproject.repository.sharedpreferences.AppSharePreference
@@ -14,5 +15,9 @@ class RemoteDataSource  @Inject constructor(
 
     suspend fun getAllCharacter(): Resource<GetAllCharacterDataClass> = getResult {
         APIService.getAllCharacters()
+    }
+
+    suspend fun getAllEmployee(): Resource<EmployeeModel> = getResult {
+        APIService.getAllEmployee()
     }
 }

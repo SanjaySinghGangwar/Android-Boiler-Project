@@ -10,4 +10,7 @@ class HomeViewModel @Inject constructor(
     repository: Repository
 ) : ViewModel() {
     val data = repository.getAllCharacter()
+
+
+    val employee = repository.getAllEmployee()
 }

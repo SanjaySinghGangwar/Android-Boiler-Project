@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import dev.sanjaygangwar.tempproject.databinding.CharacterItemBinding
+import dev.sanjaygangwar.tempproject.models.data.EmployeeData
+import dev.sanjaygangwar.tempproject.models.data.EmployeeModel
 import dev.sanjaygangwar.tempproject.models.entity.Characters
 
 class HomeRecyclerAdapter(
@@ -15,9 +17,9 @@ class HomeRecyclerAdapter(
         fun onItemCLicked(id: Characters)
     }
 
-    private val items = ArrayList<Characters>()
+    private val items = ArrayList<EmployeeData>()
 
-    fun setItems(items: ArrayList<Characters>) {
+    fun setItems(items: ArrayList<EmployeeData>) {
         this.items.clear()
         this.items.addAll(items)
         notifyDataSetChanged()

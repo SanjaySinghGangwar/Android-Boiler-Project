@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import dev.sanjaygangwar.tempproject.models.data.EmployeeData
 import dev.sanjaygangwar.tempproject.models.entity.Characters
 
 
@@ -21,4 +22,14 @@ interface mainDao {
     // Optionally, you can add additional methods like deleting all characters
     // @Query("DELETE FROM characters")
     // suspend fun deleteAll()
+
+
+
+    // employee queries
+    @Query("SELECT * FROM employee")
+    fun getAllEmployee(): LiveData<List<EmployeeData>>
+
+    // Function to insert all characters into the local database
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllEmployee(characters: List<EmployeeData>)
 }

@@ -2,14 +2,15 @@ package dev.sanjaygangwar.tempproject.ui.fragment.home
 
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanjaygangwar.tempproject.databinding.HomeBinding
 import dev.sanjaygangwar.tempproject.models.entity.Characters
-import dev.sanjaygangwar.tempproject.ui.fragment.home.adapter.HomeRecyclerAdapter
 import dev.sanjaygangwar.tempproject.ui.base.BaseFragment
+import dev.sanjaygangwar.tempproject.ui.fragment.home.adapter.HomeRecyclerAdapter
+import dev.sanjaygangwar.tempproject.utils.ToastUtil.mLog
 import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.ImageExtensions.hide
 import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.ImageExtensions.show
-import dev.sanjaygangwar.tempproject.utils.ToastUtil.mToast
 import dev.sanjaygangwar.tempproject.utils.network.retrofit.Resource
 
 @AndroidEntryPoint
@@ -33,22 +34,40 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate), HomeRecyclerAdapte
 
     override fun initAllObserver() {
 
-        viewModel.data.observe(viewLifecycleOwner) { value ->
-            when (value.status) {
+//        viewModel.data.observe(viewLifecycleOwner) { value ->
+//            when (value.status) {
+//                Resource.Status.LOADING -> {
+//                    bind?.progressBar?.show()
+//                }
+//
+//                Resource.Status.SUCCESS -> {
+//                    bind?.progressBar?.hide()
+//                    value.data?.let { adapter.setItems(it as ArrayList) }
+//                }
+//
+//                Resource.Status.ERROR -> {
+//                    bind?.progressBar?.hide()
+//                }
+//            }
+//
+//        }
+
+        viewModel.employee.observe(viewLifecycleOwner) { employeeData ->
+            when (employeeData.status) {
                 Resource.Status.LOADING -> {
                     bind?.progressBar?.show()
                 }
 
                 Resource.Status.SUCCESS -> {
                     bind?.progressBar?.hide()
-                    value.data?.let { adapter.setItems(it as ArrayList) }
+                    mLog(Gson().toJson(employeeData))
+                    employeeData.data?.let { adapter.setItems(it as ArrayList) }
                 }
 
                 Resource.Status.ERROR -> {
                     bind?.progressBar?.hide()
                 }
             }
-
         }
     }
 

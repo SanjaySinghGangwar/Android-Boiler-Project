@@ -5,12 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import dev.sanjaygangwar.tempproject.models.data.EmployeeData
 import dev.sanjaygangwar.tempproject.models.entity.Characters
 import dev.sanjaygangwar.tempproject.models.entity.userData
 import dev.sanjaygangwar.tempproject.repository.offline.dao.mainDao
 import dev.sanjaygangwar.tempproject.utils.converters.Converters
 
-@Database(entities = [userData::class, Characters::class], version = 1, exportSchema = false)
+@Database(entities = [userData::class, Characters::class,EmployeeData::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 

@@ -16,4 +16,9 @@ class Repository @Inject constructor(
         saveCallResult = { it.data.let { networkResponse -> localDataSource.insertAll(networkResponse) } }
     )
 
+    fun getAllEmployee() = performGetOperation(
+        databaseQuery = { localDataSource.getAllEmployee() },
+        networkCall = { remoteDataSource.getAllEmployee() },
+        saveCallResult = { it.data.let { networkResponse -> localDataSource.insertAllEmployee(networkResponse) } }
+    )
 }
