@@ -129,6 +129,10 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
     implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
+    // LeakCanary
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12") // or latest version
+    releaseImplementation("com.squareup.leakcanary:leakcanary-android-no-op:2.12") // disables in release builds
+
 }
 
 kapt {
