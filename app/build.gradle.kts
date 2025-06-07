@@ -133,6 +133,12 @@ dependencies {
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12") // or latest version
     releaseImplementation("com.squareup.leakcanary:leakcanary-android-no-op:2.12") // disables in release builds
 
+    // teleparty media3
+    implementation("androidx.media3:media3-exoplayer:1.3.1")
+    implementation("androidx.media3:media3-ui:1.3.1")
+    implementation("androidx.media3:media3-datasource:1.3.1")
+    implementation("androidx.media3:media3-datasource-okhttp:1.3.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
 }
 
 kapt {

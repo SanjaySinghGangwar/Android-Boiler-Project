@@ -36,15 +36,12 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d12be28-2a5c-4ff1-9f7d-e57e65ceabf5" name="Changes" comment="added some points for kotlin">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="1d12be28-2a5c-4ff1-9f7d-e57e65ceabf5" name="Changes" comment="upgraded the gradle">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/activity/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/activity/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/Home.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/Home.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/home.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +51,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=/Users/kutumb/.android/avd/Small_Phone_API_31.avd)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=R5CT22J2FDX)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -163,14 +160,15 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "teleparty__main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Volumes/2 TB/Personal/Code/Boiler/android/app/src/main/res/drawable",
-    "settings.editor.selected.configurable": "editing.templates",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Kotlin",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
@@ -260,6 +258,12 @@
       <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" IS_LOCATION_SIMULATION_SUPPORTED="false" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
+      <embedded_app_extension_list />
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>
@@ -416,7 +420,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740036754917</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="upgraded the gradle">
+      <option name="closed" value="true" />
+      <created>1749287009427</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1749287009427</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -441,7 +453,8 @@
     <MESSAGE value="added bullets" />
     <MESSAGE value="added code sample" />
     <MESSAGE value="added some points for kotlin" />
-    <option name="LAST_COMMIT_MESSAGE" value="added some points for kotlin" />
+    <MESSAGE value="upgraded the gradle" />
+    <option name="LAST_COMMIT_MESSAGE" value="upgraded the gradle" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -459,12 +472,12 @@
       <map>
         <entry key="dev.sanjaygangwar.tempproject">
           <value>
-            <CheckInfo lastCheckTimestamp="1739719947510" />
+            <CheckInfo lastCheckTimestamp="1749287972171" />
           </value>
         </entry>
         <entry key="dev.sanjaygangwar.tempproject.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1739719947510" />
+            <CheckInfo lastCheckTimestamp="1749287972171" />
           </value>
         </entry>
       </map>

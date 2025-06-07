@@ -131,17 +131,17 @@ class Main : BaseActivity<MainBinding>(MainBinding::inflate), GenericDialog.Gene
     override fun onViewClicker(p0: View?) {}
 
     private fun initNetworkObserver() {
-        val noInternetDialog = NoInternetConnection()
-        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        networkObserver = NetworkObserver(connectivityManager)
-        networkObserver.isConnected.observe(this) { isConnected ->
-            if (isConnected) {
-                noInternetDialog.dismiss()
-            } else {
-                noInternetDialog.showNow(supportFragmentManager, noInternetDialog.tag)
-            }
-        }
-        connectivityManager.registerDefaultNetworkCallback(networkObserver)
+//        val noInternetDialog = NoInternetConnection()
+//        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//        networkObserver = NetworkObserver(connectivityManager)
+//        networkObserver.isConnected.observe(this) { isConnected ->
+//            if (isConnected) {
+//                noInternetDialog.dismiss()
+//            } else {
+//                noInternetDialog.showNow(supportFragmentManager, noInternetDialog.tag)
+//            }
+//        }
+//        connectivityManager.registerDefaultNetworkCallback(networkObserver)
     }
 
     private fun checkForUpdates() {
