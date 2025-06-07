@@ -16,4 +16,8 @@ class Repository @Inject constructor(
         saveCallResult = { it.data.let { networkResponse -> localDataSource.insertAll(networkResponse) } }
     )
 
+    // local db can be used to store video data as well, if needed using performGetOperation -> saveCallResult
+    // Function to fetch video data from the remote data source
+    suspend fun getData() = remoteDataSource.getVideoData()
+
 }

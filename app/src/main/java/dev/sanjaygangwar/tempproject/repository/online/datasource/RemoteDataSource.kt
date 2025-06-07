@@ -1,6 +1,7 @@
 package dev.sanjaygangwar.tempproject.repository.online.datasource
 
 import dev.sanjaygangwar.tempproject.models.data.GetAllCharacterDataClass
+import dev.sanjaygangwar.tempproject.models.data.VideoModelData
 import dev.sanjaygangwar.tempproject.repository.online.api.APIService
 import dev.sanjaygangwar.tempproject.repository.sharedpreferences.AppSharePreference
 import dev.sanjaygangwar.tempproject.utils.network.retrofit.BaseDataSource
@@ -14,5 +15,9 @@ class RemoteDataSource  @Inject constructor(
 
     suspend fun getAllCharacter(): Resource<GetAllCharacterDataClass> = getResult {
         APIService.getAllCharacters()
+    }
+
+    suspend fun getVideoData(): Resource<VideoModelData> = getResult {
+        APIService.getVideoData()
     }
 }
