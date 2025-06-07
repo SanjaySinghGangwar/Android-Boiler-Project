@@ -44,6 +44,7 @@ class Main : BaseActivity<MainBinding>(MainBinding::inflate), GenericDialog.Gene
 
     private lateinit var connectivityManager: ConnectivityManager
     private lateinit var networkObserver: NetworkObserver
+    private var noInternetDialog: NoInternetConnection? = null
 
     private var appUpdateManager: AppUpdateManager? = null
     private var reviewManager: ReviewManager? = null
@@ -131,17 +132,23 @@ class Main : BaseActivity<MainBinding>(MainBinding::inflate), GenericDialog.Gene
     override fun onViewClicker(p0: View?) {}
 
     private fun initNetworkObserver() {
-//        val noInternetDialog = NoInternetConnection()
-//        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//        networkObserver = NetworkObserver(connectivityManager)
-//        networkObserver.isConnected.observe(this) { isConnected ->
-//            if (isConnected) {
-//                noInternetDialog.dismiss()
-//            } else {
-//                noInternetDialog.showNow(supportFragmentManager, noInternetDialog.tag)
-//            }
-//        }
-//        connectivityManager.registerDefaultNetworkCallback(networkObserver)
+        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        networkObserver = NetworkObserver(connectivityManager)
+
+        // Observe connectivity state with lifecycle awareness
+        networkObserver.isConnected.observe(this) { isConnected ->
+            if (isConnected) {
+                noInternetDialog?.dismiss()
+            } else {
+                if (noInternetDialog?.isVisible != true) {
+                    noInternetDialog = NoInternetConnection()
+                    noInternetDialog?.show(supportFragmentManager, "NoInternetDialog")
+                }
+            }
+        }
+
+        // Register network callback
+        connectivityManager.registerDefaultNetworkCallback(networkObserver)
     }
 
     private fun checkForUpdates() {
@@ -210,5 +217,18 @@ class Main : BaseActivity<MainBinding>(MainBinding::inflate), GenericDialog.Gene
         applicationContext.AppSetting.updateData {
             it.copy(language = language)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            connectivityManager.unregisterNetworkCallback(networkObserver)
+        } catch (e: Exception) {
+            e.printStackTrace() // safe fallback
+        }
+
+        // Clear observer to prevent memory leaks
+        networkObserver.isConnected.removeObservers(this)
+        noInternetDialog = null
     }
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
@@ -21,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.sanjaygangwar.tempproject.R
 import dev.sanjaygangwar.tempproject.databinding.HomeBinding
 import dev.sanjaygangwar.tempproject.ui.base.BaseFragment
-import dev.sanjaygangwar.tempproject.utils.ToastUtil.mLog
 import dev.sanjaygangwar.tempproject.utils.ToastUtil.mToast
 import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.ImageExtensions.hide
 import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.ImageExtensions.show
@@ -54,7 +54,6 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
                 Resource.Status.SUCCESS -> {
                     bind?.progressBar?.hide()
                     val data = value.data?.data
-                    mLog("Video Data: ${value.data}")
                     if (data?.mediaUrl.isNullOrEmpty() || data?.licenseUri?.isEmpty()!!) {
                         bind?.playerView?.hide()
                         context?.mToast("No video available")
@@ -75,7 +74,6 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
 
     @OptIn(UnstableApi::class)
     private fun setupExoplayer(licenseUri: String?, mediaUrl: String?, playerView: PlayerView?) {
-
         // Release existing player if any
         if (this::player.isInitialized) {
             player.release()
@@ -89,7 +87,11 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
 
         // Create MediaItem with DRM configuration
         val drmConfiguration = MediaItem.DrmConfiguration.Builder(C.WIDEVINE_UUID).setLicenseUri(licenseUri).build()
-        val mediaItem = MediaItem.Builder().setUri(mediaUrl).setDrmConfiguration(drmConfiguration).setMimeType(MimeTypes.APPLICATION_MPD).build()
+        val mediaItem = MediaItem.Builder()
+            .setUri(mediaUrl)
+            .setDrmConfiguration(drmConfiguration)
+            .setMimeType(MimeTypes.APPLICATION_MPD)
+            .build()
 
         // Initialize ExoPlayer with the MediaItem
         context?.let { context ->
@@ -97,19 +99,42 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
             val mediaSourceFactory = DefaultMediaSourceFactory(dataSourceFactory)
 
             // Create and configure the ExoPlayer instance
-            player = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).build().also {
-                it.setMediaItem(mediaItem)
-                it.prepare()
-                it.playWhenReady = true
-                playerView?.player = it
-                toggleImmersiveMode()
-                playerView?.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
-                playerView?.setControllerVisibilityListener(
-                    PlayerControlView.VisibilityListener { visibility ->
-                        // Example: Show or hide a custom button with the controls
-                        bind?.btnZoom?.visibility = if (visibility == View.VISIBLE) View.VISIBLE else View.GONE
+            player = ExoPlayer.Builder(context)
+                .setMediaSourceFactory(mediaSourceFactory)
+                .build()
+                .also { exoPlayer ->
+
+                    exoPlayer.setMediaItem(mediaItem)
+                    exoPlayer.prepare()
+                    exoPlayer.playWhenReady = true
+
+                    playerView?.player = exoPlayer
+                    toggleImmersiveMode()
+                    playerView?.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+
+                    playerView?.setControllerVisibilityListener(
+                        PlayerControlView.VisibilityListener { visibility ->
+                            bind?.btnZoom?.visibility = if (visibility == View.VISIBLE) View.VISIBLE else View.GONE
+                        }
+                    )
+
+                    // --- Add listener to show/hide loader ---
+                    exoPlayer.addListener(object : Player.Listener {
+                        override fun onPlaybackStateChanged(state: Int) {
+                            super.onPlaybackStateChanged(state)
+                            when (state) {
+                                Player.STATE_BUFFERING -> {
+                                    bind?.progressBar?.visibility = View.VISIBLE
+                                }
+                                Player.STATE_READY,
+                                Player.STATE_ENDED,
+                                Player.STATE_IDLE -> {
+                                    bind?.progressBar?.visibility = View.GONE
+                                }
+                            }
+                        }
                     })
-            }
+                }
         }
     }
 

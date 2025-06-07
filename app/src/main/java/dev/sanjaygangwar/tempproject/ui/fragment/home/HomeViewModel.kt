@@ -23,11 +23,13 @@ class HomeViewModel @Inject constructor(
         fetchVideoData()
     }
 
+    // Function to fetch video data from the repository
     fun fetchVideoData() {
         viewModelScope.launch {
             _videoData.value = repository.getData()
         }
     }
 
+    // Function to fetch all characters from the repository
     val data = repository.getAllCharacter()
 }
