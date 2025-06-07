@@ -2,7 +2,6 @@ package dev.sanjaygangwar.tempproject.ui.fragment.home
 
 import android.content.pm.ActivityInfo
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -16,6 +15,7 @@ import androidx.media3.datasource.DefaultDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.AspectRatioFrameLayout
+import androidx.media3.ui.PlayerControlView
 import androidx.media3.ui.PlayerView
 import dagger.hilt.android.AndroidEntryPoint
 import dev.sanjaygangwar.tempproject.R
@@ -61,6 +61,7 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
         }
     }
 
+    @OptIn(UnstableApi::class)
     private fun setupExoplayer(mediaUrl: String, playerView: PlayerView?) {
         // Release existing player if any
         if (this::player.isInitialized) {
@@ -89,7 +90,16 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
                     it.prepare()
                     it.playWhenReady = true
                     playerView?.player = it
-                    hideAndOpenImpersiveView()
+                    toggleImmersiveMode()
+
+                    playerView?.setControllerVisibilityListener(
+                        PlayerControlView.VisibilityListener { visibility ->
+                            // Example: Show or hide a custom button with the controls
+                            bind?.btnZoom?.visibility = if (visibility == View.VISIBLE) View.VISIBLE else View.GONE
+                        }
+                    )
+
+
                 }
         }
     }
@@ -107,9 +117,9 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
         }
     }
 
-    @OptIn(UnstableApi::class) private fun toggleZoom() {
+    @OptIn(UnstableApi::class)
+    private fun toggleZoom() {
         isZoomed = !isZoomed
-        Toast.makeText(context, "Zoom ${if (isZoomed) "Enabled" else "Disabled"}", Toast.LENGTH_SHORT).show()
         bind?.playerView?.resizeMode = if (isZoomed) {
             AspectRatioFrameLayout.RESIZE_MODE_ZOOM
         } else {
@@ -126,7 +136,7 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
 
 }
 
-private fun Home.hideAndOpenImpersiveView() {
+private fun Home.toggleImmersiveMode() {
     WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
     WindowInsetsControllerCompat(requireActivity().window, requireView()).apply {
         hide(WindowInsetsCompat.Type.systemBars())

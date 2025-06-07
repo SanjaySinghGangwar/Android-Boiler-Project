@@ -20,8 +20,9 @@
 
         <ImageButton
                 android:id="@+id/btnZoom"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:visibility="gone"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:scaleType="fitCenter"
                 android:layout_gravity="top|end"
                 android:layout_margin="16dp"
