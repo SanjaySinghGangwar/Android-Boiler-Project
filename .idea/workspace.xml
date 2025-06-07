@@ -36,10 +36,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1d12be28-2a5c-4ff1-9f7d-e57e65ceabf5" name="Changes" comment="upgraded the gradle">
+    <list default="true" id="1d12be28-2a5c-4ff1-9f7d-e57e65ceabf5" name="Changes" comment="Basic code structure is done.">
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/exit_zoom_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/zoom_icon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/activity/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/activity/Main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/Home.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/ui/fragment/home/Home.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/home.xml" afterDir="false" />
     </list>
@@ -167,7 +168,7 @@
     "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "teleparty__main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Volumes/2 TB/Personal/Code/Boiler/android/app/src/main/res/drawable",
+    "last_opened_file_path": "/Users/kutumb/Desktop/boiler/app/src/main/res/drawable",
     "settings.editor.selected.configurable": "preferences.sourceCode.Kotlin",
     "show.migrate.to.gradle.popup": "false"
   }
@@ -177,6 +178,7 @@
       <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
       <recent name="$PROJECT_DIR$/app/src/main/java/dev/sanjaygangwar/tempproject/utils/const" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
@@ -428,7 +430,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749287009427</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Basic code structure is done.">
+      <option name="closed" value="true" />
+      <created>1749290235799</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1749290235799</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -454,7 +464,8 @@
     <MESSAGE value="added code sample" />
     <MESSAGE value="added some points for kotlin" />
     <MESSAGE value="upgraded the gradle" />
-    <option name="LAST_COMMIT_MESSAGE" value="upgraded the gradle" />
+    <MESSAGE value="Basic code structure is done." />
+    <option name="LAST_COMMIT_MESSAGE" value="Basic code structure is done." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
