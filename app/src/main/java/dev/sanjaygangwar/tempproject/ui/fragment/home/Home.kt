@@ -190,13 +190,31 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
         bind?.btnZoom?.setImageResource(newIconRes)
     }
 
-    override fun onStop() {
-        super.onStop()
-        // Release the ExoPlayer when the fragment is stopped to free up resources
-        player.release()
+    override fun onPause() {
+        super.onPause()
+        if (this::player.isInitialized) {
+            player.playWhenReady = false
+            player.pause()
+        }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (this::player.isInitialized) {
+            player.playWhenReady = true
+            player.play()
+        }
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
+    }
 }
+
+
+
 
 private fun Home.toggleImmersiveMode() {
     // Set the window to not fit system windows, allowing for immersive mode
