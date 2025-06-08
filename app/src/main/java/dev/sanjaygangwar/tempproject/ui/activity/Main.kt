@@ -54,7 +54,7 @@ class Main : BaseActivity<MainBinding>(MainBinding::inflate), GenericDialog.Gene
         initNetworkObserver()
         checkForUpdates()
         initAdsSdk()
-        initAllPermission()
+//        initAllPermission()
         setupLoader()
 
 //        Shared Preferences and Worker -------------------------------------
