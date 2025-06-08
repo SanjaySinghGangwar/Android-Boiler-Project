@@ -7,6 +7,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
@@ -22,10 +23,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.sanjaygangwar.tempproject.R
 import dev.sanjaygangwar.tempproject.databinding.HomeBinding
 import dev.sanjaygangwar.tempproject.ui.base.BaseFragment
+import dev.sanjaygangwar.tempproject.utils.ToastUtil.mLog
 import dev.sanjaygangwar.tempproject.utils.ToastUtil.mToast
 import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.ImageExtensions.hide
 import dev.sanjaygangwar.tempproject.utils.extenstionfuntions.ImageExtensions.show
 import dev.sanjaygangwar.tempproject.utils.network.retrofit.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 @AndroidEntryPoint
@@ -61,6 +68,10 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
                     } else {
                         bind?.playerView?.show()
                     }
+
+                    lifecycleScope.launch {
+                        fetchVideoData(data.mediaUrl)
+                    }
                     setupExoplayer(data.licenseUri, data.mediaUrl, bind?.playerView)
                 }
 
@@ -69,6 +80,20 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
                 }
             }
 
+        }
+    }
+
+    suspend fun fetchVideoData(mediaUrl: String) {
+        try {
+            val xmlString = withContext(Dispatchers.IO) {
+                val connection = URL(mediaUrl).openConnection() as HttpURLConnection
+                val inputStream = connection.inputStream
+                inputStream.bufferedReader().use { it.readText() }
+            }
+            mLog("XML Data: $xmlString")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            mLog("Error fetching video data: ${e.message}")
         }
     }
 
@@ -126,6 +151,7 @@ class Home : BaseFragment<HomeBinding>(HomeBinding::inflate) {
                                 Player.STATE_BUFFERING -> {
                                     bind?.progressBar?.visibility = View.VISIBLE
                                 }
+
                                 Player.STATE_READY,
                                 Player.STATE_ENDED,
                                 Player.STATE_IDLE -> {
