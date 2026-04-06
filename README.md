@@ -1,4 +1,4 @@
-# Project Boilerplate
+# Android Boilerplate Project
 
 This boilerplate project includes the following features and integrations:
 
@@ -28,7 +28,50 @@ This boilerplate project includes the following features and integrations:
 - **Base Bottom Sheet**: Standard structure for bottom sheet dialogs.
 - **Etc.**: Additional shared components and utilities for code reuse.
 
-# --------------------- Android Topic ---------------------
+---
+
+# Android Topics & Interview Guide
+
+## Table of Contents
+
+### Android Topics
+- [Fundamentals](#fundamentals)
+- [User Interface](#user-interface)
+- [Data Storage](#data-storage)
+- [Networking](#networking)
+- [Permissions & Security](#permissions--security)
+- [Multithreading & Concurrency](#multithreading--concurrency)
+- [Jetpack Components](#jetpack-components)
+- [Testing](#testing)
+- [Multimedia](#multimedia)
+- [Location & Maps](#location--maps)
+- [Firebase](#firebase)
+- [Background Processing](#background-processing)
+- [Sensors & Hardware](#sensors--hardware)
+- [Performance Optimization](#performance-optimization)
+- [Modern Android Development (MAD)](#modern-android-development-mad)
+- [App Distribution](#app-distribution)
+- [Android Customization](#android-customization)
+- [Internationalization & Accessibility](#internationalization--accessibility)
+- [Tools & Libraries](#tools--libraries)
+
+### Interview Questions
+- [Kotlin Questions](#kotlin-questions)
+- [Android Questions](#android-questions)
+- [SOLID Principles](#solid-principles)
+
+### Advanced Topics
+- [Kotlin Advanced](#kotlin-advanced)
+- [Android Architecture](#android-architecture)
+- [Dependency Injection with Hilt](#dependency-injection-with-hilt)
+- [Networking (Advanced)](#networking-advanced)
+- [Jetpack Compose](#jetpack-compose)
+- [Performance & Memory](#performance--memory)
+- [Testing (Advanced)](#testing-advanced)
+
+---
+
+# Android Topics
 
 ## Fundamentals
 
@@ -157,11 +200,14 @@ This boilerplate project includes the following features and integrations:
 - **Debugging**: Stetho
 - **CI/CD**: GitHub Actions, Fastlane, Firebase App Distribution
 
-# ------------------ Interview Questions ------------------
+---
 
-# ------------------ Kotlin Questions ------------------
+# Interview Questions
 
-**What is the difference between `val` and `var` in Kotlin?**
+## Kotlin Questions
+
+<details>
+<summary><strong>What is the difference between <code>val</code> and <code>var</code> in Kotlin?</strong></summary>
 
 - `val` is used to declare a **read-only** variable (immutable).
 - `var` is used to declare a **mutable** variable, allowing reassignment.
@@ -173,9 +219,12 @@ myString = "Hello Kotlin" // This will give a compile error
 var anotherString = "Hello World"
 anotherString = "Hello Kotlin" // This is valid
 ```
+</details>
 
-**What is the difference between `lateinit` and `lazy` in Kotlin?**
-`lateinit` is used to initialize a `non-nullable property outside of the constructor`. `lazy` is used to create a `property whose value will be computed only when it is first accessed`.
+<details>
+<summary><strong>What is the difference between <code>lateinit</code> and <code>lazy</code> in Kotlin?</strong></summary>
+
+`lateinit` is used to initialize a non-nullable property outside of the constructor. `lazy` is used to create a property whose value will be computed only when it is first accessed.
 
 ```kotlin
 lateinit var myLateInitVar: String
@@ -185,9 +234,12 @@ val myLazyProperty: String by lazy {
     "Hello"
 }
 ```
+</details>
 
-**Explain the difference between a `regular class`, a `data class` and an `object class` in Kotlin.**
-A regular class is a `template for creating objects`, and an object class is a `singleton class` that can only have `one instance` throughout the `entire application`. A data class is a class that is specifically designed to `hold data`, and automatically `includes` functionality such as `equals, hashCode, and toString` methods.
+<details>
+<summary><strong>Explain the difference between a regular class, a data class, and an object class in Kotlin.</strong></summary>
+
+A regular class is a template for creating objects, and an object class is a singleton class that can only have one instance throughout the entire application. A data class is a class that is specifically designed to hold data, and automatically includes functionality such as `equals`, `hashCode`, and `toString` methods.
 
 ```kotlin
 class MyRegularClass { //regular class
@@ -200,9 +252,12 @@ object MyObjectClass { //object class
 
 data class User(val name: String, val age: Int)
 ```
+</details>
 
-**Explain the use of `coroutines` in Android**
-Coroutines are a `lightweight concurrency framework` that allows you to write `asynchronous code` in a more readable and manageable way. They are used to perform `long-running tasks` such as `network requests or database operations` without blocking the main thread. This makes the app `more responsive` and `improves the user experience`.
+<details>
+<summary><strong>Explain the use of coroutines in Android</strong></summary>
+
+Coroutines are a lightweight concurrency framework that allows you to write asynchronous code in a more readable and manageable way. They are used to perform long-running tasks such as network requests or database operations without blocking the main thread. This makes the app more responsive and improves the user experience.
 
 ```kotlin
 suspend fun getDataFromApi(): String {
@@ -211,11 +266,17 @@ suspend fun getDataFromApi(): String {
     }
 }
 ```
+</details>
 
-**Explain `asynchronous` coding in Android**
+<details>
+<summary><strong>Explain asynchronous coding in Android</strong></summary>
+
 Asynchronous refers to a method of executing tasks without waiting for the previous task to complete. Instead of blocking execution, it allows the program to continue running while waiting for long-running tasks like network calls, database operations, or file I/O to finish in the background.
+</details>
 
-**Explain the use of `sealed classes` in Kotlin.**
+<details>
+<summary><strong>Explain the use of sealed classes in Kotlin.</strong></summary>
+
 Sealed classes are used to represent a closed set of cases for a given type. They are used to express the possible states of a variable or object in a more explicit and readable way. They can only have a limited set of subclasses and are defined within the same file as the sealed class.
 
 ```kotlin
@@ -233,9 +294,12 @@ fun handleApiResponse(response: ApiResponse) {
     }
 }
 ```
+</details>
 
-**What is the difference between a `Companion Object` and an `object declaration` in Kotlin?**
-A Companion Object is a `singleton object` that is associated with a class, whereas an `object declaration creates a singleton object` without association to a class. Companion objects can access the private members of its associated class, whereas regular objects cannot.
+<details>
+<summary><strong>What is the difference between a Companion Object and an object declaration in Kotlin?</strong></summary>
+
+A Companion Object is a singleton object that is associated with a class, whereas an object declaration creates a singleton object without association to a class. Companion objects can access the private members of its associated class, whereas regular objects cannot.
 
 ```kotlin
 class MyClass {
@@ -252,13 +316,18 @@ object MySingleton {
     }
 }
 ```
+</details>
 
-**How does the `null safety` feature work in Kotlin?**
-The null safety feature in Kotlin helps to prevent `null pointer exceptions` by providing a way to explicitly identify variables that can hold null values. A variable that can hold null is defined by adding a `"?"` after the variable type.
+<details>
+<summary><strong>How does the null safety feature work in Kotlin?</strong></summary>
 
-**Explain `with`, `apply`, `let`, `also` and `run`.**
+The null safety feature in Kotlin helps to prevent null pointer exceptions by providing a way to explicitly identify variables that can hold null values. A variable that can hold null is defined by adding a `?` after the variable type.
+</details>
 
-- The `with` function is used to call `multiple methods on an object without having to repeat the object's name for each method call`.
+<details>
+<summary><strong>Explain <code>with</code>, <code>apply</code>, <code>let</code>, <code>also</code> and <code>run</code>.</strong></summary>
+
+- The `with` function is used to call multiple methods on an object without having to repeat the object's name for each method call.
 
 ```kotlin
 val myTextView = TextView(this)
@@ -269,7 +338,7 @@ with(myTextView) {
 }
 ```
 
-- The `apply` function is used to `call multiple methods on an object and return the object itself`, allowing for method chaining.
+- The `apply` function is used to call multiple methods on an object and return the object itself, allowing for method chaining.
 
 ```kotlin
 val myTextView = TextView(this).apply {
@@ -279,7 +348,7 @@ val myTextView = TextView(this).apply {
 }
 ```
 
-- The `let` function is used to `perform an action on an object only if the object is not null`. It takes a lambda and passes the object as an argument (`it`).
+- The `let` function is used to perform an action on an object only if the object is not null. It takes a lambda and passes the object as an argument (`it`).
 
 ```kotlin
 val myString: String? = "Hello"
@@ -315,9 +384,12 @@ val result = person.run {
 
 println(result) // Prints "Formatted name: JOHN, Age: 25"
 ```
+</details>
 
-**What are `higher-order` functions in Kotlin?**
-Higher-order functions are functions that can `accept other functions as parameters` or `return functions as results`. They allow for a more functional programming style in Kotlin.
+<details>
+<summary><strong>What are higher-order functions in Kotlin?</strong></summary>
+
+Higher-order functions are functions that can accept other functions as parameters or return functions as results. They allow for a more functional programming style in Kotlin.
 
 ```kotlin
 fun performOperation(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
@@ -326,9 +398,12 @@ fun performOperation(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
 val sum: (Int, Int) -> Int = { a, b -> a + b }
 val result = performOperation(5, 3, sum) // result will be 8
 ```
+</details>
 
-**Explain the concept of `generics` in Kotlin. How are `generics used` in Android development?**
-Generics in Kotlin allow you to `create reusable components` that can `work with different types`. They provide type `safety and avoid the need for type casting`. Generics are widely used in Android development, for example, when working with collections like `List<T>` or when creating adapters for RecyclerViews.
+<details>
+<summary><strong>Explain the concept of generics in Kotlin. How are generics used in Android development?</strong></summary>
+
+Generics in Kotlin allow you to create reusable components that can work with different types. They provide type safety and avoid the need for type casting. Generics are widely used in Android development, for example, when working with collections like `List<T>` or when creating adapters for RecyclerViews.
 
 ```kotlin
 fun <T> getListSize(list: List<T>): Int {
@@ -338,9 +413,12 @@ fun <T> getListSize(list: List<T>): Int {
 val stringList: List<String> = listOf("A", "B", "C")
 val size = getListSize(stringList) // size will be 3
 ```
+</details>
 
-**What is a `primary constructor` in Kotlin? How is it `different` from `secondary constructors`?**
-A primary constructor is declared in the `class header and is part of the class declaration`. It can define properties and receive parameters. Secondary constructors are `additional constructors declared inside the class body`. They provide alternative ways to initialize the class.
+<details>
+<summary><strong>What is a primary constructor in Kotlin? How is it different from secondary constructors?</strong></summary>
+
+A primary constructor is declared in the class header and is part of the class declaration. It can define properties and receive parameters. Secondary constructors are additional constructors declared inside the class body. They provide alternative ways to initialize the class.
 
 ```kotlin
 class Person(val name: String, val age: Int) {
@@ -349,17 +427,23 @@ class Person(val name: String, val age: Int) {
     }
 }
 ```
+</details>
 
-**What is type inference in Kotlin? How does it help in reducing code verbosity?**
-Type inference in Kotlin allows the `compiler to automatically determine the type of a variable` or expression based on its context. It `eliminates the need for explicitly declaring` the type, reducing code verbosity.
+<details>
+<summary><strong>What is type inference in Kotlin? How does it help in reducing code verbosity?</strong></summary>
+
+Type inference in Kotlin allows the compiler to automatically determine the type of a variable or expression based on its context. It eliminates the need for explicitly declaring the type, reducing code verbosity.
 
 ```kotlin
 val number = 42 // The compiler infers the type as Int
 val list = listOf(1, 2, 3) // The compiler infers the type as List<Int>
 ```
+</details>
 
-**How do you `handle exceptions` in Kotlin? Explain the `try-catch-finally` block.**
-If an exception occurs, it is `caught` and `handled` in the `catch` block. The `finally` block is optional and is executed regardless of whether an exception occurred.
+<details>
+<summary><strong>How do you handle exceptions in Kotlin? Explain the try-catch-finally block.</strong></summary>
+
+If an exception occurs, it is caught and handled in the `catch` block. The `finally` block is optional and is executed regardless of whether an exception occurred.
 
 ```kotlin
 try {
@@ -370,17 +454,23 @@ try {
     // Code that will always execute
 }
 ```
+</details>
 
-**What are the `visibility modifiers` available in Kotlin? Explain each one briefly.**
+<details>
+<summary><strong>What are the visibility modifiers available in Kotlin?</strong></summary>
+
 Kotlin provides four visibility modifiers:
 
 - `private`: Visible only within the same file or class.
 - `protected`: Visible within the same class and subclasses.
 - `internal`: Visible within the same module.
 - `public`: Visible everywhere (default if no modifier is specified).
+</details>
 
-**What is the difference between a `lambda expression` and an `anonymous function` in Kotlin?**
-Both allow you to define function literals. The main difference is in syntax. Lambda expressions are `surrounded by curly braces` and have `implicit return`, while anonymous functions have the `fun` keyword, `explicit return types`, and `can have multiple return statements`.
+<details>
+<summary><strong>What is the difference between a lambda expression and an anonymous function in Kotlin?</strong></summary>
+
+Both allow you to define function literals. The main difference is in syntax. Lambda expressions are surrounded by curly braces and have implicit return, while anonymous functions have the `fun` keyword, explicit return types, and can have multiple return statements.
 
 ```kotlin
 val lambda: (Int, Int) -> Int = { a, b -> a + b }
@@ -389,8 +479,10 @@ val anonymousFun = fun(a: Int, b: Int): Int {
     return a + b
 }
 ```
+</details>
 
-**Non-Null Assertion, Safe Casts, Elvis Operator and Safe Calls:**
+<details>
+<summary><strong>Non-Null Assertion, Safe Casts, Elvis Operator and Safe Calls</strong></summary>
 
 ```kotlin
 text!!.length        // non-null assertion — throws if null
@@ -398,15 +490,20 @@ value as? String     // safe cast — returns null instead of throwing
 val length = text?.length ?: 0  // Elvis operator — fallback if null
 val length2 = text?.length      // safe call — returns null if text is null
 ```
+</details>
 
-**What is the difference between a list and an array in Kotlin?**
+<details>
+<summary><strong>What is the difference between a list and an array in Kotlin?</strong></summary>
 
 - **Size:** Lists can dynamically grow or shrink; arrays have a fixed size.
 - **Type Flexibility:** Lists support generics (heterogeneous); arrays are homogeneous.
 - **Modification:** Lists have `add`/`remove` methods; arrays require creating a new array.
 - **Performance:** Arrays offer better performance for direct element access due to contiguous memory.
+</details>
 
-**What is the difference between an `immutable` and a `mutable` list in Kotlin?**
+<details>
+<summary><strong>What is the difference between an immutable and a mutable list in Kotlin?</strong></summary>
+
 An immutable list (created with `listOf()`) cannot be modified after creation. A mutable list (created with `mutableListOf()`) supports adding, removing, and modifying elements.
 
 ```kotlin
@@ -419,9 +516,12 @@ mutableList[0] = 10
 mutableList.add(7)
 mutableList.removeAt(1)
 ```
+</details>
 
-**Explain the concept of `extension functions` in Kotlin.**
-Extension functions allow you to `add new functions to existing classes without modifying their source code`.
+<details>
+<summary><strong>Explain the concept of extension functions in Kotlin.</strong></summary>
+
+Extension functions allow you to add new functions to existing classes without modifying their source code.
 
 ```kotlin
 fun String.addExclamation(): String {
@@ -431,8 +531,10 @@ fun String.addExclamation(): String {
 val message = "Hello"
 println(message.addExclamation()) // Output: Hello!
 ```
+</details>
 
-**What is the difference between `companion objects` and `static members` in Java?**
+<details>
+<summary><strong>What is the difference between companion objects and static members in Java?</strong></summary>
 
 - **Syntax:** Java uses the `static` keyword; Kotlin uses the `companion` keyword inside the class.
 - **Access:** Static members are accessed directly via the class name; companion object members are too, but they are actual objects.
@@ -456,8 +558,11 @@ class MyClass {
     }
 }
 ```
+</details>
 
-**Explain the `suspend` modifier in Kotlin.**
+<details>
+<summary><strong>Explain the <code>suspend</code> modifier in Kotlin.</strong></summary>
+
 The `suspend` modifier marks a function that can be paused and resumed without blocking the thread. It is a fundamental concept in coroutine-based programming and can only be called from a coroutine or another suspend function.
 
 ```kotlin
@@ -471,8 +576,11 @@ fun main() = runBlocking {
     println(result)
 }
 ```
+</details>
 
-**What is the purpose of the `withContext()` function in Kotlin coroutines?**
+<details>
+<summary><strong>What is the purpose of the <code>withContext()</code> function in Kotlin coroutines?</strong></summary>
+
 The `withContext()` function switches the coroutine's context to a different dispatcher while suspending the current coroutine, then returns to the original dispatcher once the block completes.
 
 ```kotlin
@@ -483,8 +591,11 @@ suspend fun fetchFromNetwork(): String {
     }
 }
 ```
+</details>
 
-**What is a flow in Kotlin coroutines?**
+<details>
+<summary><strong>What is a flow in Kotlin coroutines?</strong></summary>
+
 A flow is a cold asynchronous stream of data that can emit multiple values over time. It is designed to handle sequences of values computed asynchronously and lazily. Flows provide built-in operators to transform and combine data streams.
 
 ```kotlin
@@ -506,8 +617,11 @@ fun main() = runBlocking {
         }
 }
 ```
+</details>
 
-**Functional programming in Kotlin.**
+<details>
+<summary><strong>Functional programming in Kotlin.</strong></summary>
+
 Functional programming in Kotlin encourages:
 
 - **Immutable Data:** Use of immutable data structures where objects cannot be modified after creation.
@@ -524,8 +638,11 @@ val sum = numbers
 
 println(sum) // Prints the sum of doubled even numbers: 12
 ```
+</details>
 
-**Explain the concept of delegates in Kotlin.**
+<details>
+<summary><strong>Explain the concept of delegates in Kotlin.</strong></summary>
+
 Delegates provide a way to delegate the implementation of properties or functions to another object, allowing reuse of common behavior without inheritance.
 
 ```kotlin
@@ -538,8 +655,11 @@ val args: SecondFragmentArgs by navArgs()
 
 // by -> Delegation
 ```
+</details>
 
-**What is the difference between `init` and constructor in Kotlin?**
+<details>
+<summary><strong>What is the difference between <code>init</code> and constructor in Kotlin?</strong></summary>
+
 `init` is an initialization block executed when an instance is created. The constructor creates the instance, while the `init` block handles initialization logic. The key difference is that `init` always runs regardless of which constructor is used.
 
 ```kotlin
@@ -557,8 +677,10 @@ fun main() {
     println(person.greeting)   // Output: Hello, John!
 }
 ```
+</details>
 
-**What is the difference between invariance, covariance, and contravariance in Kotlin generics?**
+<details>
+<summary><strong>What is the difference between invariance, covariance, and contravariance in Kotlin generics?</strong></summary>
 
 - `Invariance` — no subtyping relationship between different generic instantiations. `Box<String>` is NOT a subtype of `Box<Any>`.
 - `Covariance` (`out`) — allows a subtype relationship that preserves the direction of subtyping. A `Container<Dog>` can be used where `Container<Animal>` is expected.
@@ -588,8 +710,11 @@ fun main() {
     val dogProcessor: Processor<Dog> = animalProcessor // Contravariance
 }
 ```
+</details>
 
-**Explain the concept of `typealias` in Kotlin.**
+<details>
+<summary><strong>Explain the concept of <code>typealias</code> in Kotlin.</strong></summary>
+
 `typealias` provides an alternative name for an existing type, making the code more readable and maintainable.
 
 ```kotlin
@@ -602,8 +727,11 @@ fun main() {
     println(employee.id) // Output: 123
 }
 ```
+</details>
 
-**What are `inline functions` in Kotlin?**
+<details>
+<summary><strong>What are inline functions in Kotlin?</strong></summary>
+
 Inline functions are expanded at the call site during compilation — the function body is inserted directly instead of making a function call. This reduces overhead, especially for higher-order functions with lambdas. Declared using the `inline` keyword.
 
 ```kotlin
@@ -616,8 +744,11 @@ fun main() {
     println(sum) // Output: 7
 }
 ```
+</details>
 
-**Explain the concept of `tail recursion` in Kotlin.**
+<details>
+<summary><strong>Explain the concept of tail recursion in Kotlin.</strong></summary>
+
 Tail recursion is where a recursive function calls itself as its last operation. The compiler optimizes it into an efficient loop, preventing stack overflow. Use the `tailrec` modifier to enable this optimization.
 
 ```kotlin
@@ -634,8 +765,11 @@ fun main() {
     println(result) // Output: 120
 }
 ```
+</details>
 
-**What is the use of the `@JvmStatic` annotation in Kotlin?**
+<details>
+<summary><strong>What is the use of the <code>@JvmStatic</code> annotation in Kotlin?</strong></summary>
+
 `@JvmStatic` is used when interoperating with Java code. Applied to a companion object's function or property, it generates a static equivalent in the compiled Java bytecode, allowing Java callers to invoke it as a static method.
 
 ```kotlin
@@ -649,8 +783,11 @@ class Utils {
 }
 // Java: Utils.doSomething()
 ```
+</details>
 
-**What is the difference between "==" and "===" operators in Kotlin?**
+<details>
+<summary><strong>What is the difference between <code>==</code> and <code>===</code> operators in Kotlin?</strong></summary>
+
 - `==` — structural equality: checks if the **values** of two objects are equal (calls `equals()`).
 - `===` — referential equality: checks if two **references point to the same object** in memory.
 
@@ -663,8 +800,11 @@ println(a == b)  // true (structural equality)
 println(a === b) // true (string interning in JVM)
 println(a === c) // true (same reference)
 ```
+</details>
 
-**What is the purpose of the `operator` modifier in Kotlin?**
+<details>
+<summary><strong>What is the purpose of the <code>operator</code> modifier in Kotlin?</strong></summary>
+
 The `operator` modifier allows you to overload or define custom behavior for built-in operators such as `+`, `-`, `*`, `/`, `==`, etc.
 
 ```kotlin
@@ -681,8 +821,11 @@ fun main() {
     println(sum) // Output: Point(x=4, y=6)
 }
 ```
+</details>
 
-**What is the difference between extension functions and member functions in Kotlin?**
+<details>
+<summary><strong>What is the difference between extension functions and member functions in Kotlin?</strong></summary>
+
 - **Extension functions** add new functions to existing classes without modifying their source code.
 - **Member functions** are defined inside the class and can access its private properties and functions directly.
 
@@ -706,8 +849,11 @@ fun main() {
     person.introduce() // Hello, my name is John
 }
 ```
+</details>
 
-**Explain the concept of the `"this"` expression in Kotlin.**
+<details>
+<summary><strong>Explain the concept of the <code>this</code> expression in Kotlin.</strong></summary>
+
 The `this` expression refers to the current instance of the class.
 
 ```kotlin
@@ -724,8 +870,11 @@ fun main() {
     person.printName() // Output: My name is John
 }
 ```
+</details>
 
-**Explain the concept of default arguments in Kotlin.**
+<details>
+<summary><strong>Explain the concept of default arguments in Kotlin.</strong></summary>
+
 Default arguments allow you to define default values for function parameters. If an argument is not provided for a parameter with a default value, the default value is used.
 
 ```kotlin
@@ -738,8 +887,11 @@ fun main() {
     greet("John") // Output: Hello, John!
 }
 ```
+</details>
 
-**Explain the concept of `function references` in Kotlin.**
+<details>
+<summary><strong>Explain the concept of function references in Kotlin.</strong></summary>
+
 Function references allow you to refer to a function by its name without invoking it, and pass it as a first-class value.
 
 ```kotlin
@@ -753,8 +905,11 @@ fun main() {
     functionReference() // Output: Hello, World!
 }
 ```
+</details>
 
-**What is the purpose of the `downTo` keyword in Kotlin?**
+<details>
+<summary><strong>What is the purpose of the <code>downTo</code> keyword in Kotlin?</strong></summary>
+
 `downTo` is used with the range operator to create a range in descending order, commonly used in `for` loops.
 
 ```kotlin
@@ -762,8 +917,11 @@ for (i in 10 downTo 1) {
     println(i)
 }
 ```
+</details>
 
-**Explain the concept of the `until` keyword in Kotlin.**
+<details>
+<summary><strong>Explain the concept of the <code>until</code> keyword in Kotlin.</strong></summary>
+
 `until` creates a range from the starting value up to, but **not including**, the end value.
 
 ```kotlin
@@ -771,8 +929,11 @@ for (i in 1 until 5) {
     println(i) // Prints 1, 2, 3, 4
 }
 ```
+</details>
 
-**Explain the concept of the `internal` visibility modifier in Kotlin.**
+<details>
+<summary><strong>Explain the concept of the <code>internal</code> visibility modifier in Kotlin.</strong></summary>
+
 The `internal` modifier restricts visibility to the same module. It allows access from any code within the same module, but not from outside it. A module is a set of Kotlin files compiled together.
 
 ```kotlin
@@ -783,8 +944,11 @@ internal class InternalClass {
     }
 }
 ```
+</details>
 
-**What is the difference between `first()` and `firstOrNull()` functions in Kotlin?**
+<details>
+<summary><strong>What is the difference between <code>first()</code> and <code>firstOrNull()</code> functions in Kotlin?</strong></summary>
+
 Both retrieve the first element of a collection. The difference is in handling empty collections:
 
 - `first()` — throws `NoSuchElementException` if the collection is empty.
@@ -798,8 +962,11 @@ val empty = emptyList<Int>()
 println(empty.firstOrNull())    // Output: null
 // empty.first() would throw NoSuchElementException
 ```
+</details>
 
-**Explain the concept of `crossinline` in Kotlin.**
+<details>
+<summary><strong>Explain the concept of <code>crossinline</code> in Kotlin.</strong></summary>
+
 The `crossinline` modifier is used in inline higher-order functions to indicate that the passed lambda cannot contain non-local returns. It is required when the lambda is executed in a different context (e.g., inside a `Runnable` or another lambda).
 
 ```kotlin
@@ -817,8 +984,11 @@ fun main() {
     }
 }
 ```
+</details>
 
-**What is the use of the `requireNotNull` function in Kotlin?**
+<details>
+<summary><strong>What is the use of the <code>requireNotNull</code> function in Kotlin?</strong></summary>
+
 `requireNotNull` checks that a value is not null. It throws `IllegalArgumentException` with a message if null, and returns the non-null value otherwise.
 
 ```kotlin
@@ -832,8 +1002,11 @@ fun main() {
     printName(null)   // Throws IllegalArgumentException
 }
 ```
+</details>
 
-**Explain the concept of top-level functions in Kotlin.**
+<details>
+<summary><strong>Explain the concept of top-level functions in Kotlin.</strong></summary>
+
 Top-level functions are declared outside of any class or interface, at the top level of a file. They are accessible from anywhere in the same module and provide a way to organize logic that doesn't belong to a specific class.
 
 ```kotlin
@@ -848,8 +1021,11 @@ fun multiplyNumbers(a: Int, b: Int): Int {
     return a * b
 }
 ```
+</details>
 
-**Explain the concept of `inlining` in Kotlin.**
+<details>
+<summary><strong>Explain the concept of inlining in Kotlin.</strong></summary>
+
 Inlining optimizes higher-order functions by replacing the function call with the actual code at each call site. This reduces the overhead of lambda object creation and function call overhead.
 
 ```kotlin
@@ -862,8 +1038,11 @@ fun main() {
     println(result) // Output: 8
 }
 ```
+</details>
 
-**How does `Kotlin handle SAM (Single Abstract Method) conversions` for Java interoperability?**
+<details>
+<summary><strong>How does Kotlin handle SAM (Single Abstract Method) conversions for Java interoperability?</strong></summary>
+
 Kotlin allows SAM conversions, where functional interfaces in Java can be seamlessly used as lambda expressions in Kotlin. This simplifies the integration of Kotlin with Java libraries that heavily use functional interfaces.
 
 ```kotlin
@@ -876,11 +1055,17 @@ setClickListener { message ->
     println("Lambda: $message")
 }
 ```
+</details>
 
-**What are `Kotlin Contracts`, and how do they `improve code optimization`?**
+<details>
+<summary><strong>What are Kotlin Contracts, and how do they improve code optimization?</strong></summary>
+
 Kotlin Contracts are annotations that developers can use to provide additional information to the compiler about the expected behavior of functions. By specifying contracts, developers can guide the compiler in making more informed decisions during optimization, resulting in potentially more efficient code.
+</details>
 
-**How do you perform `string interpolation` in Kotlin?**
+<details>
+<summary><strong>How do you perform string interpolation in Kotlin?</strong></summary>
+
 String interpolation allows you to embed expressions or variables directly within string literals using `$` for variables and `${}` for expressions.
 
 ```kotlin
@@ -891,56 +1076,93 @@ fun main() {
     println(message) // Output: My name is John and I am 30 years old.
 }
 ```
+</details>
 
-## ------------------ Android Points ------------------
+---
 
-**What's Activity in Android?**
-Activity `represents a single screen with a user interface`. It serves as the entry point for interacting with the app and can host UI elements like buttons, text fields, and images. Each Android app typically consists of multiple activities that work together to provide a seamless user experience.
+## Android Questions
 
-**What are the components of the Android Application?**
+<details>
+<summary><strong>What's Activity in Android?</strong></summary>
+
+Activity represents a single screen with a user interface. It serves as the entry point for interacting with the app and can host UI elements like buttons, text fields, and images. Each Android app typically consists of multiple activities that work together to provide a seamless user experience.
+</details>
+
+<details>
+<summary><strong>What are the components of the Android Application?</strong></summary>
+
 There are four main building blocks that an Android application consists of. These loosely coupled components are bound by the application manifest file:
 
 - `Activities`
 - `Services`
 - `Content Providers`
 - `Broadcast Receivers`
+</details>
 
-**What is Toast in Android?**
-A Toast is a `short alert message shown on the Android screen for a short interval of time`. It is used to display information when we perform any operation in our app. It disappears automatically.
+<details>
+<summary><strong>What is Toast in Android?</strong></summary>
 
-**What's Service in Android?**
-Services in Android are a special component that facilitates an application to `run in the background in order to perform long-running operation tasks`.
+A Toast is a short alert message shown on the Android screen for a short interval of time. It is used to display information when we perform any operation in our app. It disappears automatically.
+</details>
 
-**What is a `Content Provider` in Android?**
-A Content Provider acts as a `central repository for storing and managing application data`. It allows apps to securely `share, access, and modify data` from other apps while maintaining proper permissions and security.
+<details>
+<summary><strong>What's Service in Android?</strong></summary>
+
+Services in Android are a special component that facilitates an application to run in the background in order to perform long-running operation tasks.
+</details>
+
+<details>
+<summary><strong>What is a Content Provider in Android?</strong></summary>
+
+A Content Provider acts as a central repository for storing and managing application data. It allows apps to securely share, access, and modify data from other apps while maintaining proper permissions and security.
 
 ```kotlin
 val contentUri = Uri.parse("content://com.example.provider/users")
 val cursor = contentResolver.query(contentUri, null, null, null, null)
 ```
+</details>
 
-**What is a `Broadcast Receiver` in Android?**
-A Broadcast Receiver listens for `system-wide or app-specific events` (broadcasts) and responds when they occur. Events include `device boot`, `incoming SMS`, `battery changes`, or `airplane mode activation`.
+<details>
+<summary><strong>What is a Broadcast Receiver in Android?</strong></summary>
+
+A Broadcast Receiver listens for system-wide or app-specific events (broadcasts) and responds when they occur. Events include device boot, incoming SMS, battery changes, or airplane mode activation.
 
 - **Static Broadcast Receiver** – Declared in `AndroidManifest.xml`, works even if the app is closed.
 - **Dynamic Broadcast Receiver** – Registered at runtime, works only when the app is running or minimized.
+</details>
 
-**What is `Gradle` in Android?**
-Gradle is an open-source build automation tool used in Android for `building, testing, and deployment`. It `automates tasks like compiling code, managing dependencies, and generating APKs`.
+<details>
+<summary><strong>What is Gradle in Android?</strong></summary>
 
-**What is a Fragment in Android?**
-A Fragment is a `reusable UI component` that represents a portion of an Activity. It helps create `flexible, modular, and adaptive UI designs` that adjust to different screen sizes.
+Gradle is an open-source build automation tool used in Android for building, testing, and deployment. It automates tasks like compiling code, managing dependencies, and generating APKs.
+</details>
 
-**What's `RecyclerView in Android` & How it works?**
-RecyclerView is a ViewGroup that is an `improvement` on ListView and GridView. It improves efficiency by **recycling** off-screen item views — items scrolled out of view are reused for new items, reducing memory consumption.
+<details>
+<summary><strong>What is a Fragment in Android?</strong></summary>
 
-**What's the Difference Between `Intent and Intent Filters`?**
-An Intent is an `object passed to startActivity()`, `startService()`, etc. to launch a component or trigger an action. An `Intent Filter` describes the `capability of the component` — what kinds of Intents it can respond to.
+A Fragment is a reusable UI component that represents a portion of an Activity. It helps create flexible, modular, and adaptive UI designs that adjust to different screen sizes.
+</details>
 
-**What is the AndroidManifest.xml?**
-Every project includes a manifest file stored in the root directory. It defines the structure and metadata of the application, its `components` (Activities, Services, Content Providers, Broadcast Receivers), `permissions`, and `requirements` like icon and theme.
+<details>
+<summary><strong>What's RecyclerView in Android & How it works?</strong></summary>
 
-**Activity Lifecycle in brief.**
+RecyclerView is a ViewGroup that is an improvement on ListView and GridView. It improves efficiency by **recycling** off-screen item views — items scrolled out of view are reused for new items, reducing memory consumption.
+</details>
+
+<details>
+<summary><strong>What's the Difference Between Intent and Intent Filters?</strong></summary>
+
+An Intent is an object passed to `startActivity()`, `startService()`, etc. to launch a component or trigger an action. An Intent Filter describes the capability of the component — what kinds of Intents it can respond to.
+</details>
+
+<details>
+<summary><strong>What is the AndroidManifest.xml?</strong></summary>
+
+Every project includes a manifest file stored in the root directory. It defines the structure and metadata of the application, its components (Activities, Services, Content Providers, Broadcast Receivers), permissions, and requirements like icon and theme.
+</details>
+
+<details>
+<summary><strong>Activity Lifecycle in brief.</strong></summary>
 
 ![Activity Lifecycle](A0ED08A0-8A80-4B38-8CB0-C85D004B7557.jpeg)
 
@@ -953,15 +1175,22 @@ Every project includes a manifest file stored in the root directory. It defines 
 | `onPause()` | Activity losing focus (another activity coming on top) |
 | `onStop()` | Activity no longer visible |
 | `onDestroy()` | Activity being destroyed |
+</details>
 
-**Why do we need to call `setContentView()` in `onCreate()`?**
+<details>
+<summary><strong>Why do we need to call <code>setContentView()</code> in <code>onCreate()</code>?</strong></summary>
+
 `onCreate()` is called only once in the lifecycle. Calling `setContentView()` here ensures the layout is inflated a single time. Calling it in `onResume()` or `onStart()` would re-inflate the layout on every transition, which is inefficient.
+</details>
 
-**Explain the `Fragment Lifecycle` in Brief**
+<details>
+<summary><strong>Explain the Fragment Lifecycle in Brief</strong></summary>
 
 ![Fragment Lifecycle](Android_Fragment_Lifecycle.jpg)
+</details>
 
-## Difference between Fragment and Activity
+<details>
+<summary><strong>Difference between Fragment and Activity</strong></summary>
 
 | Feature | Activity | Fragment |
 |---|---|---|
@@ -973,9 +1202,12 @@ Every project includes a manifest file stored in the root directory. It defines 
 | **Lifecycle Handling** | Managed by the OS. | Managed by the hosting Activity. |
 | **Performance** | Heavier component. | Lightweight compared to Activity. |
 | **Reusability** | Not reusable. | Highly reusable. |
+</details>
 
-**What's `Context` in Android?**
-Context gives us the `context of the current state of our application`. It is used to:
+<details>
+<summary><strong>What's Context in Android?</strong></summary>
+
+Context gives us the context of the current state of our application. It is used to:
 
 - Access resources.
 - Interact with other Android components by sending messages.
@@ -984,8 +1216,10 @@ Context gives us the `context of the current state of our application`. It is us
 **Two main types of Context:**
 - **Application Context** — tied to the app's lifecycle.
 - **Activity Context** — tied to the Activity's lifecycle.
+</details>
 
-## Difference Between View and ViewGroup in Android
+<details>
+<summary><strong>Difference Between View and ViewGroup in Android</strong></summary>
 
 | Feature | View | ViewGroup |
 |---|---|---|
@@ -993,31 +1227,38 @@ Context gives us the `context of the current state of our application`. It is us
 | **Purpose** | Represents UI elements like buttons and text boxes. | Organizes Views to structure the UI layout. |
 | **Examples** | `EditText`, `Button`, `CheckBox` | `LinearLayout`, `RelativeLayout`, `ConstraintLayout` |
 | **Base Class** | `android.view.View` | `android.view.ViewGroup` |
+</details>
 
-**Describe the architecture of your last app.**
+<details>
+<summary><strong>Describe the architecture of your last app.</strong></summary>
+
 The most popular Android architectures are:
 
 - `MVC (Model — View — Controller)`
 - `MVP (Model — View — Presenter)`
 - `MVVM (Model — View — ViewModel)`
 
-## MVC vs MVP vs MVVM Architecture
+**MVC vs MVP vs MVVM Architecture:**
 
 | Feature | MVC | MVP | MVVM |
 |---|---|---|---|
 | **Coupling** | View and Model tightly coupled. | Presenter decouples View and Model. | Data binding; clear separation of business logic and UI. |
 | **Relationships** | One Controller → many Views. | One Presenter → one View. | One ViewModel → many Views. |
 | **Best for** | Small-scale projects. | Simple and complex apps. | Large-scale projects. |
+</details>
 
-**Describe `MVVM`**
+<details>
+<summary><strong>Describe MVVM</strong></summary>
 
 `Model — View — ViewModel (MVVM)` separates data presentation logic from the core business logic:
 
 - `Model` — responsible for data sources. Works with the ViewModel to get and save data.
 - `View` — observes the ViewModel and contains no application logic.
 - `ViewModel` — exposes data streams to the View and serves as a link between Model and View.
+</details>
 
-**How to Reduce APK size in Android?**
+<details>
+<summary><strong>How to Reduce APK size in Android?</strong></summary>
 
 - Remove unused resources and code
 - Use Vector Drawables
@@ -1029,9 +1270,12 @@ The most popular Android architectures are:
 - Use the Android Size Analyzer tool
 - Publish App Bundles (AAB) instead of APK
 - Use `resConfigs` to strip unused locales
+</details>
 
-**What's `Android Jetpack` and its `Key Benefits`?**
-Jetpack is a `set of software components, libraries, tools`, and guidance to help in developing great Android apps.
+<details>
+<summary><strong>What's Android Jetpack and its Key Benefits?</strong></summary>
+
+Jetpack is a set of software components, libraries, tools, and guidance to help in developing great Android apps.
 
 Key Benefits:
 - Forms a recommended architecture through its components
@@ -1039,17 +1283,23 @@ Key Benefits:
 - Simplifies complex tasks
 - Provides backward compatibility via `androidx.*`
 - Inbuilt Kotlin integration
+</details>
 
-**What's `Jetpack Compose` and its Benefits?**
-Jetpack Compose is a `modern declarative UI toolkit` for building native Android UI with less code and Kotlin APIs.
+<details>
+<summary><strong>What's Jetpack Compose and its Benefits?</strong></summary>
+
+Jetpack Compose is a modern declarative UI toolkit for building native Android UI with less code and Kotlin APIs.
 
 - Declarative
 - Compatible with existing Views
 - Increases development speed
 - Concise and idiomatic Kotlin
 - Easy to maintain
+</details>
 
-**What are the `Architecture Components` of Android?**
+<details>
+<summary><strong>What are the Architecture Components of Android?</strong></summary>
+
 - Room
 - WorkManager
 - Lifecycle
@@ -1058,8 +1308,10 @@ Jetpack Compose is a `modern declarative UI toolkit` for building native Android
 - Navigation
 - Paging
 - Data Binding
+</details>
 
-**How to Improve RecyclerView Scrolling Performance in Android?**
+<details>
+<summary><strong>How to Improve RecyclerView Scrolling Performance in Android?</strong></summary>
 
 - Set a specific width and height to `ImageView` in items
 - Avoid nested scrolling views
@@ -1067,13 +1319,19 @@ Jetpack Compose is a `modern declarative UI toolkit` for building native Android
 - Use an image loading library (Glide, Coil)
 - Keep `onBindViewHolder()` lightweight
 - Use `DiffUtil` / `notifyItemChanged()` instead of `notifyDataSetChanged()`
+</details>
 
-**What's `Retrofit` in Android?**
-Retrofit is a `type-safe REST client` for Android and Java that simplifies consuming RESTful web services. It uses `OkHttp` as the networking layer and automatically serializes JSON responses into Kotlin/Java objects using a converter (e.g., Gson, Moshi).
+<details>
+<summary><strong>What's Retrofit in Android?</strong></summary>
+
+Retrofit is a type-safe REST client for Android and Java that simplifies consuming RESTful web services. It uses OkHttp as the networking layer and automatically serializes JSON responses into Kotlin/Java objects using a converter (e.g., Gson, Moshi).
 
 > Note: Retrofit does not support image loading — use Glide or Coil for that.
+</details>
 
-**What are the `reasons your Android app` is lagging?**
+<details>
+<summary><strong>What are the reasons your Android app is lagging?</strong></summary>
+
 - Too much work on the main thread
 - Large asset files
 - Outdated SDK version
@@ -1081,23 +1339,35 @@ Retrofit is a `type-safe REST client` for Android and Java that simplifies consu
 - Slow network responses
 - Chatty network calls (too many small requests)
 - Inefficient code
+</details>
 
-**What is `ANR` and How can it be `Prevented in Android`?**
-ANR stands for `Application Not Responding`. It is triggered when a process on the UI thread takes more than ~5 seconds. The GUI locks up and the system shows a dialog prompting the user to wait or force-close the app.
+<details>
+<summary><strong>What is ANR and How can it be Prevented in Android?</strong></summary>
+
+ANR stands for Application Not Responding. It is triggered when a process on the UI thread takes more than ~5 seconds. The GUI locks up and the system shows a dialog prompting the user to wait or force-close the app.
 
 **Prevention:** Move heavy tasks off the main thread using coroutines, `WorkManager`, or background threads. Identify blocked threads with Android Profiler or StrictMode.
+</details>
 
-**What is `Android NDK` and why is it useful?**
+<details>
+<summary><strong>What is Android NDK and why is it useful?</strong></summary>
+
 The NDK (Native Development Kit) allows you to write performance-critical code in C/C++ for Android. It is useful for:
 - Games or physics simulations requiring low latency
 - Reusing existing C/C++ libraries
 - Computationally intensive operations
+</details>
 
-**Explain the `JUnit` test in brief.**
-JUnit is a `Unit Testing framework` for Java/Kotlin included by default in Android Studio. It provides annotations such as `@Test`, `@Before`, `@After` to define and organize tests.
+<details>
+<summary><strong>Explain the JUnit test in brief.</strong></summary>
 
-**What's `LiveData` in `Android Architecture Component` and its Advantages?**
-LiveData is a `lifecycle-aware observable data holder`. It only updates observers whose lifecycle state is active (STARTED or RESUMED), and automatically removes destroyed observers — preventing memory leaks.
+JUnit is a Unit Testing framework for Java/Kotlin included by default in Android Studio. It provides annotations such as `@Test`, `@Before`, `@After` to define and organize tests.
+</details>
+
+<details>
+<summary><strong>What's LiveData in Android Architecture Component and its Advantages?</strong></summary>
+
+LiveData is a lifecycle-aware observable data holder. It only updates observers whose lifecycle state is active (STARTED or RESUMED), and automatically removes destroyed observers — preventing memory leaks.
 
 **Advantages:**
 - UI stays in sync with data changes
@@ -1105,9 +1375,12 @@ LiveData is a `lifecycle-aware observable data holder`. It only updates observer
 - No crashes from stopped or destroyed activities
 
 ![LiveData Component](LiveData_Component-(1).jpg)
+</details>
 
-**What's `Data Binding` in Android?**
-Data Binding is a library that allows you to `bind UI components to data sources declaratively` in XML, removing the need for `findViewById()` calls.
+<details>
+<summary><strong>What's Data Binding in Android?</strong></summary>
+
+Data Binding is a library that allows you to bind UI components to data sources declaratively in XML, removing the need for `findViewById()` calls.
 
 ```kotlin
 // Without Data Binding
@@ -1124,8 +1397,11 @@ textView.setText(viewModel.getUserName())
 - Removes UI framework calls from the Activity
 - Allows classes and methods to observe data changes
 - Reduces boilerplate
+</details>
 
-**Room in Android Architecture Component.**
+<details>
+<summary><strong>Room in Android Architecture Component.</strong></summary>
+
 Room is an SQLite abstraction library that:
 
 - Validates queries at **compile time**
@@ -1136,12 +1412,18 @@ Three sub-components:
 - `@Entity` — annotated class representing a database table
 - `@Dao` — interface defining query methods
 - `@Database` — abstract class that serves as the main access point
+</details>
 
-**ViewModel in Android**
-ViewModel holds and manages UI-related data in a lifecycle-conscious way. Its main purpose is to `survive configuration changes` like screen rotation — data is not lost when the Activity is recreated.
+<details>
+<summary><strong>ViewModel in Android</strong></summary>
 
-**What is the difference between `Serializable` and `Parcelable` in Android?**
-Both are used to `transfer data between components`. However:
+ViewModel holds and manages UI-related data in a lifecycle-conscious way. Its main purpose is to survive configuration changes like screen rotation — data is not lost when the Activity is recreated.
+</details>
+
+<details>
+<summary><strong>What is the difference between Serializable and Parcelable in Android?</strong></summary>
+
+Both are used to transfer data between components. However:
 
 - `Serializable` — Java standard interface; uses **reflection** which is slower.
 - `Parcelable` — Android-specific; uses **direct memory access**, making it significantly faster.
@@ -1152,20 +1434,31 @@ Use `@Parcelize` for the simplest Parcelable implementation:
 @Parcelize
 data class User(val name: String, val age: Int) : Parcelable
 ```
+</details>
 
-**How does `Dependency Injection (DI)` work in Android?**
-Dependency Injection is a `design pattern that promotes loose coupling` by providing dependencies externally rather than creating them inside a class. In Android, **Hilt** (built on Dagger) is the recommended DI framework. It improves code `maintainability`, `testability`, and allows easy swapping of implementations.
+<details>
+<summary><strong>How does Dependency Injection (DI) work in Android?</strong></summary>
 
-**What is the `purpose of ProGuard` in Android development?**
-ProGuard is used for `code shrinking, optimization, and obfuscation`. It removes unused classes, fields, and methods to reduce app size, and obfuscates code by renaming identifiers to make reverse engineering harder.
+Dependency Injection is a design pattern that promotes loose coupling by providing dependencies externally rather than creating them inside a class. In Android, **Hilt** (built on Dagger) is the recommended DI framework. It improves code maintainability, testability, and allows easy swapping of implementations.
+</details>
 
-**How can you `handle orientation changes` in an Android application?**
+<details>
+<summary><strong>What is the purpose of ProGuard in Android development?</strong></summary>
+
+ProGuard is used for code shrinking, optimization, and obfuscation. It removes unused classes, fields, and methods to reduce app size, and obfuscates code by renaming identifiers to make reverse engineering harder.
+</details>
+
+<details>
+<summary><strong>How can you handle orientation changes in an Android application?</strong></summary>
+
 Orientation changes cause an Activity to restart. Handle this by:
 - Overriding `onSaveInstanceState()` to save important data
 - Restoring state in `onCreate()` or `onRestoreInstanceState()`
 - Using **ViewModel** to retain UI data across configuration changes (recommended approach)
+</details>
 
-**What is the difference between a `Service` and an `IntentService` in Android?**
+<details>
+<summary><strong>What is the difference between a Service and an IntentService in Android?</strong></summary>
 
 | | Service | IntentService |
 |---|---|---|
@@ -1174,11 +1467,16 @@ Orientation changes cause an Activity to restart. Handle this by:
 | Best for | Ongoing background work | Simple, independent tasks |
 
 > Note: `IntentService` is deprecated in API 30+. Use `WorkManager` or a coroutine-based approach instead.
+</details>
 
-**What is Android `WorkManager`?**
-Android WorkManager is an API that provides a `unified, reliable solution for scheduling and executing background tasks`, even across device reboots. It abstracts away differences between Android versions and their background processing limitations.
+<details>
+<summary><strong>What is Android WorkManager?</strong></summary>
 
-**What are the key `features` of WorkManager?**
+Android WorkManager is an API that provides a unified, reliable solution for scheduling and executing background tasks, even across device reboots. It abstracts away differences between Android versions and their background processing limitations.
+</details>
+
+<details>
+<summary><strong>What are the key features of WorkManager?</strong></summary>
 
 - One-time and periodic task scheduling
 - Constraints (network, charging, device idle)
@@ -1203,21 +1501,33 @@ val constrainedRequest = OneTimeWorkRequestBuilder<MyWorker>()
     .setConstraints(constraints)
     .build()
 ```
+</details>
 
-**How does `WorkManager differ from other background task scheduling` mechanisms in Android?**
-WorkManager provides a `unified API` that handles task execution across all Android versions. It intelligently selects the best available implementation (JobScheduler, AlarmManager, etc.) based on the device's API level, ensuring optimal performance and reliability.
+<details>
+<summary><strong>How does WorkManager differ from other background task scheduling mechanisms in Android?</strong></summary>
 
-**What are the different types of `constraints` that can be applied to a `WorkRequest`?**
+WorkManager provides a unified API that handles task execution across all Android versions. It intelligently selects the best available implementation (JobScheduler, AlarmManager, etc.) based on the device's API level, ensuring optimal performance and reliability.
+</details>
+
+<details>
+<summary><strong>What are the different types of constraints that can be applied to a WorkRequest?</strong></summary>
+
 - Network connectivity requirements (e.g., unmetered network)
 - Device charging status
 - Device idle state
 - Execution window (time frame for task execution)
+</details>
 
-**What is the difference between `OneTimeWorkRequest` and `PeriodicWorkRequest`?**
+<details>
+<summary><strong>What is the difference between OneTimeWorkRequest and PeriodicWorkRequest?</strong></summary>
+
 - `OneTimeWorkRequest` — executes a task once. Ideal for one-off operations like sending analytics.
 - `PeriodicWorkRequest` — executes a task repeatedly at a specified interval. Ideal for recurring sync tasks.
+</details>
 
-**How can you `pass data` to a Worker class?**
+<details>
+<summary><strong>How can you pass data to a Worker class?</strong></summary>
+
 Use `workDataOf()` to build input data and attach it with `setInputData()`. Retrieve it inside `doWork()` via `inputData`.
 
 ```kotlin
@@ -1227,8 +1537,11 @@ val myWorkRequest = OneTimeWorkRequestBuilder<MyWorker>()
     .setInputData(inputData)
     .build()
 ```
+</details>
 
-**How can you `observe the progress` or `output of a Worker class`?**
+<details>
+<summary><strong>How can you observe the progress or output of a Worker class?</strong></summary>
+
 WorkManager provides `getWorkInfoByIdLiveData()` to observe the `WorkInfo` object, which contains the task's state, progress, and output data.
 
 ```kotlin
@@ -1242,8 +1555,11 @@ WorkManager.getInstance(context)
         }
     }
 ```
+</details>
 
-**How can you `chain multiple work requests together`?**
+<details>
+<summary><strong>How can you chain multiple work requests together?</strong></summary>
+
 Use `beginWith()` and `then()` to define a sequence of tasks.
 
 ```kotlin
@@ -1255,8 +1571,11 @@ WorkManager.getInstance(context)
     .then(secondWorkRequest)
     .enqueue()
 ```
+</details>
 
-**How can you handle and retry failed tasks in WorkManager?**
+<details>
+<summary><strong>How can you handle and retry failed tasks in WorkManager?</strong></summary>
+
 WorkManager automatically retries failed tasks using the retry policy defined by `setBackoffCriteria()`. It supports linear and exponential backoff strategies.
 
 ```kotlin
@@ -1264,12 +1583,13 @@ val myWorkRequest = OneTimeWorkRequestBuilder<MyWorker>()
     .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 1, TimeUnit.MINUTES)
     .build()
 ```
+</details>
 
-# ------------------ SOLID Principles ------------------
+---
 
-**SOLID Principles in Programming**
+## SOLID Principles
 
-The SOLID principles are five essential guidelines that enhance software design, `making code more maintainable and scalable`:
+The SOLID principles are five essential guidelines that enhance software design, making code more maintainable and scalable:
 
 | Principle | Rule |
 |---|---|
@@ -1279,40 +1599,47 @@ The SOLID principles are five essential guidelines that enhance software design,
 | **I**nterface Segregation | Don't force clients to implement interfaces they don't use |
 | **D**ependency Inversion | Depend on abstractions, not concrete implementations |
 
-SOLID helps reduce `tight coupling` — where classes are highly dependent on one another. Loosely coupled classes are more `reusable, maintainable, flexible, and stable`.
+SOLID helps reduce tight coupling — where classes are highly dependent on one another. Loosely coupled classes are more reusable, maintainable, flexible, and stable.
+
+<details>
+<summary><strong>Single Responsibility Principle (SRP)</strong></summary>
+
+"A class should have only one reason to change" — every class should have a single, well-defined responsibility.
+</details>
+
+<details>
+<summary><strong>Open/Closed Principle</strong></summary>
+
+"Software entities should be open for extension, but closed for modification" — you should be able to extend behavior without modifying existing code.
+</details>
+
+<details>
+<summary><strong>Liskov's Substitution Principle (LSP)</strong></summary>
+
+"Derived or child classes must be substitutable for their base or parent classes" — any subclass should work correctly wherever its parent is expected, without unexpected behavior.
+</details>
+
+<details>
+<summary><strong>Interface Segregation Principle (ISP)</strong></summary>
+
+"Do not force any client to implement an interface which is irrelevant to them" — prefer many small, client-specific interfaces over one large general-purpose interface.
+</details>
+
+<details>
+<summary><strong>Dependency Inversion Principle (DIP)</strong></summary>
+
+"High-level modules should not depend on low-level modules. Both should depend on abstractions" — classes should rely on interfaces or abstract classes rather than concrete implementations, making it easier to swap implementations without affecting other parts of the codebase.
+</details>
 
 ---
 
-**Single Responsibility Principle (SRP)**
-`"A class should have only one reason to change"` — every class should have a single, well-defined responsibility.
-
----
-
-**Open/Closed Principle**
-`"Software entities should be open for extension, but closed for modification"` — you should be able to extend behavior without modifying existing code.
-
----
-
-**Liskov's Substitution Principle (LSP)**
-`"Derived or child classes must be substitutable for their base or parent classes"` — any subclass should work correctly wherever its parent is expected, without unexpected behavior.
-
----
-
-**Interface Segregation Principle (ISP)**
-`"Do not force any client to implement an interface which is irrelevant to them"` — prefer many small, client-specific interfaces over one large general-purpose interface.
-
----
-
-**Dependency Inversion Principle (DIP)**
-`"High-level modules should not depend on low-level modules. Both should depend on abstractions"` — classes should rely on interfaces or abstract classes rather than concrete implementations, making it easier to swap implementations without affecting other parts of the codebase.
-
-# ------------------ Advanced Topics ------------------
+# Advanced Topics
 
 ## Kotlin Advanced
 
----
+<details>
+<summary><strong>What is <code>StateFlow</code> and how is it different from <code>LiveData</code>?</strong></summary>
 
-**What is `StateFlow` and how is it different from `LiveData`?**
 `StateFlow` is a hot, coroutine-based observable that always holds a current value and emits updates to all collectors. Unlike `LiveData`, it is not lifecycle-aware by default, works outside Android (pure Kotlin), and requires an initial value.
 
 | | LiveData | StateFlow |
@@ -1336,10 +1663,11 @@ viewLifecycleOwner.lifecycleScope.launch {
     }
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>What is <code>SharedFlow</code> and when do you use it over <code>StateFlow</code>?</strong></summary>
 
-**What is `SharedFlow` and when do you use it over `StateFlow`?**
 `SharedFlow` is a hot flow that can emit multiple values to multiple collectors. Unlike `StateFlow`, it has no current-value concept and can be configured with a replay cache and buffer.
 
 Use `SharedFlow` for **one-time events** (navigation, snackbars, errors) where you don't want a stale value replayed on resubscription.
@@ -1370,10 +1698,11 @@ lifecycleScope.launch {
 | Holds current value | Yes | No |
 | Replay on subscribe | Last value | Configurable (0–N) |
 | Best for | UI state | One-time events |
+</details>
 
----
+<details>
+<summary><strong>What are Coroutine Dispatchers?</strong></summary>
 
-**What are Coroutine `Dispatchers`?**
 Dispatchers determine which thread or thread pool a coroutine runs on.
 
 | Dispatcher | Used for |
@@ -1389,10 +1718,11 @@ viewModelScope.launch {
     _uiState.value = UiState.Success(data) // back on Main
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>How does Coroutine Exception Handling work?</strong></summary>
 
-**How does Coroutine Exception Handling work?**
 Exceptions in coroutines propagate up the Job hierarchy. Use `CoroutineExceptionHandler` for top-level coroutines, or `try/catch` inside `suspend` functions. `SupervisorJob` prevents one child's failure from cancelling siblings.
 
 ```kotlin
@@ -1418,10 +1748,11 @@ viewModelScope.launch {
 val supervisor = SupervisorJob()
 val scope = CoroutineScope(Dispatchers.IO + supervisor)
 ```
+</details>
 
----
+<details>
+<summary><strong>What is <code>Channel</code> in Kotlin and how does it differ from Flow?</strong></summary>
 
-**What is `Channel` in Kotlin and how does it differ from Flow?**
 A `Channel` is a hot, concurrent communication primitive — like a queue between coroutines. Unlike Flow, it is consumed once (not multicasted) and is stateful.
 
 | | Flow | Channel |
@@ -1437,10 +1768,10 @@ val channel = Channel<Int>()
 launch { channel.send(1); channel.send(2) }
 launch { for (value in channel) println(value) }
 ```
+</details>
 
----
-
-**What is `callbackFlow` and `channelFlow`?**
+<details>
+<summary><strong>What is <code>callbackFlow</code> and <code>channelFlow</code>?</strong></summary>
 
 - `callbackFlow` — bridges callback-based APIs (e.g., listeners) into a Flow.
 - `channelFlow` — allows emitting values from different coroutines within the same flow builder.
@@ -1456,10 +1787,10 @@ fun locationUpdates(): Flow<Location> = callbackFlow {
     awaitClose { fusedClient.removeLocationUpdates(callback) }
 }
 ```
+</details>
 
----
-
-**What are Flow operators you commonly use?**
+<details>
+<summary><strong>What are Flow operators you commonly use?</strong></summary>
 
 | Operator | Purpose |
 |---|---|
@@ -1484,14 +1815,15 @@ searchQuery
     .catch { emit(emptyList()) }
     .collect { results -> showResults(results) }
 ```
+</details>
 
 ---
 
 ## Android Architecture
 
----
+<details>
+<summary><strong>What is Clean Architecture in Android?</strong></summary>
 
-**What is Clean Architecture in Android?**
 Clean Architecture separates the codebase into independent layers, each with a clear responsibility. The dependency rule states that inner layers know nothing about outer layers.
 
 ```
@@ -1502,10 +1834,11 @@ UI Layer  →  Domain Layer  →  Data Layer
 - **UI Layer** — Activities, Fragments, ViewModels, UI state
 - **Domain Layer** — Business logic. Pure Kotlin, no Android dependencies. Contains `UseCases` and `Entities`.
 - **Data Layer** — Repository implementations, API services, Room DAOs, data models
+</details>
 
----
+<details>
+<summary><strong>What is a UseCase (Interactor)?</strong></summary>
 
-**What is a `UseCase` (Interactor)?**
 A UseCase encapsulates a single business operation. It sits in the domain layer, depends only on repository interfaces (not implementations), and is called by the ViewModel.
 
 ```kotlin
@@ -1526,10 +1859,11 @@ class UserViewModel(private val getUser: GetUserUseCase) : ViewModel() {
     }
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>What is the Repository Pattern?</strong></summary>
 
-**What is the Repository Pattern?**
 The Repository provides a clean API for data access and hides the details of where data comes from (network, cache, DB). The ViewModel/UseCase interacts only with the repository interface.
 
 ```kotlin
@@ -1552,10 +1886,11 @@ class UserRepositoryImpl(
     }
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>What is MVI Architecture?</strong></summary>
 
-**What is MVI Architecture?**
 MVI (Model–View–Intent) is a unidirectional data flow architecture where:
 
 - **Model** — immutable UI state
@@ -1597,10 +1932,11 @@ fun handleIntent(intent: LoginIntent) {
 | Data flow | Bidirectional (two-way binding possible) | Strictly unidirectional |
 | Predictability | Moderate | High — state is always reproducible |
 | Complexity | Lower | Higher boilerplate |
+</details>
 
----
+<details>
+<summary><strong>What is the difference between <code>ViewModel</code> and <code>AndroidViewModel</code>?</strong></summary>
 
-**What is the difference between `ViewModel` and `AndroidViewModel`?**
 `AndroidViewModel` is a subclass of `ViewModel` that holds a reference to the `Application` context. Use it only when you need application context (e.g., accessing system services). Avoid it when possible — prefer injecting context via Hilt.
 
 ```kotlin
@@ -1608,10 +1944,11 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun getAppName() = getApplication<Application>().getString(R.string.app_name)
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>What is <code>SavedStateHandle</code>?</strong></summary>
 
-**What is `SavedStateHandle`?**
 `SavedStateHandle` is a key-value map that survives both configuration changes and process death. Inject it into ViewModels to persist critical UI state.
 
 ```kotlin
@@ -1623,14 +1960,15 @@ class SearchViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     }
 }
 ```
+</details>
 
 ---
 
 ## Dependency Injection with Hilt
 
----
+<details>
+<summary><strong>What is Hilt and how does it work?</strong></summary>
 
-**What is Hilt and how does it work?**
 Hilt is Android's recommended DI library built on top of Dagger. It generates DI components at compile time, eliminating runtime reflection. Annotate your `Application` class with `@HiltAndroidApp` to set it up.
 
 ```kotlin
@@ -1645,10 +1983,11 @@ class HomeViewModel @Inject constructor(
     private val repo: UserRepository
 ) : ViewModel()
 ```
+</details>
 
----
+<details>
+<summary><strong>What are Hilt Scopes?</strong></summary>
 
-**What are Hilt `Scopes`?**
 Scopes control how long a dependency lives.
 
 | Annotation | Lifetime |
@@ -1666,10 +2005,10 @@ class AnalyticsService @Inject constructor() { }
 @ViewModelScoped
 class SearchRepository @Inject constructor(private val api: SearchApi) { }
 ```
+</details>
 
----
-
-**What are Hilt `Modules` and `@Provides` vs `@Binds`?**
+<details>
+<summary><strong>What are Hilt Modules and <code>@Provides</code> vs <code>@Binds</code>?</strong></summary>
 
 - `@Provides` — used when you don't own the class (e.g., Retrofit, Room) or need manual construction.
 - `@Binds` — used to bind an interface to its implementation. More efficient (no generated wrapper).
@@ -1694,10 +2033,11 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>What are <code>@Qualifiers</code> in Hilt?</strong></summary>
 
-**What are `@Qualifiers` in Hilt?**
 Qualifiers distinguish between multiple bindings of the same type.
 
 ```kotlin
@@ -1719,14 +2059,15 @@ fun provideLoggingOkHttp(): OkHttpClient = OkHttpClient.Builder()
     .addInterceptor(HttpLoggingInterceptor())
     .build()
 ```
+</details>
 
 ---
 
-## Networking
+## Networking (Advanced)
 
----
+<details>
+<summary><strong>What are OkHttp Interceptors?</strong></summary>
 
-**What are OkHttp `Interceptors`?**
 Interceptors intercept and modify HTTP requests/responses. Two types:
 
 - **Application Interceptors** — see the original request; run once.
@@ -1747,10 +2088,11 @@ val client = OkHttpClient.Builder()
     .addInterceptor(HttpLoggingInterceptor().apply { level = Level.BODY })
     .build()
 ```
+</details>
 
----
+<details>
+<summary><strong>What is Certificate Pinning?</strong></summary>
 
-**What is Certificate Pinning?**
 Certificate Pinning ensures the app only trusts a specific server certificate or public key, protecting against man-in-the-middle attacks even if a rogue CA is compromised.
 
 ```kotlin
@@ -1764,10 +2106,11 @@ val client = OkHttpClient.Builder()
 ```
 
 > Rotate pins carefully — if the server certificate changes and the pin is not updated, the app will break.
+</details>
 
----
+<details>
+<summary><strong>What are Retrofit Caching Strategies?</strong></summary>
 
-**What are Retrofit `Caching Strategies`?**
 HTTP caching is handled by OkHttp. Set a `Cache` on the client and control behavior via headers or a custom interceptor.
 
 ```kotlin
@@ -1789,10 +2132,10 @@ val client = OkHttpClient.Builder()
     .addInterceptor(offlineInterceptor)
     .build()
 ```
+</details>
 
----
-
-**What is the difference between `@GET` and `@POST` in Retrofit? Common annotations?**
+<details>
+<summary><strong>What is the difference between <code>@GET</code> and <code>@POST</code> in Retrofit? Common annotations?</strong></summary>
 
 | Annotation | Purpose |
 |---|---|
@@ -1823,14 +2166,15 @@ interface UserApi {
     suspend fun uploadPhoto(@Part photo: MultipartBody.Part): UploadResponse
 }
 ```
+</details>
 
 ---
 
 ## Jetpack Compose
 
----
+<details>
+<summary><strong>What is recomposition and how do you minimize unnecessary recompositions?</strong></summary>
 
-**What is recomposition and how do you minimize unnecessary recompositions?**
 Recomposition is when Compose re-executes a composable because its state changed. It is efficient by design (skips unchanged composables), but can be costly if triggered too often.
 
 Tips to minimize:
@@ -1856,10 +2200,10 @@ fun Item(state: ItemState) {
     state.items.forEach { Text(it) }
 }
 ```
+</details>
 
----
-
-**What is the difference between `remember` and `rememberSaveable`?**
+<details>
+<summary><strong>What is the difference between <code>remember</code> and <code>rememberSaveable</code>?</strong></summary>
 
 | | `remember` | `rememberSaveable` |
 |---|---|---|
@@ -1871,10 +2215,11 @@ fun Item(state: ItemState) {
 var count by remember { mutableStateOf(0) }             // lost on rotation
 var name by rememberSaveable { mutableStateOf("") }     // survives rotation
 ```
+</details>
 
----
+<details>
+<summary><strong>What are Compose Side Effects?</strong></summary>
 
-**What are Compose Side Effects?**
 Side effects are operations that escape the composable scope (e.g., launching a coroutine, registering a listener). Compose provides structured APIs for them.
 
 | API | When to use |
@@ -1903,10 +2248,11 @@ DisposableEffect(lifecycleOwner) {
 // derivedStateOf — avoid recomposing parent when only derived value matters
 val isScrolled by remember { derivedStateOf { listState.firstVisibleItemIndex > 0 } }
 ```
+</details>
 
----
+<details>
+<summary><strong>What is State hoisting in Compose?</strong></summary>
 
-**What is `State hoisting` in Compose?**
 State hoisting moves state up to the caller so a composable becomes stateless and reusable. The pattern is: pass value down, pass event (lambda) up.
 
 ```kotlin
@@ -1923,10 +2269,11 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
     TextField(value = query, onValueChange = onQueryChange)
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>What is <code>CompositionLocal</code>?</strong></summary>
 
-**What is `CompositionLocal`?**
 `CompositionLocal` implicitly passes data down the composition tree without explicit parameter passing. Built-in examples include `LocalContext`, `LocalDensity`, `MaterialTheme`.
 
 ```kotlin
@@ -1944,10 +2291,11 @@ fun ProfileBadge() {
     Text(session.userName)
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>What is <code>Modifier</code> in Compose and how does order matter?</strong></summary>
 
-**What is `Modifier` in Compose and how does order matter?**
 `Modifier` is a chain of transformations applied to a composable. Order matters because each modifier operates on the result of the previous one.
 
 ```kotlin
@@ -1955,14 +2303,15 @@ fun ProfileBadge() {
 Box(Modifier.padding(16.dp).background(Color.Red))   // padding outside background
 Box(Modifier.background(Color.Red).padding(16.dp))   // padding inside background (red area is larger)
 ```
+</details>
 
 ---
 
 ## Performance & Memory
 
----
+<details>
+<summary><strong>What is a Memory Leak in Android? Common causes?</strong></summary>
 
-**What is a Memory Leak in Android? Common causes?**
 A memory leak occurs when an object is no longer needed but is still referenced, preventing garbage collection.
 
 Common causes:
@@ -1987,10 +2336,11 @@ class MyCallback(activity: MainActivity) {
 // Or cancel coroutines properly
 viewModelScope.launch { } // auto-cancelled when ViewModel is cleared
 ```
+</details>
 
----
+<details>
+<summary><strong>What is <code>StrictMode</code> in Android?</strong></summary>
 
-**What is `StrictMode` in Android?**
 `StrictMode` is a developer tool that detects and reports accidental disk/network access on the main thread and other violations, failing fast during development.
 
 ```kotlin
@@ -2013,10 +2363,11 @@ if (BuildConfig.DEBUG) {
     )
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>What are Baseline Profiles?</strong></summary>
 
-**What are Baseline Profiles?**
 Baseline Profiles are a list of critical code paths provided to the Android Runtime (ART) ahead of time, allowing it to pre-compile them on install rather than at runtime. This improves startup time and reduces jank for commonly used flows.
 
 - Defined in `src/main/baseline-prof.txt` or generated using `BaselineProfileRule` in a Macrobenchmark test.
@@ -2037,10 +2388,10 @@ class BaselineProfileGenerator {
     }
 }
 ```
+</details>
 
----
-
-**How do you optimize App Startup time?**
+<details>
+<summary><strong>How do you optimize App Startup time?</strong></summary>
 
 - Use `App Startup` library to initialize libraries lazily and control order.
 - Defer non-critical initialization out of `Application.onCreate()`.
@@ -2057,10 +2408,10 @@ class TimberInitializer : Initializer<Unit> {
     override fun dependencies() = emptyList<Class<Initializer<*>>>()
 }
 ```
+</details>
 
----
-
-**What is the difference between `onTrimMemory()` and `onLowMemory()`?**
+<details>
+<summary><strong>What is the difference between <code>onTrimMemory()</code> and <code>onLowMemory()</code>?</strong></summary>
 
 | | `onLowMemory()` | `onTrimMemory(level)` |
 |---|---|---|
@@ -2075,14 +2426,14 @@ override fun onTrimMemory(level: Int) {
     }
 }
 ```
+</details>
 
 ---
 
-## Testing
+## Testing (Advanced)
 
----
-
-**What is the difference between Unit, Integration, and UI tests?**
+<details>
+<summary><strong>What is the difference between Unit, Integration, and UI tests?</strong></summary>
 
 | Type | Scope | Speed | Tools |
 |---|---|---|---|
@@ -2091,10 +2442,10 @@ override fun onTrimMemory(level: Int) {
 | UI / Instrumentation test | Full app on device | Slow | Espresso, Compose UI test, UI Automator |
 
 The **Testing Pyramid**: many unit tests → fewer integration tests → few UI tests.
+</details>
 
----
-
-**How do you unit test a ViewModel with coroutines?**
+<details>
+<summary><strong>How do you unit test a ViewModel with coroutines?</strong></summary>
 
 Use `TestCoroutineDispatcher` / `UnconfinedTestDispatcher` and `turbine` for Flow testing.
 
@@ -2130,10 +2481,11 @@ class MainDispatcherRule : TestWatcher() {
     override fun finished(d: Description) { Dispatchers.resetMain() }
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>What is MockK and how is it used?</strong></summary>
 
-**What is `MockK` and how is it used?**
 MockK is a Kotlin-first mocking library. It supports coroutines, extension functions, objects, and companion objects — things Mockito struggles with.
 
 ```kotlin
@@ -2152,10 +2504,11 @@ coEvery { repo.getUser("bad") } throws IOException("Network error")
 // Relaxed mock — returns defaults for unstubbed calls
 val repo = mockk<UserRepository>(relaxed = true)
 ```
+</details>
 
----
+<details>
+<summary><strong>What is Turbine and how do you test Flows with it?</strong></summary>
 
-**What is `Turbine` and how do you test Flows with it?**
 Turbine is a library for testing Kotlin Flows concisely. It provides `test {}` extension that lets you assert emitted values in order.
 
 ```kotlin
@@ -2171,10 +2524,10 @@ fun `search emits results`() = runTest {
     }
 }
 ```
+</details>
 
----
-
-**How do you write UI tests with Jetpack Compose?**
+<details>
+<summary><strong>How do you write UI tests with Jetpack Compose?</strong></summary>
 
 ```kotlin
 @get:Rule
@@ -2197,10 +2550,11 @@ fun loginButton_isEnabled_afterInput() {
     composeRule.onNodeWithText("Login").assertIsEnabled()
 }
 ```
+</details>
 
----
+<details>
+<summary><strong>What is Hilt testing support?</strong></summary>
 
-**What is `Hilt` testing support?**
 Hilt provides `@HiltAndroidTest` and `HiltTestApplication` to replace production modules with test fakes.
 
 ```kotlin
@@ -2220,3 +2574,4 @@ class HomeFragmentTest {
     }
 }
 ```
+</details>
