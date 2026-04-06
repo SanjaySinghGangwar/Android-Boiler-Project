@@ -62,16 +62,29 @@ This boilerplate project includes the following features and integrations:
 
 ### Advanced Topics
 - [Kotlin Advanced](#kotlin-advanced)
+- [Kotlin Sequences vs Collections](#kotlin-sequences-vs-collections)
+- [Kotlin DSL](#kotlin-dsl)
 - [Coroutines Deep Dive](#coroutines-deep-dive)
 - [Android Architecture](#android-architecture)
 - [Design Patterns](#design-patterns)
 - [Modularization](#modularization)
 - [Dependency Injection with Hilt](#dependency-injection-with-hilt)
+- [Room Advanced](#room-advanced)
+- [DataStore](#datastore)
 - [Networking (Advanced)](#networking-advanced)
+- [WebSocket & Real-Time Communication](#websocket--real-time-communication)
 - [Paging 3](#paging-3)
+- [Image Loading](#image-loading)
+- [Notifications](#notifications)
+- [Deep Linking](#deep-linking)
+- [Process Death & State Restoration](#process-death--state-restoration)
 - [Jetpack Compose](#jetpack-compose)
+- [Compose Animations](#compose-animations)
+- [Compose Performance](#compose-performance)
 - [Compose Navigation](#compose-navigation)
+- [App Widgets with Glance](#app-widgets-with-glance)
 - [Gradle & Build System](#gradle--build-system)
+- [KSP vs KAPT](#ksp-vs-kapt)
 - [Security (Advanced)](#security-advanced)
 - [Performance & Memory](#performance--memory)
 - [Accessibility](#accessibility)
@@ -1829,6 +1842,204 @@ searchQuery
 
 ---
 
+## Kotlin Sequences vs Collections
+
+<details>
+<summary><strong>What is the difference between Sequences and Collections in Kotlin?</strong></summary>
+
+Collections (List, Set) process elements **eagerly** — each operation creates a new intermediate collection. Sequences process elements **lazily** — operations are chained and executed only when a terminal operation is called.
+
+```kotlin
+// Collection — creates intermediate lists at each step
+val result = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    .filter { it % 2 == 0 }   // creates [2, 4, 6, 8, 10]
+    .map { it * 2 }            // creates [4, 8, 12, 16, 20]
+    .take(3)                   // creates [4, 8, 12]
+
+// Sequence — no intermediate collections, processes element by element
+val result = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+    .asSequence()
+    .filter { it % 2 == 0 }   // lazy
+    .map { it * 2 }            // lazy
+    .take(3)                   // lazy
+    .toList()                  // terminal — triggers execution
+```
+
+**When to use Sequences:**
+- Large collections (10,000+ elements)
+- Multiple chained operations
+- When you only need a subset of results (`first`, `take`)
+
+**When to use Collections:**
+- Small collections
+- Single operation
+- When you need indexing or random access
+</details>
+
+<details>
+<summary><strong>What are useful Collection operations for interviews?</strong></summary>
+
+```kotlin
+val people = listOf(
+    Person("Alice", 30, "Engineering"),
+    Person("Bob", 25, "Marketing"),
+    Person("Charlie", 35, "Engineering"),
+    Person("Diana", 28, "Marketing")
+)
+
+// groupBy — group elements by key
+val byDept = people.groupBy { it.department }
+// {Engineering=[Alice, Charlie], Marketing=[Bob, Diana]}
+
+// associateBy — create map with unique keys
+val byName = people.associateBy { it.name }
+// {Alice=Person(...), Bob=Person(...), ...}
+
+// partition — split into two lists by predicate
+val (seniors, juniors) = people.partition { it.age >= 30 }
+// seniors = [Alice, Charlie], juniors = [Bob, Diana]
+
+// flatMap — flatten nested collections
+val nestedList = listOf(listOf(1, 2), listOf(3, 4))
+val flat = nestedList.flatMap { it } // [1, 2, 3, 4]
+
+// fold — accumulate with initial value
+val totalAge = people.fold(0) { acc, person -> acc + person.age } // 118
+
+// zipWithNext — pair consecutive elements
+val numbers = listOf(1, 2, 3, 4)
+val pairs = numbers.zipWithNext() // [(1,2), (2,3), (3,4)]
+
+// chunked — split into fixed-size groups
+val chunks = (1..10).toList().chunked(3) // [[1,2,3], [4,5,6], [7,8,9], [10]]
+
+// windowed — sliding window
+val windows = (1..5).toList().windowed(3) // [[1,2,3], [2,3,4], [3,4,5]]
+```
+</details>
+
+---
+
+## Kotlin DSL
+
+<details>
+<summary><strong>What is a Kotlin DSL?</strong></summary>
+
+A Domain-Specific Language (DSL) in Kotlin uses language features like lambdas with receivers, extension functions, and infix functions to create expressive, readable APIs that feel like a custom language.
+
+You already use Kotlin DSLs daily:
+- **Gradle** build scripts (`dependencies { }`)
+- **Jetpack Compose** UI (`Column { Text("Hello") }`)
+- **Ktor** routing (`get("/users") { }`)
+
+```kotlin
+// Lambda with receiver — the foundation of DSLs
+fun buildString(action: StringBuilder.() -> Unit): String {
+    val sb = StringBuilder()
+    sb.action()  // StringBuilder is the receiver (this)
+    return sb.toString()
+}
+
+val result = buildString {
+    append("Hello, ")   // 'this' is StringBuilder
+    append("World!")
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you build a type-safe DSL?</strong></summary>
+
+```kotlin
+// HTML-like DSL example
+@DslMarker
+annotation class HtmlDsl
+
+@HtmlDsl
+class HTML {
+    private val children = mutableListOf<String>()
+
+    fun head(init: Head.() -> Unit) {
+        children.add(Head().apply(init).render())
+    }
+
+    fun body(init: Body.() -> Unit) {
+        children.add(Body().apply(init).render())
+    }
+
+    fun render() = "<html>${children.joinToString("")}</html>"
+}
+
+@HtmlDsl
+class Body {
+    private val children = mutableListOf<String>()
+    fun p(text: String) { children.add("<p>$text</p>") }
+    fun h1(text: String) { children.add("<h1>$text</h1>") }
+    fun render() = "<body>${children.joinToString("")}</body>"
+}
+
+fun html(init: HTML.() -> Unit): String = HTML().apply(init).render()
+
+// Usage — reads like a template
+val page = html {
+    head { title("My Page") }
+    body {
+        h1("Welcome")
+        p("This is a DSL example.")
+    }
+}
+```
+
+**`@DslMarker`** prevents accessing outer receivers from inner lambdas, avoiding accidental scope leaks.
+</details>
+
+<details>
+<summary><strong>Practical DSL: building a network request config</strong></summary>
+
+```kotlin
+// DSL for configuring API requests
+class RequestConfig {
+    var baseUrl: String = ""
+    var timeout: Long = 30_000
+    var headers: MutableMap<String, String> = mutableMapOf()
+    private var retryConfig: RetryConfig? = null
+
+    fun headers(init: MutableMap<String, String>.() -> Unit) {
+        headers.apply(init)
+    }
+
+    fun retry(init: RetryConfig.() -> Unit) {
+        retryConfig = RetryConfig().apply(init)
+    }
+
+    data class RetryConfig(
+        var maxRetries: Int = 3,
+        var backoffMs: Long = 1000
+    )
+}
+
+fun apiClient(init: RequestConfig.() -> Unit): RequestConfig {
+    return RequestConfig().apply(init)
+}
+
+// Usage
+val client = apiClient {
+    baseUrl = "https://api.example.com"
+    timeout = 15_000
+    headers {
+        put("Authorization", "Bearer token")
+        put("Accept", "application/json")
+    }
+    retry {
+        maxRetries = 5
+        backoffMs = 2000
+    }
+}
+```
+</details>
+
+---
+
 ## Coroutines Deep Dive
 
 <details>
@@ -2587,6 +2798,327 @@ fun provideLoggingOkHttp(): OkHttpClient = OkHttpClient.Builder()
 
 ---
 
+## Room Advanced
+
+<details>
+<summary><strong>How do Room Relations work?</strong></summary>
+
+Room supports one-to-one, one-to-many, and many-to-many relationships using `@Embedded` and `@Relation`.
+
+```kotlin
+// Entities
+@Entity
+data class User(
+    @PrimaryKey val userId: Long,
+    val name: String
+)
+
+@Entity
+data class Post(
+    @PrimaryKey val postId: Long,
+    val userId: Long,  // foreign key
+    val title: String,
+    val content: String
+)
+
+// One-to-many: User with their Posts
+data class UserWithPosts(
+    @Embedded val user: User,
+    @Relation(
+        parentColumn = "userId",
+        entityColumn = "userId"
+    )
+    val posts: List<Post>
+)
+
+// DAO
+@Dao
+interface UserDao {
+    @Transaction  // required for relations
+    @Query("SELECT * FROM User WHERE userId = :id")
+    suspend fun getUserWithPosts(id: Long): UserWithPosts
+
+    @Transaction
+    @Query("SELECT * FROM User")
+    fun getAllUsersWithPosts(): Flow<List<UserWithPosts>>
+}
+```
+
+**Many-to-many** requires a junction (cross-reference) table:
+
+```kotlin
+@Entity(primaryKeys = ["playlistId", "songId"])
+data class PlaylistSongCrossRef(
+    val playlistId: Long,
+    val songId: Long
+)
+
+data class PlaylistWithSongs(
+    @Embedded val playlist: Playlist,
+    @Relation(
+        parentColumn = "playlistId",
+        entityColumn = "songId",
+        associateBy = Junction(PlaylistSongCrossRef::class)
+    )
+    val songs: List<Song>
+)
+```
+</details>
+
+<details>
+<summary><strong>How do Room Migrations work?</strong></summary>
+
+When you change the database schema, you must provide a migration strategy. Without it, Room throws an exception (or destructively recreates the database).
+
+```kotlin
+// Migration from version 1 to 2: adding a column
+val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE User ADD COLUMN email TEXT NOT NULL DEFAULT ''")
+    }
+}
+
+// Migration from version 2 to 3: creating a new table
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("""
+            CREATE TABLE IF NOT EXISTS Post (
+                postId INTEGER PRIMARY KEY NOT NULL,
+                userId INTEGER NOT NULL,
+                title TEXT NOT NULL,
+                content TEXT NOT NULL
+            )
+        """)
+    }
+}
+
+// Build database with migrations
+val db = Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
+    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+    .build()
+
+// Auto-migration (Room 2.4+) — for simple changes
+@Database(
+    version = 3,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3, spec = Migration2To3::class)
+    ]
+)
+abstract class AppDatabase : RoomDatabase()
+
+@RenameColumn(tableName = "User", fromColumnName = "name", toColumnName = "fullName")
+class Migration2To3 : AutoMigrationSpec
+```
+</details>
+
+<details>
+<summary><strong>What are TypeConverters in Room?</strong></summary>
+
+TypeConverters allow Room to store complex types (Date, List, Enum) that it doesn't natively support.
+
+```kotlin
+class Converters {
+    @TypeConverter
+    fun fromTimestamp(value: Long?): Date? = value?.let { Date(it) }
+
+    @TypeConverter
+    fun dateToTimestamp(date: Date?): Long? = date?.time
+
+    @TypeConverter
+    fun fromStringList(value: String?): List<String>? =
+        value?.let { Json.decodeFromString(it) }
+
+    @TypeConverter
+    fun toStringList(list: List<String>?): String? =
+        list?.let { Json.encodeToString(it) }
+}
+
+// Register at database level
+@Database(entities = [User::class], version = 1)
+@TypeConverters(Converters::class)
+abstract class AppDatabase : RoomDatabase()
+```
+</details>
+
+<details>
+<summary><strong>How do you test Room DAOs?</strong></summary>
+
+Use an in-memory database for fast, isolated tests.
+
+```kotlin
+@RunWith(AndroidJUnit4::class)
+class UserDaoTest {
+
+    private lateinit var db: AppDatabase
+    private lateinit var userDao: UserDao
+
+    @Before
+    fun setup() {
+        db = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            AppDatabase::class.java
+        ).allowMainThreadQueries().build()
+        userDao = db.userDao()
+    }
+
+    @After
+    fun teardown() { db.close() }
+
+    @Test
+    fun insertAndRetrieveUser() = runTest {
+        val user = User(1, "John", "john@example.com")
+        userDao.insert(user)
+
+        val result = userDao.getUserById(1)
+        assertEquals("John", result?.name)
+    }
+
+    @Test
+    fun getUsersAsFlow() = runTest {
+        userDao.insert(User(1, "Alice", "alice@example.com"))
+        userDao.insert(User(2, "Bob", "bob@example.com"))
+
+        userDao.getAllUsers().test {
+            val users = awaitItem()
+            assertEquals(2, users.size)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+}
+```
+</details>
+
+---
+
+## DataStore
+
+<details>
+<summary><strong>What is DataStore and how does it differ from SharedPreferences?</strong></summary>
+
+DataStore is a modern data storage solution that replaces SharedPreferences. It uses Kotlin coroutines and Flow for asynchronous, consistent data access.
+
+| | SharedPreferences | Preferences DataStore | Proto DataStore |
+|---|---|---|---|
+| Async | No (blocking) | Yes (coroutines) | Yes (coroutines) |
+| Type safety | No | No (key-value) | Yes (Protocol Buffers) |
+| Error handling | Runtime exceptions | Flow-based errors | Flow-based errors |
+| Thread safety | Not guaranteed | Guaranteed | Guaranteed |
+| Transactions | No | Yes | Yes |
+</details>
+
+<details>
+<summary><strong>How do you use Preferences DataStore?</strong></summary>
+
+```kotlin
+// Create DataStore
+val Context.dataStore by preferencesDataStore(name = "settings")
+
+// Define keys
+object PreferencesKeys {
+    val DARK_MODE = booleanPreferencesKey("dark_mode")
+    val USERNAME = stringPreferencesKey("username")
+    val FONT_SIZE = intPreferencesKey("font_size")
+}
+
+// Read values (returns Flow)
+val darkModeFlow: Flow<Boolean> = context.dataStore.data
+    .catch { exception ->
+        if (exception is IOException) emit(emptyPreferences())
+        else throw exception
+    }
+    .map { preferences ->
+        preferences[PreferencesKeys.DARK_MODE] ?: false
+    }
+
+// Write values
+suspend fun setDarkMode(enabled: Boolean) {
+    context.dataStore.edit { preferences ->
+        preferences[PreferencesKeys.DARK_MODE] = enabled
+    }
+}
+
+// Collect in ViewModel
+class SettingsViewModel(private val dataStore: DataStore<Preferences>) : ViewModel() {
+    val darkMode = dataStore.data
+        .map { it[PreferencesKeys.DARK_MODE] ?: false }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you use Proto DataStore?</strong></summary>
+
+Proto DataStore uses Protocol Buffers for type-safe, schema-defined storage.
+
+```protobuf
+// app/src/main/proto/user_prefs.proto
+syntax = "proto3";
+
+option java_package = "com.example.app";
+option java_multiple_files = true;
+
+message UserPreferences {
+    bool dark_mode = 1;
+    string username = 2;
+    int32 font_size = 3;
+    Theme theme = 4;
+
+    enum Theme {
+        SYSTEM = 0;
+        LIGHT = 1;
+        DARK = 2;
+    }
+}
+```
+
+```kotlin
+// Serializer
+object UserPreferencesSerializer : Serializer<UserPreferences> {
+    override val defaultValue: UserPreferences = UserPreferences.getDefaultInstance()
+    override suspend fun readFrom(input: InputStream): UserPreferences =
+        UserPreferences.parseFrom(input)
+    override suspend fun writeTo(t: UserPreferences, output: OutputStream) =
+        t.writeTo(output)
+}
+
+// Create DataStore
+val Context.userPrefsStore by dataStore(
+    fileName = "user_prefs.pb",
+    serializer = UserPreferencesSerializer
+)
+
+// Read — fully typed!
+val themeFlow: Flow<UserPreferences.Theme> = context.userPrefsStore.data
+    .map { it.theme }
+
+// Write — builder pattern
+suspend fun setTheme(theme: UserPreferences.Theme) {
+    context.userPrefsStore.updateData { prefs ->
+        prefs.toBuilder().setTheme(theme).build()
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you migrate from SharedPreferences to DataStore?</strong></summary>
+
+```kotlin
+val Context.dataStore by preferencesDataStore(
+    name = "settings",
+    produceMigrations = { context ->
+        listOf(SharedPreferencesMigration(context, "old_shared_prefs"))
+    }
+)
+// Migration happens automatically on first access
+// Old SharedPreferences file is deleted after successful migration
+```
+</details>
+
+---
+
 ## Networking (Advanced)
 
 <details>
@@ -2690,6 +3222,144 @@ interface UserApi {
     suspend fun uploadPhoto(@Part photo: MultipartBody.Part): UploadResponse
 }
 ```
+</details>
+
+---
+
+## WebSocket & Real-Time Communication
+
+<details>
+<summary><strong>How do you implement WebSocket with OkHttp?</strong></summary>
+
+WebSocket provides full-duplex communication over a single TCP connection — ideal for chat, live updates, and real-time data.
+
+```kotlin
+class WebSocketManager(private val client: OkHttpClient) {
+
+    private var webSocket: WebSocket? = null
+
+    fun connect(url: String, listener: WebSocketListener) {
+        val request = Request.Builder().url(url).build()
+        webSocket = client.newWebSocket(request, listener)
+    }
+
+    fun send(message: String) {
+        webSocket?.send(message)
+    }
+
+    fun disconnect() {
+        webSocket?.close(1000, "Client closing")
+    }
+}
+
+// Listener
+class ChatWebSocketListener : WebSocketListener() {
+    override fun onOpen(webSocket: WebSocket, response: Response) {
+        Log.d("WS", "Connected")
+    }
+
+    override fun onMessage(webSocket: WebSocket, text: String) {
+        Log.d("WS", "Received: $text")
+        // Parse message and update UI via Flow/LiveData
+    }
+
+    override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+        webSocket.close(1000, null)
+    }
+
+    override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+        Log.e("WS", "Error: ${t.message}")
+        // Implement reconnection logic
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you wrap WebSocket in a Flow?</strong></summary>
+
+```kotlin
+fun observeWebSocket(url: String): Flow<WebSocketEvent> = callbackFlow {
+    val client = OkHttpClient()
+    val request = Request.Builder().url(url).build()
+
+    val listener = object : WebSocketListener() {
+        override fun onOpen(webSocket: WebSocket, response: Response) {
+            trySend(WebSocketEvent.Connected)
+        }
+
+        override fun onMessage(webSocket: WebSocket, text: String) {
+            trySend(WebSocketEvent.Message(text))
+        }
+
+        override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+            trySend(WebSocketEvent.Closing(code, reason))
+            webSocket.close(1000, null)
+        }
+
+        override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+            trySend(WebSocketEvent.Error(t))
+            close(t)
+        }
+    }
+
+    val ws = client.newWebSocket(request, listener)
+    awaitClose { ws.close(1000, "Flow cancelled") }
+}
+
+sealed class WebSocketEvent {
+    object Connected : WebSocketEvent()
+    data class Message(val text: String) : WebSocketEvent()
+    data class Closing(val code: Int, val reason: String) : WebSocketEvent()
+    data class Error(val throwable: Throwable) : WebSocketEvent()
+}
+```
+</details>
+
+<details>
+<summary><strong>What is Server-Sent Events (SSE)?</strong></summary>
+
+SSE is a one-way communication channel where the server pushes updates to the client. Simpler than WebSocket when you only need server-to-client updates (e.g., live scores, stock tickers).
+
+```kotlin
+// Using OkHttp for SSE
+fun observeSSE(url: String): Flow<String> = callbackFlow {
+    val client = OkHttpClient.Builder()
+        .readTimeout(0, TimeUnit.SECONDS)  // no timeout for streaming
+        .build()
+
+    val request = Request.Builder()
+        .url(url)
+        .header("Accept", "text/event-stream")
+        .build()
+
+    val call = client.newCall(request)
+    val response = call.execute()
+    val source = response.body?.source()
+
+    launch(Dispatchers.IO) {
+        try {
+            while (source?.exhausted() == false) {
+                val line = source.readUtf8Line() ?: break
+                if (line.startsWith("data:")) {
+                    trySend(line.removePrefix("data:").trim())
+                }
+            }
+        } catch (e: Exception) {
+            close(e)
+        }
+    }
+
+    awaitClose { call.cancel() }
+}
+```
+
+| | WebSocket | SSE |
+|---|---|---|
+| Direction | Bidirectional | Server → Client only |
+| Protocol | ws:// / wss:// | HTTP/HTTPS |
+| Reconnection | Manual | Built-in (browser) |
+| Best for | Chat, games | Notifications, live feeds |
 </details>
 
 ---
@@ -2817,6 +3487,387 @@ class ArticleRemoteMediator(
         }
     }
 }
+```
+</details>
+
+---
+
+## Image Loading
+
+<details>
+<summary><strong>Coil vs Glide — what should you use?</strong></summary>
+
+| | Coil | Glide |
+|---|---|---|
+| Language | Kotlin-first | Java (Kotlin-friendly) |
+| Coroutine support | Native | Via extensions |
+| Compose support | First-class (`AsyncImage`) | Via `GlidePainter` |
+| KMP support | Yes (Coil 3) | No |
+| Memory cache | Yes | Yes |
+| Disk cache | Yes | Yes |
+| GIF support | Via decoder | Built-in |
+| Size | ~1,500 methods | ~4,500 methods |
+| Recommendation | Modern Kotlin/Compose projects | Legacy View-based projects |
+</details>
+
+<details>
+<summary><strong>How do you use Coil in Jetpack Compose?</strong></summary>
+
+```kotlin
+// Basic image loading
+AsyncImage(
+    model = "https://example.com/image.jpg",
+    contentDescription = "Profile photo",
+    modifier = Modifier.size(120.dp).clip(CircleShape),
+    contentScale = ContentScale.Crop
+)
+
+// With placeholder, error, and crossfade
+AsyncImage(
+    model = ImageRequest.Builder(LocalContext.current)
+        .data("https://example.com/image.jpg")
+        .crossfade(true)
+        .build(),
+    contentDescription = "Photo",
+    placeholder = painterResource(R.drawable.placeholder),
+    error = painterResource(R.drawable.error),
+    modifier = Modifier.fillMaxWidth()
+)
+
+// Preload / cache
+val context = LocalContext.current
+LaunchedEffect(url) {
+    val request = ImageRequest.Builder(context)
+        .data(url)
+        .memoryCachePolicy(CachePolicy.ENABLED)
+        .diskCachePolicy(CachePolicy.ENABLED)
+        .build()
+    context.imageLoader.execute(request)
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you use Glide in XML Views?</strong></summary>
+
+```kotlin
+// Basic loading
+Glide.with(context)
+    .load("https://example.com/image.jpg")
+    .into(imageView)
+
+// With transformations and caching
+Glide.with(context)
+    .load(url)
+    .placeholder(R.drawable.placeholder)
+    .error(R.drawable.error)
+    .circleCrop()
+    .diskCacheStrategy(DiskCacheStrategy.ALL)
+    .transition(DrawableTransitionOptions.withCrossFade())
+    .into(imageView)
+
+// Preload
+Glide.with(context)
+    .load(url)
+    .preload()
+
+// Clear cache
+Glide.get(context).clearMemory()  // on main thread
+Thread { Glide.get(context).clearDiskCache() }.start()  // on background thread
+```
+</details>
+
+---
+
+## Notifications
+
+<details>
+<summary><strong>How do you create Notification Channels?</strong></summary>
+
+Since Android 8.0 (API 26), all notifications must belong to a channel. Users can control notifications per channel.
+
+```kotlin
+// Create channel in Application.onCreate()
+fun createNotificationChannels(context: Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channels = listOf(
+            NotificationChannel(
+                "messages", "Messages",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Chat message notifications"
+                enableVibration(true)
+            },
+            NotificationChannel(
+                "updates", "App Updates",
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                description = "Silent update notifications"
+            }
+        )
+
+        val manager = context.getSystemService(NotificationManager::class.java)
+        manager.createNotificationChannels(channels)
+    }
+}
+```
+
+| Importance | Behavior |
+|---|---|
+| `IMPORTANCE_HIGH` | Sound + heads-up notification |
+| `IMPORTANCE_DEFAULT` | Sound, no heads-up |
+| `IMPORTANCE_LOW` | No sound, appears in shade |
+| `IMPORTANCE_MIN` | No sound, not in status bar |
+</details>
+
+<details>
+<summary><strong>How do you display different notification styles?</strong></summary>
+
+```kotlin
+// Basic notification
+val notification = NotificationCompat.Builder(context, "messages")
+    .setSmallIcon(R.drawable.ic_notification)
+    .setContentTitle("New message")
+    .setContentText("Hey, how are you?")
+    .setPriority(NotificationCompat.PRIORITY_HIGH)
+    .setAutoCancel(true)
+    .setContentIntent(pendingIntent)
+    .build()
+
+// Big Text Style — expandable text
+NotificationCompat.Builder(context, "messages")
+    .setStyle(NotificationCompat.BigTextStyle()
+        .bigText("This is a much longer message that will be visible when the notification is expanded...")
+    )
+
+// Inbox Style — multiple lines
+NotificationCompat.Builder(context, "messages")
+    .setStyle(NotificationCompat.InboxStyle()
+        .addLine("Alice: Hey!")
+        .addLine("Bob: Meeting at 3pm")
+        .addLine("Charlie: PR approved")
+        .setSummaryText("3 new messages")
+    )
+
+// Big Picture Style
+NotificationCompat.Builder(context, "updates")
+    .setStyle(NotificationCompat.BigPictureStyle()
+        .bigPicture(bitmap)
+        .bigLargeIcon(null as Bitmap?)
+    )
+
+// Action buttons
+NotificationCompat.Builder(context, "messages")
+    .addAction(R.drawable.ic_reply, "Reply", replyPendingIntent)
+    .addAction(R.drawable.ic_dismiss, "Dismiss", dismissPendingIntent)
+
+// Post notification (Android 13+ requires permission)
+NotificationManagerCompat.from(context).notify(notificationId, notification)
+```
+</details>
+
+<details>
+<summary><strong>What is a Foreground Service notification?</strong></summary>
+
+Foreground services must display a persistent notification. Since Android 14, you must also declare the foreground service type.
+
+```kotlin
+class UploadService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification = NotificationCompat.Builder(this, "uploads")
+            .setContentTitle("Uploading file...")
+            .setSmallIcon(R.drawable.ic_upload)
+            .setProgress(100, 0, false)
+            .setOngoing(true)
+            .build()
+
+        startForeground(NOTIFICATION_ID, notification)
+        // Do work...
+        return START_NOT_STICKY
+    }
+}
+```
+
+```xml
+<!-- AndroidManifest.xml -->
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+<service
+    android:name=".UploadService"
+    android:foregroundServiceType="dataSync" />
+```
+</details>
+
+---
+
+## Deep Linking
+
+<details>
+<summary><strong>What is the difference between Deep Links, App Links, and Dynamic Links?</strong></summary>
+
+| | Deep Links | App Links | Dynamic Links |
+|---|---|---|---|
+| Scheme | Custom (`myapp://`) | HTTPS only | HTTPS (Firebase) |
+| Verification | None | Server-verified (Digital Asset Links) | Firebase-managed |
+| Disambiguation | May show app chooser | Opens app directly | Opens app or Play Store |
+| Works if not installed | No | No | Yes (deferred deep link) |
+| Platform | Android only | Android 6.0+ | Cross-platform |
+
+> Note: Firebase Dynamic Links is deprecated. Use App Links + Play Install Referrer for new projects.
+</details>
+
+<details>
+<summary><strong>How do you implement App Links?</strong></summary>
+
+```xml
+<!-- AndroidManifest.xml -->
+<activity android:name=".MainActivity">
+    <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data
+            android:scheme="https"
+            android:host="www.example.com"
+            android:pathPrefix="/product" />
+    </intent-filter>
+</activity>
+```
+
+```json
+// Host /.well-known/assetlinks.json on your server
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+        "namespace": "android_app",
+        "package_name": "com.example.app",
+        "sha256_cert_fingerprints": ["AA:BB:CC:..."]
+    }
+}]
+```
+
+```kotlin
+// Handle in Activity
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    handleDeepLink(intent)
+}
+
+override fun onNewIntent(intent: Intent) {
+    super.onNewIntent(intent)
+    handleDeepLink(intent)
+}
+
+private fun handleDeepLink(intent: Intent) {
+    val uri = intent.data ?: return
+    when {
+        uri.pathSegments.contains("product") -> {
+            val productId = uri.lastPathSegment
+            navigateToProduct(productId)
+        }
+    }
+}
+```
+</details>
+
+---
+
+## Process Death & State Restoration
+
+<details>
+<summary><strong>What is Process Death and why is it important?</strong></summary>
+
+The Android system can kill your app's process when it's in the background to reclaim memory. When the user returns, the system recreates the Activity stack but **all in-memory data is lost** — including ViewModel state (unless using `SavedStateHandle`).
+
+**What survives process death:**
+- `onSaveInstanceState()` Bundle (limited to ~1MB)
+- `SavedStateHandle` in ViewModel
+- Room / DataStore / SharedPreferences (persisted to disk)
+- Navigation back stack (automatic)
+
+**What does NOT survive:**
+- ViewModel fields (without `SavedStateHandle`)
+- Static variables / singletons
+- In-memory caches
+- Running coroutines
+
+```kotlin
+// BAD — lost on process death
+class SearchViewModel : ViewModel() {
+    var query = ""  // GONE after process death
+}
+
+// GOOD — survives process death
+class SearchViewModel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+    val query = savedStateHandle.getStateFlow("query", "")
+
+    fun onQueryChanged(q: String) {
+        savedStateHandle["query"] = q
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you test for process death?</strong></summary>
+
+1. **Android Studio:** Run your app → put it in background → In Terminal:
+   ```bash
+   adb shell am kill com.example.app
+   ```
+   Then reopen the app from recents.
+
+2. **Developer Options:** Enable "Don't keep activities" — this destroys activities immediately on leaving (stricter than real process death, but good for testing).
+
+3. **Automated testing:**
+   ```kotlin
+   @Test
+   fun viewModel_survives_process_death() {
+       val savedState = SavedStateHandle(mapOf("query" to "kotlin"))
+       val viewModel = SearchViewModel(savedState)
+
+       assertEquals("kotlin", viewModel.query.value)
+   }
+   ```
+</details>
+
+<details>
+<summary><strong>How do you handle process death in Jetpack Compose?</strong></summary>
+
+```kotlin
+// rememberSaveable — survives process death
+@Composable
+fun SearchScreen() {
+    var query by rememberSaveable { mutableStateOf("") }
+    // query survives rotation AND process death
+
+    var complexState by rememberSaveable(stateSaver = CustomSaver) {
+        mutableStateOf(SearchFilter())
+    }
+}
+
+// Custom Saver for complex objects
+val SearchFilterSaver = run {
+    val categoryKey = "category"
+    val sortKey = "sort"
+    mapSaver(
+        save = { mapOf(categoryKey to it.category, sortKey to it.sortOrder.name) },
+        restore = { SearchFilter(it[categoryKey] as String, SortOrder.valueOf(it[sortKey] as String)) }
+    )
+}
+
+// For Parcelable objects — automatic
+@Parcelize
+data class SearchFilter(
+    val category: String = "all",
+    val sortOrder: SortOrder = SortOrder.NEWEST
+) : Parcelable
+
+// Just works with rememberSaveable
+var filter by rememberSaveable { mutableStateOf(SearchFilter()) }
 ```
 </details>
 
@@ -2959,6 +4010,284 @@ Box(Modifier.background(Color.Red).padding(16.dp))   // padding inside backgroun
 
 ---
 
+## Compose Animations
+
+<details>
+<summary><strong>What animation APIs does Compose provide?</strong></summary>
+
+| API | Use Case |
+|---|---|
+| `animateAsState` | Animate a single value (color, size, alpha) |
+| `AnimatedVisibility` | Show/hide content with enter/exit transitions |
+| `AnimatedContent` | Animate between different content |
+| `Crossfade` | Fade between composables |
+| `updateTransition` | Orchestrate multiple animations on state change |
+| `Animatable` | Low-level, imperative animation control |
+| `infiniteTransition` | Looping animations (pulsing, rotating) |
+</details>
+
+<details>
+<summary><strong>How do you use <code>animateAsState</code>?</strong></summary>
+
+Animates a value whenever it changes. Compose handles interpolation automatically.
+
+```kotlin
+@Composable
+fun AnimatedBox(isExpanded: Boolean) {
+    val size by animateDpAsState(
+        targetValue = if (isExpanded) 200.dp else 100.dp,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
+    )
+
+    val color by animateColorAsState(
+        targetValue = if (isExpanded) Color.Red else Color.Blue,
+        animationSpec = tween(durationMillis = 500)
+    )
+
+    val alpha by animateFloatAsState(
+        targetValue = if (isExpanded) 1f else 0.5f
+    )
+
+    Box(
+        modifier = Modifier
+            .size(size)
+            .alpha(alpha)
+            .background(color)
+    )
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you use <code>AnimatedVisibility</code>?</strong></summary>
+
+```kotlin
+@Composable
+fun ExpandableCard(title: String, content: String) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column(modifier = Modifier.clickable { expanded = !expanded }) {
+        Text(title, style = MaterialTheme.typography.titleMedium)
+
+        AnimatedVisibility(
+            visible = expanded,
+            enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+            exit = fadeOut() + shrinkVertically()
+        ) {
+            Text(
+                text = content,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+    }
+}
+
+// Common enter/exit transitions
+// Enter: fadeIn(), slideInHorizontally(), expandVertically(), scaleIn()
+// Exit:  fadeOut(), slideOutHorizontally(), shrinkVertically(), scaleOut()
+// Combine with +: fadeIn() + slideInVertically()
+```
+</details>
+
+<details>
+<summary><strong>How do you use <code>AnimatedContent</code> and <code>Crossfade</code>?</strong></summary>
+
+```kotlin
+// AnimatedContent — animate between different content based on state
+@Composable
+fun Counter(count: Int) {
+    AnimatedContent(
+        targetState = count,
+        transitionSpec = {
+            if (targetState > initialState) {
+                slideInVertically { -it } + fadeIn() togetherWith
+                    slideOutVertically { it } + fadeOut()
+            } else {
+                slideInVertically { it } + fadeIn() togetherWith
+                    slideOutVertically { -it } + fadeOut()
+            }.using(SizeTransform(clip = false))
+        }
+    ) { targetCount ->
+        Text(text = "$targetCount", fontSize = 48.sp)
+    }
+}
+
+// Crossfade — simple fade between composables
+@Composable
+fun ScreenSwitcher(currentScreen: Screen) {
+    Crossfade(targetState = currentScreen, animationSpec = tween(300)) { screen ->
+        when (screen) {
+            Screen.Home -> HomeScreen()
+            Screen.Profile -> ProfileScreen()
+            Screen.Settings -> SettingsScreen()
+        }
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you create infinite (looping) animations?</strong></summary>
+
+```kotlin
+@Composable
+fun PulsingDot() {
+    val infiniteTransition = rememberInfiniteTransition()
+
+    val scale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.3f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(600, easing = EaseInOutCubic),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    val alpha by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 0.5f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(600),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    Box(
+        modifier = Modifier
+            .scale(scale)
+            .alpha(alpha)
+            .size(20.dp)
+            .background(Color.Red, CircleShape)
+    )
+}
+
+// Rotating loading spinner
+val rotation by infiniteTransition.animateFloat(
+    initialValue = 0f,
+    targetValue = 360f,
+    animationSpec = infiniteRepeatable(
+        animation = tween(1000, easing = LinearEasing)
+    )
+)
+Icon(
+    imageVector = Icons.Default.Refresh,
+    modifier = Modifier.rotate(rotation)
+)
+```
+</details>
+
+---
+
+## Compose Performance
+
+<details>
+<summary><strong>How do you debug recomposition issues?</strong></summary>
+
+**Tools:**
+- **Layout Inspector** (Android Studio) — shows recomposition counts per composable in real-time
+- **Composition tracing** — add `composition-tracing` dependency to see composables in system traces
+- **Recomposition highlighter** — visual overlay showing which composables are recomposing
+
+```kotlin
+// Enable recomposition counter in debug builds
+// Add to build.gradle.kts
+kotlinOptions {
+    freeCompilerArgs += listOf(
+        "-P", "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+            project.buildDir.absolutePath + "/compose_metrics"
+    )
+}
+// Generates: composables.txt, classes.txt, composables.csv
+// Shows stability of each composable and parameter
+```
+</details>
+
+<details>
+<summary><strong>What is Stability in Compose and why does it matter?</strong></summary>
+
+Compose skips recomposition of a composable if all its parameters are **stable** and **unchanged**. Unstable parameters cause unnecessary recomposition.
+
+**Stable types** (skippable):
+- Primitives (`Int`, `String`, `Boolean`)
+- `@Stable` or `@Immutable` annotated classes
+- `data class` with only stable properties
+- Lambda expressions (when remembered)
+
+**Unstable types** (not skippable):
+- `List`, `Map`, `Set` (interfaces — could be mutable)
+- Classes from external libraries
+- Classes with `var` properties
+
+```kotlin
+// UNSTABLE — List is an interface, Compose can't guarantee immutability
+@Composable
+fun UserList(users: List<User>) { /* always recomposes */ }
+
+// STABLE — wrap in @Immutable
+@Immutable
+data class UserListState(val users: List<User>)
+
+@Composable
+fun UserList(state: UserListState) { /* skipped if unchanged */ }
+
+// Alternative: use kotlinx.collections.immutable
+@Composable
+fun UserList(users: ImmutableList<User>) { /* stable! */ }
+```
+</details>
+
+<details>
+<summary><strong>What are best practices for Compose performance?</strong></summary>
+
+```kotlin
+// 1. Use remember to avoid recomputation
+val sortedList = remember(items) { items.sortedBy { it.name } }
+
+// 2. Use derivedStateOf for derived values
+val showButton by remember {
+    derivedStateOf { listState.firstVisibleItemIndex > 0 }
+}
+
+// 3. Use key() in LazyColumn for stable identity
+LazyColumn {
+    items(users, key = { it.id }) { user ->
+        UserCard(user)
+    }
+}
+
+// 4. Defer state reads — read state as late as possible
+// BAD — parent recomposes on every scroll
+@Composable
+fun Screen() {
+    val scrollState = rememberLazyListState()
+    val showButton = scrollState.firstVisibleItemIndex > 0  // read here = recompose Screen
+    Header(showButton)
+    LazyColumn(state = scrollState) { }
+}
+
+// GOOD — defer read to where it's needed
+@Composable
+fun Screen() {
+    val scrollState = rememberLazyListState()
+    Header(scrollState)  // pass state, not value
+    LazyColumn(state = scrollState) { }
+}
+
+@Composable
+fun Header(scrollState: LazyListState) {
+    val showButton by remember { derivedStateOf { scrollState.firstVisibleItemIndex > 0 } }
+    // Only Header recomposes
+}
+
+// 5. Use lambda modifiers for frequently changing values
+Modifier.offset { IntOffset(0, offsetY.value.roundToInt()) }  // lambda = no recomposition
+// vs
+Modifier.offset(y = offsetY.dp)  // recomposes parent on every change
+```
+</details>
+
+---
+
 ## Compose Navigation
 
 <details>
@@ -3079,6 +4408,137 @@ Don't forget to declare the deep link in `AndroidManifest.xml`:
         <data android:scheme="https" android:host="myapp.com" />
     </intent-filter>
 </activity>
+```
+</details>
+
+---
+
+## App Widgets with Glance
+
+<details>
+<summary><strong>What is Glance?</strong></summary>
+
+Glance is a Jetpack library that lets you build Android app widgets using a Compose-like API. It translates composables into `RemoteViews` behind the scenes.
+
+```kotlin
+// Widget content
+class TodoWidget : GlanceAppWidget() {
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        provideContent {
+            TodoWidgetContent()
+        }
+    }
+}
+
+@Composable
+fun TodoWidgetContent() {
+    val tasks = listOf("Buy groceries", "Walk the dog", "Read a book")
+
+    Column(
+        modifier = GlanceModifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "My Tasks",
+            style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        )
+        Spacer(modifier = GlanceModifier.height(8.dp))
+        tasks.forEach { task ->
+            Row(
+                modifier = GlanceModifier.fillMaxWidth().padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CheckBox(checked = false, onCheckedChange = actionRunCallback<ToggleTask>())
+                Spacer(modifier = GlanceModifier.width(8.dp))
+                Text(text = task)
+            }
+        }
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you register a Glance widget?</strong></summary>
+
+```kotlin
+// Widget receiver
+class TodoWidgetReceiver : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget = TodoWidget()
+}
+```
+
+```xml
+<!-- AndroidManifest.xml -->
+<receiver
+    android:name=".widget.TodoWidgetReceiver"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+    </intent-filter>
+    <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/todo_widget_info" />
+</receiver>
+```
+
+```xml
+<!-- res/xml/todo_widget_info.xml -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="180dp"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:updatePeriodMillis="3600000"
+    android:description="@string/widget_description"
+    android:previewImage="@drawable/widget_preview" />
+```
+</details>
+
+<details>
+<summary><strong>How do you handle actions and state updates in Glance?</strong></summary>
+
+```kotlin
+// Action callback
+class ToggleTask : ActionCallback {
+    override suspend fun onAction(
+        context: Context,
+        glanceId: GlanceId,
+        parameters: ActionParameters
+    ) {
+        val taskId = parameters[ActionParameters.Key<String>("taskId")]
+        // Update data source
+        TodoRepository.toggleTask(taskId)
+        // Refresh widget
+        TodoWidget().update(context, glanceId)
+    }
+}
+
+// Triggering action from composable
+Button(
+    text = "Refresh",
+    onClick = actionRunCallback<RefreshAction>()
+)
+
+// Navigate to app
+Text(
+    text = "Open App",
+    modifier = GlanceModifier.clickable(
+        actionStartActivity<MainActivity>()
+    )
+)
+
+// Update widget from anywhere (e.g., after data sync)
+class DataSyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
+    override suspend fun doWork(): Result {
+        // sync data...
+        TodoWidget().updateAll(applicationContext)
+        return Result.success()
+    }
+}
 ```
 </details>
 
@@ -3209,6 +4669,105 @@ Other tips:
 - Use modularization to limit what gets recompiled
 - Use configuration cache (`org.gradle.configuration-cache=true`)
 - Profile builds with `./gradlew --scan`
+</details>
+
+---
+
+## KSP vs KAPT
+
+<details>
+<summary><strong>What is the difference between KSP and KAPT?</strong></summary>
+
+Both are annotation processing tools, but KSP (Kotlin Symbol Processing) is significantly faster because it works directly with Kotlin code instead of generating Java stubs first.
+
+| | KAPT | KSP |
+|---|---|---|
+| Approach | Generates Java stubs → processes annotations | Processes Kotlin symbols directly |
+| Speed | Slow (2x compilation) | Up to 2x faster than KAPT |
+| Kotlin support | Limited (via Java stubs) | Full Kotlin support |
+| Incremental | Partially | Yes |
+| Multiplatform | No | Yes (KMP compatible) |
+
+```kotlin
+// KAPT — old way
+plugins {
+    kotlin("kapt")
+}
+dependencies {
+    kapt("com.google.dagger:hilt-compiler:2.50")
+    kapt("androidx.room:room-compiler:2.6.1")
+}
+
+// KSP — new way (preferred)
+plugins {
+    id("com.google.devtools.ksp")
+}
+dependencies {
+    ksp("com.google.dagger:hilt-compiler:2.50")
+    ksp("androidx.room:room-compiler:2.6.1")
+}
+```
+</details>
+
+<details>
+<summary><strong>Which libraries support KSP?</strong></summary>
+
+| Library | KSP Support |
+|---|---|
+| **Room** | Yes |
+| **Hilt / Dagger** | Yes |
+| **Moshi** | Yes (`moshi-kotlin-codegen`) |
+| **Glide** | Yes (KSP processor) |
+| **Kotlin Serialization** | Uses compiler plugin (not KSP/KAPT) |
+| **Retrofit** | No annotation processing needed |
+| **Data Binding** | KAPT only (uses Java AP) |
+
+**Migration tip:** Replace `kapt()` with `ksp()` one library at a time. You can use both KAPT and KSP in the same project during migration, but remove KAPT entirely when done for the best build speed.
+</details>
+
+<details>
+<summary><strong>How do you write a custom KSP processor?</strong></summary>
+
+```kotlin
+// Processor
+class AutoFactoryProcessor(
+    private val codeGenerator: CodeGenerator,
+    private val logger: KSPLogger
+) : SymbolProcessor {
+
+    override fun process(resolver: Resolver): List<KSAnnotated> {
+        val symbols = resolver.getSymbolsWithAnnotation("com.example.AutoFactory")
+            .filterIsInstance<KSClassDeclaration>()
+
+        symbols.forEach { classDeclaration ->
+            val packageName = classDeclaration.packageName.asString()
+            val className = classDeclaration.simpleName.asString()
+
+            val file = codeGenerator.createNewFile(
+                Dependencies(true, classDeclaration.containingFile!!),
+                packageName,
+                "${className}Factory"
+            )
+
+            file.bufferedWriter().use { writer ->
+                writer.write("package $packageName\n\n")
+                writer.write("object ${className}Factory {\n")
+                writer.write("    fun create(): $className = $className()\n")
+                writer.write("}\n")
+            }
+        }
+
+        return emptyList()  // no deferred symbols
+    }
+}
+
+// Provider
+class AutoFactoryProcessorProvider : SymbolProcessorProvider {
+    override fun create(environment: SymbolProcessorEnvironment): SymbolProcessor {
+        return AutoFactoryProcessor(environment.codeGenerator, environment.logger)
+    }
+}
+```
 </details>
 
 ---
