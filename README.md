@@ -62,11 +62,21 @@ This boilerplate project includes the following features and integrations:
 
 ### Advanced Topics
 - [Kotlin Advanced](#kotlin-advanced)
+- [Coroutines Deep Dive](#coroutines-deep-dive)
 - [Android Architecture](#android-architecture)
+- [Design Patterns](#design-patterns)
+- [Modularization](#modularization)
 - [Dependency Injection with Hilt](#dependency-injection-with-hilt)
 - [Networking (Advanced)](#networking-advanced)
+- [Paging 3](#paging-3)
 - [Jetpack Compose](#jetpack-compose)
+- [Compose Navigation](#compose-navigation)
+- [Gradle & Build System](#gradle--build-system)
+- [Security (Advanced)](#security-advanced)
 - [Performance & Memory](#performance--memory)
+- [Accessibility](#accessibility)
+- [Kotlin Multiplatform (KMP)](#kotlin-multiplatform-kmp)
+- [CI/CD Pipelines](#cicd-pipelines)
 - [Testing (Advanced)](#testing-advanced)
 
 ---
@@ -1819,6 +1829,179 @@ searchQuery
 
 ---
 
+## Coroutines Deep Dive
+
+<details>
+<summary><strong>What is Structured Concurrency?</strong></summary>
+
+Structured concurrency ensures that coroutines are launched in a specific scope and are automatically cancelled when the scope is cancelled. It prevents coroutine leaks by tying the lifetime of coroutines to a well-defined scope.
+
+Key principles:
+- Every coroutine has a parent (except root coroutines)
+- A parent coroutine does not complete until all children complete
+- Cancelling a parent cancels all children
+- An uncaught exception in a child cancels the parent (unless using `SupervisorJob`)
+
+```kotlin
+// Structured — coroutines tied to viewModelScope
+class MyViewModel : ViewModel() {
+    fun loadData() {
+        viewModelScope.launch {  // cancelled when ViewModel is cleared
+            val users = async { repo.getUsers() }
+            val posts = async { repo.getPosts() }
+            _state.value = UiState(users.await(), posts.await())
+        }
+    }
+}
+
+// Unstructured — AVOID: leaked coroutine
+fun loadData() {
+    GlobalScope.launch {  // lives until app is killed
+        repo.getUsers()
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>What is the difference between <code>coroutineScope</code> and <code>supervisorScope</code>?</strong></summary>
+
+Both create a new scope, but they differ in how they handle child failures:
+
+- `coroutineScope` — if any child fails, all other children are cancelled, and the scope rethrows the exception.
+- `supervisorScope` — if a child fails, other children continue running. Each child must handle its own exceptions.
+
+```kotlin
+// coroutineScope — one failure cancels all
+suspend fun fetchAll() = coroutineScope {
+    val users = async { api.getUsers() }    // cancelled if posts fails
+    val posts = async { api.getPosts() }    // cancelled if users fails
+    Pair(users.await(), posts.await())
+}
+
+// supervisorScope — failures are independent
+suspend fun fetchAll() = supervisorScope {
+    val users = async {
+        try { api.getUsers() } catch (e: Exception) { emptyList() }
+    }
+    val posts = async {
+        try { api.getPosts() } catch (e: Exception) { emptyList() }
+    }
+    Pair(users.await(), posts.await())
+}
+```
+</details>
+
+<details>
+<summary><strong>Explain the Job hierarchy in coroutines.</strong></summary>
+
+Every coroutine has a `Job` that represents its lifecycle. Jobs form a parent-child tree:
+
+- **Job** — basic job; failure propagates to parent
+- **SupervisorJob** — failure does NOT propagate to parent or siblings
+- **Deferred** — a Job that produces a result (from `async`)
+
+```kotlin
+val parentJob = Job()
+val scope = CoroutineScope(Dispatchers.IO + parentJob)
+
+val child1 = scope.launch { /* ... */ }
+val child2 = scope.launch { /* ... */ }
+
+// Cancel everything
+parentJob.cancel()  // cancels child1 and child2
+
+// Job states: New → Active → Completing → Completed
+//                          → Cancelling → Cancelled
+```
+
+| | `Job` | `SupervisorJob` |
+|---|---|---|
+| Child failure | Cancels parent + siblings | Only cancels the failing child |
+| Use case | All-or-nothing operations | Independent tasks |
+</details>
+
+<details>
+<summary><strong>What is the difference between <code>launch</code> and <code>async</code>?</strong></summary>
+
+- `launch` — fire-and-forget; returns a `Job`. Exceptions are thrown immediately.
+- `async` — returns a `Deferred<T>` with a result. Exceptions are deferred until `.await()` is called.
+
+```kotlin
+// launch — no return value
+val job = scope.launch {
+    repository.syncData()
+}
+
+// async — returns a value
+val deferred = scope.async {
+    repository.fetchUser(id)
+}
+val user = deferred.await()  // suspends until result is ready
+
+// Parallel decomposition with async
+suspend fun loadDashboard() = coroutineScope {
+    val profile = async { api.getProfile() }
+    val feed = async { api.getFeed() }
+    val notifications = async { api.getNotifications() }
+    DashboardData(profile.await(), feed.await(), notifications.await())
+}
+```
+</details>
+
+<details>
+<summary><strong>What is <code>Mutex</code> and how do you handle shared mutable state in coroutines?</strong></summary>
+
+`Mutex` is the coroutine-safe alternative to `synchronized`. It provides mutual exclusion without blocking threads.
+
+```kotlin
+val mutex = Mutex()
+var counter = 0
+
+// Safe — mutex protects shared state
+suspend fun increment() {
+    mutex.withLock {
+        counter++
+    }
+}
+
+// Alternative: use thread-safe data structures
+val atomicCounter = AtomicInteger(0)
+
+// Alternative: confine state to a single coroutine
+val counterActor = Channel<Unit>()
+launch {
+    var count = 0
+    for (msg in counterActor) { count++ }
+}
+```
+</details>
+
+<details>
+<summary><strong>What is <code>ensureActive()</code> and cooperative cancellation?</strong></summary>
+
+Coroutine cancellation is cooperative — a coroutine must check for cancellation to stop. Suspending functions like `delay()`, `yield()`, and `withContext()` check automatically. For CPU-bound loops, use `ensureActive()` or `isActive`.
+
+```kotlin
+// BAD — tight loop ignores cancellation
+suspend fun processItems(items: List<Item>) {
+    for (item in items) {
+        heavyComputation(item)  // never checks cancellation
+    }
+}
+
+// GOOD — checks cancellation
+suspend fun processItems(items: List<Item>) = coroutineScope {
+    for (item in items) {
+        ensureActive()  // throws CancellationException if cancelled
+        heavyComputation(item)
+    }
+}
+```
+</details>
+
+---
+
 ## Android Architecture
 
 <details>
@@ -1960,6 +2143,347 @@ class SearchViewModel(private val savedState: SavedStateHandle) : ViewModel() {
     }
 }
 ```
+</details>
+
+---
+
+## Design Patterns
+
+<details>
+<summary><strong>Singleton Pattern</strong></summary>
+
+Ensures a class has only one instance throughout the application. In Kotlin, use `object` for a thread-safe singleton.
+
+```kotlin
+// Kotlin singleton — thread-safe by default
+object DatabaseManager {
+    fun getConnection(): Connection { /* ... */ }
+}
+
+// Singleton with parameters (lazy initialization)
+class AppDatabase private constructor(context: Context) {
+    companion object {
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+
+        fun getInstance(context: Context): AppDatabase {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE ?: AppDatabase(context.applicationContext).also {
+                    INSTANCE = it
+                }
+            }
+        }
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>Factory Pattern</strong></summary>
+
+Creates objects without exposing the instantiation logic. The client uses a factory method instead of calling the constructor directly.
+
+```kotlin
+// Simple Factory
+sealed class Notification {
+    data class Email(val address: String) : Notification()
+    data class Push(val token: String) : Notification()
+    data class SMS(val phone: String) : Notification()
+}
+
+object NotificationFactory {
+    fun create(type: String, target: String): Notification = when (type) {
+        "email" -> Notification.Email(target)
+        "push"  -> Notification.Push(target)
+        "sms"   -> Notification.SMS(target)
+        else    -> throw IllegalArgumentException("Unknown type: $type")
+    }
+}
+
+// Abstract Factory — family of related objects
+interface ViewModelFactory {
+    fun createViewModel(): ViewModel
+}
+
+class HomeViewModelFactory(private val repo: HomeRepository) : ViewModelFactory {
+    override fun createViewModel() = HomeViewModel(repo)
+}
+```
+</details>
+
+<details>
+<summary><strong>Builder Pattern</strong></summary>
+
+Constructs complex objects step by step, allowing different representations. Kotlin's named arguments and default values often replace the need for a Builder.
+
+```kotlin
+// Classic Builder
+class NotificationBuilder {
+    private var title: String = ""
+    private var message: String = ""
+    private var icon: Int = 0
+    private var priority: Int = NotificationCompat.PRIORITY_DEFAULT
+
+    fun setTitle(title: String) = apply { this.title = title }
+    fun setMessage(message: String) = apply { this.message = message }
+    fun setIcon(icon: Int) = apply { this.icon = icon }
+    fun setPriority(priority: Int) = apply { this.priority = priority }
+
+    fun build(): Notification { /* ... */ }
+}
+
+val notification = NotificationBuilder()
+    .setTitle("Hello")
+    .setMessage("World")
+    .build()
+
+// Kotlin alternative — data class with defaults
+data class NotificationConfig(
+    val title: String,
+    val message: String,
+    val icon: Int = R.drawable.default_icon,
+    val priority: Int = NotificationCompat.PRIORITY_DEFAULT
+)
+
+val config = NotificationConfig(title = "Hello", message = "World")
+```
+</details>
+
+<details>
+<summary><strong>Observer Pattern</strong></summary>
+
+Defines a one-to-many dependency between objects. When the subject changes state, all observers are notified. In Android, `LiveData`, `StateFlow`, and `Flow` are all implementations of this pattern.
+
+```kotlin
+// Manual Observer pattern
+interface Observer<T> {
+    fun onChanged(value: T)
+}
+
+class Observable<T> {
+    private val observers = mutableListOf<Observer<T>>()
+
+    fun observe(observer: Observer<T>) { observers.add(observer) }
+    fun remove(observer: Observer<T>) { observers.remove(observer) }
+
+    fun notify(value: T) {
+        observers.forEach { it.onChanged(value) }
+    }
+}
+
+// Android — LiveData is an Observer pattern
+viewModel.users.observe(viewLifecycleOwner) { users ->
+    adapter.submitList(users)
+}
+
+// Kotlin — StateFlow is an Observer pattern
+lifecycleScope.launch {
+    viewModel.uiState.collect { state -> render(state) }
+}
+```
+</details>
+
+<details>
+<summary><strong>Strategy Pattern</strong></summary>
+
+Defines a family of algorithms, encapsulates each one, and makes them interchangeable. The algorithm can vary independently from the clients that use it.
+
+```kotlin
+// Strategy interface
+fun interface SortStrategy<T> {
+    fun sort(list: MutableList<T>)
+}
+
+val bubbleSort = SortStrategy<Int> { list ->
+    // bubble sort implementation
+}
+
+val quickSort = SortStrategy<Int> { list ->
+    // quick sort implementation
+}
+
+class Sorter<T>(private var strategy: SortStrategy<T>) {
+    fun setStrategy(strategy: SortStrategy<T>) { this.strategy = strategy }
+    fun sort(list: MutableList<T>) = strategy.sort(list)
+}
+
+// Usage
+val sorter = Sorter(quickSort)
+sorter.sort(myList)
+```
+</details>
+
+<details>
+<summary><strong>Adapter Pattern</strong></summary>
+
+Converts the interface of a class into another interface the client expects. In Android, `RecyclerView.Adapter` is the most common example.
+
+```kotlin
+// Adapting a third-party API response to your domain model
+// Third-party response
+data class ApiUser(val user_name: String, val user_age: Int)
+
+// Your domain model
+data class User(val name: String, val age: Int)
+
+// Adapter
+fun ApiUser.toDomain(): User = User(
+    name = this.user_name,
+    age = this.user_age
+)
+
+// RecyclerView Adapter — classic Android Adapter pattern
+class UserAdapter : ListAdapter<User, UserViewHolder>(UserDiffCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+        val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return UserViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>Repository Pattern (revisited as a Design Pattern)</strong></summary>
+
+Mediates between the domain and data layers. It provides a clean API and hides data source details (network, cache, database).
+
+**Why it's important:**
+- ViewModel doesn't know where data comes from
+- Easy to swap implementations (real vs. fake for testing)
+- Single source of truth for data
+
+```kotlin
+// Offline-first repository strategy
+class ArticleRepository(
+    private val api: ArticleApi,
+    private val dao: ArticleDao
+) {
+    fun getArticles(): Flow<List<Article>> = flow {
+        // 1. Emit cached data immediately
+        val cached = dao.getAll()
+        emit(cached.map { it.toDomain() })
+
+        // 2. Fetch fresh data from network
+        try {
+            val remote = api.getArticles()
+            dao.insertAll(remote.map { it.toEntity() })
+            emit(dao.getAll().map { it.toDomain() })
+        } catch (e: IOException) {
+            // Network failed — cached data already emitted
+        }
+    }
+}
+```
+</details>
+
+---
+
+## Modularization
+
+<details>
+<summary><strong>What is Modularization and why does it matter?</strong></summary>
+
+Modularization is splitting an app into multiple Gradle modules, each with a specific responsibility. It improves build times, enforces separation of concerns, and enables team scalability.
+
+**Benefits:**
+- **Faster builds** — only changed modules are recompiled
+- **Strict boundaries** — modules can't access each other's internals
+- **Reusability** — shared modules can be used across apps
+- **Team scalability** — different teams can own different modules
+- **Dynamic delivery** — feature modules can be downloaded on demand
+
+```
+app/                    ← Application module (entry point)
+├── feature/
+│   ├── home/           ← Feature module
+│   ├── search/         ← Feature module
+│   └── profile/        ← Feature module
+├── core/
+│   ├── network/        ← Core module (Retrofit, OkHttp)
+│   ├── database/       ← Core module (Room)
+│   ├── ui/             ← Core module (shared Compose components)
+│   └── common/         ← Core module (utilities, extensions)
+└── domain/             ← Domain module (UseCases, Entities)
+```
+</details>
+
+<details>
+<summary><strong>What are the different module types?</strong></summary>
+
+| Module Type | Purpose | Example |
+|---|---|---|
+| **App module** | Entry point, wires everything together | `:app` |
+| **Feature module** | Contains a single feature (UI + ViewModel) | `:feature:home` |
+| **Core module** | Shared infrastructure (network, DB, UI components) | `:core:network` |
+| **Domain module** | Business logic, use cases, entities (pure Kotlin) | `:domain` |
+| **Data module** | Repository implementations, data sources | `:data:user` |
+| **Dynamic feature** | Downloaded on demand via Play Store | `:dynamicfeature:ar` |
+
+```kotlin
+// feature/home/build.gradle.kts
+plugins {
+    id("com.android.library")
+    id("dagger.hilt.android.plugin")
+}
+
+dependencies {
+    implementation(project(":core:network"))
+    implementation(project(":core:ui"))
+    implementation(project(":domain"))
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you handle navigation between feature modules?</strong></summary>
+
+Feature modules should not depend on each other. Use one of these patterns:
+
+```kotlin
+// 1. Navigation via deep links (recommended with Navigation Component)
+// feature:home doesn't know about feature:profile
+findNavController().navigate(
+    Uri.parse("myapp://profile/${userId}")
+)
+
+// 2. Navigator interface in a shared module
+// core/navigation/Navigator.kt
+interface AppNavigator {
+    fun navigateToProfile(userId: String)
+    fun navigateToSettings()
+}
+
+// app module provides the implementation
+class AppNavigatorImpl(private val navController: NavController) : AppNavigator {
+    override fun navigateToProfile(userId: String) {
+        navController.navigate("profile/$userId")
+    }
+    override fun navigateToSettings() {
+        navController.navigate("settings")
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>What is the <code>api</code> vs <code>implementation</code> dependency difference?</strong></summary>
+
+- `implementation` — the dependency is internal; consumers of this module cannot see it.
+- `api` — the dependency is exposed; consumers of this module can also use it.
+
+```kotlin
+// core/network/build.gradle.kts
+dependencies {
+    api(libs.retrofit)            // Exposed — feature modules can use Retrofit types
+    implementation(libs.okhttp)   // Hidden — only core:network uses OkHttp internally
+}
+```
+
+**Rule of thumb:** Use `implementation` by default. Use `api` only when the dependency's types appear in your module's public API (function signatures, return types).
 </details>
 
 ---
@@ -2170,6 +2694,134 @@ interface UserApi {
 
 ---
 
+## Paging 3
+
+<details>
+<summary><strong>What is Paging 3 and why use it?</strong></summary>
+
+Paging 3 is a Jetpack library that loads data incrementally (page by page) from a data source. It handles loading states, errors, retries, and caching automatically.
+
+**Why use it:**
+- Efficient memory usage — only loads what's visible
+- Built-in loading/error state handling
+- Supports Room, network, or combined data sources
+- Works with RecyclerView and Compose `LazyColumn`
+
+```
+DataSource → PagingSource → Pager → Flow<PagingData<T>> → UI (LazyColumn / RecyclerView)
+```
+</details>
+
+<details>
+<summary><strong>How does <code>PagingSource</code> work?</strong></summary>
+
+`PagingSource` defines how to load pages of data. You implement `load()` which returns a `LoadResult` (either `Page` with data or `Error`).
+
+```kotlin
+class ArticlePagingSource(
+    private val api: ArticleApi
+) : PagingSource<Int, Article>() {
+
+    override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
+        return state.anchorPosition?.let { anchor ->
+            state.closestPageToPosition(anchor)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchor)?.nextKey?.minus(1)
+        }
+    }
+
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
+        val page = params.key ?: 1
+        return try {
+            val response = api.getArticles(page = page, size = params.loadSize)
+            LoadResult.Page(
+                data = response.articles,
+                prevKey = if (page == 1) null else page - 1,
+                nextKey = if (response.articles.isEmpty()) null else page + 1
+            )
+        } catch (e: Exception) {
+            LoadResult.Error(e)
+        }
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you set up Pager and collect PagingData?</strong></summary>
+
+```kotlin
+// ViewModel
+class ArticleViewModel(private val api: ArticleApi) : ViewModel() {
+    val articles: Flow<PagingData<Article>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            prefetchDistance = 5,      // load next page when 5 items away
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { ArticlePagingSource(api) }
+    ).flow.cachedIn(viewModelScope)  // survives config changes
+}
+
+// Compose UI
+@Composable
+fun ArticleList(viewModel: ArticleViewModel) {
+    val articles = viewModel.articles.collectAsLazyPagingItems()
+
+    LazyColumn {
+        items(articles.itemCount) { index ->
+            articles[index]?.let { ArticleCard(it) }
+        }
+
+        // Loading state
+        when (articles.loadState.append) {
+            is LoadState.Loading -> item { CircularProgressIndicator() }
+            is LoadState.Error -> item { RetryButton { articles.retry() } }
+            else -> {}
+        }
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>What is <code>RemoteMediator</code>?</strong></summary>
+
+`RemoteMediator` enables an offline-first approach by loading data from the network and caching it in a local database (Room). The UI always reads from Room, and `RemoteMediator` handles fetching more data when needed.
+
+```kotlin
+@OptIn(ExperimentalPagingApi::class)
+class ArticleRemoteMediator(
+    private val api: ArticleApi,
+    private val db: AppDatabase
+) : RemoteMediator<Int, ArticleEntity>() {
+
+    override suspend fun load(
+        loadType: LoadType,
+        state: PagingState<Int, ArticleEntity>
+    ): MediatorResult {
+        val page = when (loadType) {
+            LoadType.REFRESH -> 1
+            LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
+            LoadType.APPEND -> getNextPage()
+        }
+
+        return try {
+            val response = api.getArticles(page)
+            db.withTransaction {
+                if (loadType == LoadType.REFRESH) db.articleDao().clearAll()
+                db.articleDao().insertAll(response.map { it.toEntity() })
+            }
+            MediatorResult.Success(endOfPaginationReached = response.isEmpty())
+        } catch (e: Exception) {
+            MediatorResult.Error(e)
+        }
+    }
+}
+```
+</details>
+
+---
+
 ## Jetpack Compose
 
 <details>
@@ -2307,6 +2959,421 @@ Box(Modifier.background(Color.Red).padding(16.dp))   // padding inside backgroun
 
 ---
 
+## Compose Navigation
+
+<details>
+<summary><strong>How does Navigation work in Jetpack Compose?</strong></summary>
+
+Compose Navigation uses `NavHost` and `NavController` to navigate between composable screens. Routes are string-based identifiers.
+
+```kotlin
+@Composable
+fun AppNavigation() {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") {
+            HomeScreen(
+                onNavigateToDetail = { id -> navController.navigate("detail/$id") }
+            )
+        }
+        composable(
+            route = "detail/{itemId}",
+            arguments = listOf(navArgument("itemId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val itemId = backStackEntry.arguments?.getString("itemId") ?: ""
+            DetailScreen(itemId = itemId)
+        }
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>What is Type-Safe Navigation in Compose?</strong></summary>
+
+Type-safe navigation (introduced with Navigation 2.8+) uses Kotlin serialization and data classes instead of string routes, eliminating route typos and argument parsing errors.
+
+```kotlin
+// Define routes as data classes / objects
+@Serializable
+object Home
+
+@Serializable
+data class Detail(val itemId: String)
+
+@Serializable
+object Settings
+
+// NavHost with type-safe routes
+NavHost(navController = navController, startDestination = Home) {
+    composable<Home> {
+        HomeScreen(onNavigateToDetail = { id ->
+            navController.navigate(Detail(itemId = id))
+        })
+    }
+    composable<Detail> { backStackEntry ->
+        val detail: Detail = backStackEntry.toRoute()
+        DetailScreen(itemId = detail.itemId)
+    }
+    composable<Settings> {
+        SettingsScreen()
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you handle nested navigation graphs?</strong></summary>
+
+Nested graphs group related destinations and allow you to encapsulate navigation logic for features.
+
+```kotlin
+// Main NavHost
+NavHost(navController, startDestination = "main") {
+    // Auth flow — nested graph
+    navigation(startDestination = "login", route = "auth") {
+        composable("login") { LoginScreen(onLoginSuccess = {
+            navController.navigate("main") {
+                popUpTo("auth") { inclusive = true }
+            }
+        })}
+        composable("register") { RegisterScreen() }
+    }
+
+    // Main flow — nested graph
+    navigation(startDestination = "home", route = "main") {
+        composable("home") { HomeScreen() }
+        composable("profile") { ProfileScreen() }
+        composable("settings") { SettingsScreen() }
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you handle deep links in Compose Navigation?</strong></summary>
+
+```kotlin
+composable(
+    route = "detail/{itemId}",
+    arguments = listOf(navArgument("itemId") { type = NavType.StringType }),
+    deepLinks = listOf(
+        navDeepLink { uriPattern = "https://myapp.com/detail/{itemId}" },
+        navDeepLink { uriPattern = "myapp://detail/{itemId}" }
+    )
+) { backStackEntry ->
+    val itemId = backStackEntry.arguments?.getString("itemId") ?: ""
+    DetailScreen(itemId)
+}
+```
+
+Don't forget to declare the deep link in `AndroidManifest.xml`:
+
+```xml
+<activity android:name=".MainActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="https" android:host="myapp.com" />
+    </intent-filter>
+</activity>
+```
+</details>
+
+---
+
+## Gradle & Build System
+
+<details>
+<summary><strong>What are Build Types and Product Flavors?</strong></summary>
+
+- **Build Types** define how the app is built (debug vs. release) — control minification, signing, debuggability.
+- **Product Flavors** define different versions of the app (free vs. paid, staging vs. production) — can change app ID, resources, and code.
+
+```kotlin
+android {
+    buildTypes {
+        debug {
+            isDebuggable = true
+            applicationIdSuffix = ".debug"
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
+    flavorDimensions += "version"
+    productFlavors {
+        create("free") {
+            dimension = "version"
+            applicationIdSuffix = ".free"
+            buildConfigField("Boolean", "IS_PREMIUM", "false")
+        }
+        create("paid") {
+            dimension = "version"
+            applicationIdSuffix = ".paid"
+            buildConfigField("Boolean", "IS_PREMIUM", "true")
+        }
+    }
+}
+// Generates: freeDebug, freeRelease, paidDebug, paidRelease
+```
+</details>
+
+<details>
+<summary><strong>What is a Version Catalog?</strong></summary>
+
+Version Catalogs (introduced in Gradle 7.0) centralize dependency versions in a `libs.versions.toml` file, replacing scattered version variables.
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+kotlin = "1.9.22"
+compose-bom = "2024.02.00"
+hilt = "2.50"
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+
+[plugins]
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+```
+
+```kotlin
+// build.gradle.kts — usage
+dependencies {
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.material3)
+    implementation(libs.hilt.android)
+}
+```
+</details>
+
+<details>
+<summary><strong>What is the difference between <code>buildSrc</code> and convention plugins?</strong></summary>
+
+- `buildSrc` — a special Gradle module that compiles before the rest. Good for sharing build logic, but any change triggers a full rebuild.
+- **Convention plugins** — reusable plugins in a `build-logic` included build. Changes only recompile the plugin, not the whole project.
+
+```kotlin
+// build-logic/convention/src/main/kotlin/AndroidLibraryConventionPlugin.kt
+class AndroidLibraryConventionPlugin : Plugin<Project> {
+    override fun apply(target: Project) = with(target) {
+        pluginManager.apply("com.android.library")
+        pluginManager.apply("org.jetbrains.kotlin.android")
+
+        extensions.configure<LibraryExtension> {
+            compileSdk = 34
+            defaultConfig.minSdk = 24
+            compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+        }
+    }
+}
+
+// feature/home/build.gradle.kts
+plugins {
+    id("myapp.android.library")  // applies the convention
+}
+```
+</details>
+
+<details>
+<summary><strong>How do you speed up Gradle builds?</strong></summary>
+
+```properties
+# gradle.properties
+org.gradle.parallel=true          # Build modules in parallel
+org.gradle.caching=true           # Enable build cache
+org.gradle.daemon=true            # Keep daemon alive between builds
+org.gradle.jvmargs=-Xmx4g        # Increase heap size
+
+# Kotlin-specific
+kotlin.incremental=true
+kotlin.caching.enabled=true
+```
+
+Other tips:
+- Use `implementation` instead of `api` to limit recompilation
+- Avoid unnecessary `kapt` — migrate to KSP
+- Use modularization to limit what gets recompiled
+- Use configuration cache (`org.gradle.configuration-cache=true`)
+- Profile builds with `./gradlew --scan`
+</details>
+
+---
+
+## Security (Advanced)
+
+<details>
+<summary><strong>What is EncryptedSharedPreferences?</strong></summary>
+
+`EncryptedSharedPreferences` provides a secure wrapper around SharedPreferences using AES-256 encryption for both keys and values.
+
+```kotlin
+val masterKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .build()
+
+val securePrefs = EncryptedSharedPreferences.create(
+    context,
+    "secure_prefs",
+    masterKey,
+    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+)
+
+// Use like normal SharedPreferences
+securePrefs.edit().putString("auth_token", token).apply()
+val token = securePrefs.getString("auth_token", null)
+```
+</details>
+
+<details>
+<summary><strong>How does the Android Keystore System work?</strong></summary>
+
+The Android Keystore provides a secure container for cryptographic keys. Keys stored in the Keystore are protected by hardware (TEE or StrongBox) and cannot be extracted.
+
+```kotlin
+// Generate a key in the Keystore
+val keyGenerator = KeyGenerator.getInstance(
+    KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore"
+)
+keyGenerator.init(
+    KeyGenParameterSpec.Builder("my_key", KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+        .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+        .setUserAuthenticationRequired(true)  // Requires biometric
+        .build()
+)
+val secretKey = keyGenerator.generateKey()
+
+// Encrypt data
+val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+val encryptedData = cipher.doFinal(plainText.toByteArray())
+val iv = cipher.iv  // save this for decryption
+```
+</details>
+
+<details>
+<summary><strong>What is Root Detection and why is it important?</strong></summary>
+
+Root detection checks if a device has been rooted (gained superuser access). Rooted devices can bypass app security, intercept traffic, and tamper with app data.
+
+**Common checks:**
+- Check for `su` binary (`/system/bin/su`, `/system/xbin/su`)
+- Check for root management apps (Magisk, SuperSU)
+- Check for `test-keys` in build properties
+- Verify system partition is read-only
+- Use SafetyNet/Play Integrity API (server-side verification)
+
+```kotlin
+// Basic checks (easily bypassed — use as one layer)
+fun isDeviceRooted(): Boolean {
+    val paths = arrayOf("/system/bin/su", "/system/xbin/su", "/sbin/su")
+    return paths.any { File(it).exists() }
+}
+
+// Better — use Play Integrity API (server-side verification)
+// Client requests an integrity token, server verifies it with Google
+val integrityManager = IntegrityManagerFactory.create(context)
+val request = IntegrityTokenRequest.builder()
+    .setNonce(generateNonce())
+    .build()
+integrityManager.requestIntegrityToken(request)
+    .addOnSuccessListener { response ->
+        sendTokenToServer(response.token())  // verify server-side
+    }
+```
+</details>
+
+<details>
+<summary><strong>What is Network Security Config?</strong></summary>
+
+Network Security Config is an XML file that customizes network security settings without code changes. Defined in `res/xml/network_security_config.xml`.
+
+```xml
+<!-- res/xml/network_security_config.xml -->
+<network-security-config>
+    <!-- Production: only trust system CAs -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Debug: also trust user-installed CAs (for Charles Proxy, etc.) -->
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+
+    <!-- Certificate pinning for your API -->
+    <domain-config>
+        <domain includeSubdomains="true">api.example.com</domain>
+        <pin-set expiration="2025-12-31">
+            <pin digest="SHA-256">base64EncodedPin=</pin>
+            <pin digest="SHA-256">backupPin=</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>
+```
+
+```xml
+<!-- AndroidManifest.xml -->
+<application android:networkSecurityConfig="@xml/network_security_config" />
+```
+</details>
+
+<details>
+<summary><strong>What are R8 / ProGuard rules?</strong></summary>
+
+R8 (replacement for ProGuard) performs code shrinking, optimization, and obfuscation. Custom rules control what gets kept or obfuscated.
+
+```proguard
+# proguard-rules.pro
+
+# Keep data classes used by Gson/Moshi (serialization needs field names)
+-keep class com.example.app.data.model.** { *; }
+
+# Keep Retrofit interfaces
+-keep,allowobfuscation interface com.example.app.data.api.**
+
+# Keep Parcelable implementations
+-keepclassmembers class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator CREATOR;
+}
+
+# Keep enum values (used in when expressions)
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+# Debug — print mapping for stack trace de-obfuscation
+-printmapping mapping.txt
+```
+
+**Common issues:**
+- Retrofit/Gson breaks → keep model classes
+- Reflection-based libraries break → keep affected classes
+- Crashes in release only → check ProGuard rules
+</details>
+
+---
+
 ## Performance & Memory
 
 <details>
@@ -2425,6 +3492,378 @@ override fun onTrimMemory(level: Int) {
         imageCache.clear()
     }
 }
+```
+</details>
+
+---
+
+## Accessibility
+
+<details>
+<summary><strong>Why is Accessibility important in Android?</strong></summary>
+
+Accessibility ensures your app is usable by everyone, including people with visual, motor, hearing, or cognitive disabilities. Google Play also increasingly features accessible apps.
+
+**Key principles:**
+- All interactive elements must have content descriptions
+- Touch targets should be at least 48dp x 48dp
+- Color should not be the only way to convey information
+- Support screen readers (TalkBack)
+- Support font scaling and display size changes
+</details>
+
+<details>
+<summary><strong>How do you handle Accessibility in XML Views?</strong></summary>
+
+```xml
+<!-- Content description for screen readers -->
+<ImageButton
+    android:contentDescription="@string/add_item"
+    android:minWidth="48dp"
+    android:minHeight="48dp" />
+
+<!-- Mark decorative images as not important -->
+<ImageView
+    android:importantForAccessibility="no"
+    android:contentDescription="@null" />
+
+<!-- Group related elements for TalkBack -->
+<LinearLayout
+    android:focusable="true"
+    android:contentDescription="Order #1234, $25.99, delivered">
+    <TextView android:text="Order #1234" />
+    <TextView android:text="$25.99" />
+    <TextView android:text="Delivered" />
+</LinearLayout>
+
+<!-- Live regions for dynamic content -->
+<TextView
+    android:accessibilityLiveRegion="polite"
+    android:text="@string/status_message" />
+```
+</details>
+
+<details>
+<summary><strong>How do you handle Accessibility in Jetpack Compose?</strong></summary>
+
+```kotlin
+// Content description
+Image(
+    painter = painterResource(R.drawable.logo),
+    contentDescription = "Company logo"  // null for decorative images
+)
+
+// Semantic properties
+Icon(
+    imageVector = Icons.Default.Delete,
+    contentDescription = null,
+    modifier = Modifier.semantics {
+        contentDescription = "Delete item"
+        role = Role.Button
+    }
+)
+
+// Merge semantics for grouped elements
+Row(modifier = Modifier.semantics(mergeDescendants = true) {}) {
+    Text("Order #1234")
+    Text("$25.99")
+}
+// TalkBack reads: "Order #1234, $25.99" as one unit
+
+// Custom actions
+Box(modifier = Modifier.semantics {
+    customActions = listOf(
+        CustomAccessibilityAction("Archive") { archiveItem(); true },
+        CustomAccessibilityAction("Delete") { deleteItem(); true }
+    )
+})
+
+// Heading for navigation
+Text(
+    text = "Settings",
+    modifier = Modifier.semantics { heading() }
+)
+```
+</details>
+
+<details>
+<summary><strong>How do you test Accessibility?</strong></summary>
+
+- **TalkBack** — enable in device settings and navigate your app by touch
+- **Accessibility Scanner** — Google app that scans for issues (touch target size, contrast, labels)
+- **Espresso Accessibility Checks** — automated testing
+
+```kotlin
+// Enable accessibility checks in Espresso tests
+@Before
+fun setUp() {
+    AccessibilityChecks.enable().setRunChecksFromRootView(true)
+}
+
+// Compose — check semantics in tests
+composeRule.onNodeWithContentDescription("Add item").assertExists()
+composeRule.onNodeWithText("Submit").assertHasClickAction()
+```
+</details>
+
+---
+
+## Kotlin Multiplatform (KMP)
+
+<details>
+<summary><strong>What is Kotlin Multiplatform (KMP)?</strong></summary>
+
+KMP allows sharing Kotlin code across platforms (Android, iOS, Web, Desktop, Server) while still using native APIs where needed. Unlike cross-platform frameworks (Flutter, React Native), KMP shares **business logic** while keeping native UI.
+
+```
+Shared code (commonMain)
+├── Business logic
+├── Data models
+├── Networking (Ktor)
+├── Local storage (SQLDelight)
+└── ViewModels
+
+Platform-specific (androidMain / iosMain)
+├── UI (Jetpack Compose / SwiftUI)
+├── Platform APIs
+└── DI setup
+```
+</details>
+
+<details>
+<summary><strong>How is a KMP project structured?</strong></summary>
+
+```kotlin
+// shared/build.gradle.kts
+kotlin {
+    androidTarget()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.ktor.client.core)
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.sqldelight.android.driver)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+            implementation(libs.sqldelight.native.driver)
+        }
+    }
+}
+```
+</details>
+
+<details>
+<summary><strong>What is <code>expect</code> / <code>actual</code> in KMP?</strong></summary>
+
+`expect`/`actual` lets you declare a common API and provide platform-specific implementations.
+
+```kotlin
+// commonMain — declaration
+expect class PlatformContext
+
+expect fun getPlatformName(): String
+
+expect class DatabaseDriverFactory {
+    fun createDriver(): SqlDriver
+}
+
+// androidMain — implementation
+actual typealias PlatformContext = Context
+
+actual fun getPlatformName(): String = "Android ${Build.VERSION.SDK_INT}"
+
+actual class DatabaseDriverFactory(private val context: Context) {
+    actual fun createDriver(): SqlDriver =
+        AndroidSqliteDriver(AppDatabase.Schema, context, "app.db")
+}
+
+// iosMain — implementation
+actual class PlatformContext  // no direct equivalent
+
+actual fun getPlatformName(): String = "iOS ${UIDevice.currentDevice.systemVersion}"
+
+actual class DatabaseDriverFactory {
+    actual fun createDriver(): SqlDriver =
+        NativeSqliteDriver(AppDatabase.Schema, "app.db")
+}
+```
+</details>
+
+<details>
+<summary><strong>What libraries are commonly used in KMP?</strong></summary>
+
+| Purpose | Library | Replaces |
+|---|---|---|
+| Networking | **Ktor** | Retrofit (Android only) |
+| Serialization | **kotlinx.serialization** | Gson / Moshi |
+| Local DB | **SQLDelight** | Room (Android only) |
+| DI | **Koin** | Hilt (Android only) |
+| Key-Value storage | **multiplatform-settings** | SharedPreferences |
+| Date/Time | **kotlinx-datetime** | java.time |
+| Image loading | **Coil 3** (KMP) | Coil 2 (Android only) |
+| ViewModel | **KMP ViewModel** (official) | AndroidX ViewModel |
+</details>
+
+---
+
+## CI/CD Pipelines
+
+<details>
+<summary><strong>What is CI/CD for Android?</strong></summary>
+
+- **CI (Continuous Integration)** — automatically build, lint, and test every code change (PR/push).
+- **CD (Continuous Delivery)** — automatically deploy builds to testers or the Play Store.
+
+**Common tools:** GitHub Actions, Bitrise, CircleCI, Jenkins, Fastlane, Firebase App Distribution.
+</details>
+
+<details>
+<summary><strong>How do you set up GitHub Actions for Android?</strong></summary>
+
+```yaml
+# .github/workflows/android-ci.yml
+name: Android CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+
+      - name: Run Lint
+        run: ./gradlew lint
+
+      - name: Run Unit Tests
+        run: ./gradlew testDebugUnitTest
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+```
+</details>
+
+<details>
+<summary><strong>How do you use Fastlane for Android?</strong></summary>
+
+Fastlane automates building, signing, and deploying Android apps.
+
+```ruby
+# fastlane/Fastfile
+default_platform(:android)
+
+platform :android do
+  desc "Run all tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Build and deploy to Firebase App Distribution"
+  lane :beta do
+    gradle(
+      task: "assemble",
+      build_type: "Release"
+    )
+    firebase_app_distribution(
+      app: "1:123456789:android:abcdef",
+      groups: "internal-testers",
+      release_notes: "Bug fixes and improvements"
+    )
+  end
+
+  desc "Deploy to Play Store (internal track)"
+  lane :deploy do
+    gradle(
+      task: "bundle",
+      build_type: "Release"
+    )
+    upload_to_play_store(
+      track: "internal",
+      aab: "app/build/outputs/bundle/release/app-release.aab"
+    )
+  end
+end
+```
+
+```bash
+# Usage
+fastlane test       # Run tests
+fastlane beta       # Deploy to Firebase
+fastlane deploy     # Deploy to Play Store
+```
+</details>
+
+<details>
+<summary><strong>How do you handle signing in CI/CD?</strong></summary>
+
+Never commit keystore files or passwords to the repository. Use environment variables or secrets.
+
+```kotlin
+// app/build.gradle.kts
+android {
+    signingConfigs {
+        create("release") {
+            storeFile = file(System.getenv("KEYSTORE_PATH") ?: "keystore.jks")
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
+            keyAlias = System.getenv("KEY_ALIAS") ?: ""
+            keyPassword = System.getenv("KEY_PASSWORD") ?: ""
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+```
+
+```yaml
+# GitHub Actions — use secrets
+- name: Decode keystore
+  run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > keystore.jks
+
+- name: Build Release
+  env:
+    KEYSTORE_PATH: keystore.jks
+    KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+    KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+    KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+  run: ./gradlew assembleRelease
 ```
 </details>
 
